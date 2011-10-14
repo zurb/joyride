@@ -1,5 +1,5 @@
 /*
- * jQuery Joyride Plugin 1.0
+ * jQuery Joyride Plugin 1.0.1
  * www.ZURB.com/playground
  * Copyright 2011, ZURB
  * Free to use under the MIT license.
@@ -188,23 +188,24 @@
           prevCount++;
         }
       }
-      if (!settings.inline) {
-      $(window).resize(function() {
-        var parentElementID = $(tipContent[prevCount]).attr('data-id'),
-        currentTipPosition = $('#' + parentElementID).offset(),
-        currentParentHeight = $('#' + parentElementID).height(),
-        currentTipHeight = $('#joyRidePopup' + prevCount).height();
-        if (settings.tipLocation == "bottom") {
-          $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + 20), left: currentTipPosition.left});
-        } else if (settings.tipLocation == "top") {
-          if (currentTipPosition.top <= currentTipHeight) {
+      
+      if (!settings.inline || !$.cookie(settings.cookieName)) {
+        $(window).resize(function() {
+          var parentElementID = $(tipContent[prevCount]).attr('data-id'),
+          currentTipPosition = $('#' + parentElementID).offset(),
+          currentParentHeight = $('#' + parentElementID).height(),
+          currentTipHeight = $('#joyRidePopup' + prevCount).height();
+          if (settings.tipLocation == "bottom") {
             $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + 20), left: currentTipPosition.left});
-          } else {
-            $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top - (currentTipHeight + currentParentHeight)), left: currentTipPosition.left});
+          } else if (settings.tipLocation == "top") {
+            if (currentTipPosition.top <= currentTipHeight) {
+              $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + 20), left: currentTipPosition.left});
+            } else {
+              $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top - (currentTipHeight + currentParentHeight)), left: currentTipPosition.left});
+            }
           }
-        }
-      });
-    }
+        });
+      }
       
       // +++++++++++++++
       //   Timer 
