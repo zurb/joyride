@@ -189,7 +189,7 @@
         }
       }
       
-      if (!settings.inline || !$.cookie(settings.cookieName)) {
+      if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
         $(window).resize(function() {
           var parentElementID = $(tipContent[prevCount]).attr('data-id'),
           currentTipPosition = $('#' + parentElementID).offset(),
