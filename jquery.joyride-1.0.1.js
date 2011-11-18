@@ -62,7 +62,7 @@
       if(!settings.cookieMonster || !$.cookie(settings.cookieName)) {
 
       tipContent.each(function(index) {
-        var buttonText = $(this).attr('data-text'),
+        var buttonText = $(this).data('text'),
         tipClass = $(this).attr('class'),
         self = this;
 
@@ -87,14 +87,14 @@
     }
 
       showNextTip = function() {
-        var parentElementID = $(tipContent[count]).attr('data-id'),
+        var parentElementID = $(tipContent[count]).data('id'),
         parentElement = $('#' + parentElementID);
 
         while (parentElement.offset() === null) {
           count++;
           skipCount++;
           prevCount++;
-          parentElementID = $(tipContent[count]).attr('data-id'),
+          parentElementID = $(tipContent[count]).data('id'),
           parentElement = $('#' + parentElementID);
 
           if ($(tipContent).length < count)
@@ -194,7 +194,7 @@
 
       if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
         $(window).resize(function() {
-          var parentElementID = $(tipContent[prevCount]).attr('data-id'),
+          var parentElementID = $(tipContent[prevCount]).data('id'),
           currentTipPosition = $('#' + parentElementID).offset(),
           currentParentHeight = $('#' + parentElementID).height(),
           currentTipHeight = $('#joyRidePopup' + prevCount).height();
