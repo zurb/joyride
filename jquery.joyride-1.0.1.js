@@ -89,13 +89,16 @@
       showNextTip = function() {
         var parentElementID = $(tipContent[count]).attr('data-id'),
         parentElement = $('#' + parentElementID);
-        
-        if (parentElement.offset() === null) {
+
+        while (parentElement.offset() === null) {
           count++;
           skipCount++;
           prevCount++;
           parentElementID = $(tipContent[count]).attr('data-id'),
           parentElement = $('#' + parentElementID);
+
+          if ($(tipContent).length < count)
+            break;
         }
         var windowHalf = Math.ceil($(window).height() / 2),
         currentTip = $('#joyRidePopup' + count),
