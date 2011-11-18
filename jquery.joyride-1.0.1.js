@@ -30,11 +30,11 @@
 
     //Extend those options
     var options = $.extend(settings, options);
-    
+
     return this.each(function() {
-      
+
       if ($(options.tipContent).length === 0) return;
-      
+
       $(options.tipContent).hide();
 
       var bodyOffset = $(options.tipContainer).children('*').first().position(),
@@ -60,7 +60,7 @@
       };
 
       if(!settings.cookieMonster || !$.cookie(settings.cookieName)) {
-        
+
       tipContent.each(function(index) {
         var buttonText = $(this).attr('data-text'),
         tipClass = $(this).attr('class'),
@@ -83,9 +83,9 @@
           }
         }
         $('#joyRidePopup' + index).hide();
-      }); 
+      });
     }
-      
+
       showNextTip = function() {
         var parentElementID = $(tipContent[count]).attr('data-id'),
         parentElement = $('#' + parentElementID);
@@ -106,9 +106,9 @@
         currentParentHeight = parentElement.height() + 10,
         currentTipHeight = currentTip.height() + 4,
         tipOffset = 0;
-        
+
         if (currentTip.length === 0) return;
-        
+
         if (count < tipContent.length) {
           if (settings.tipAnimation == "pop") {
             $('.joyride-timer-indicator').width(0);
@@ -125,11 +125,11 @@
               currentTip.fadeIn(settings.tipAnimationFadeSpeed);
             }
           }
-          
+
           // ++++++++++++++++++
-          //   Tip Location 
+          //   Tip Location
           // ++++++++++++++++++
-          
+
           if (settings.tipLocation == "bottom") {
             currentTip.offset({top: (currentTipPosition.top + currentParentHeight + 14), left: (currentTipPosition.left - bodyOffset.left)});
             currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
@@ -142,14 +142,14 @@
               currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
             }
           }
-          
-          // Animate Scrolling when tip is off screen 
+
+          // Animate Scrolling when tip is off screen
           tipOffset = Math.ceil(currentTip.offset().top - windowHalf);
-          
+
           $("html, body").animate({
             scrollTop: tipOffset
           }, settings.scrollSpeed);
-          
+
           if (count > 0) {
             if (skipCount > 0) {
               var hideCount = prevCount - skipCount;
@@ -163,7 +163,7 @@
               $('#joyRidePopup' + hideCount).fadeOut(settings.tipAnimationFadeSpeed);
             }
           }
-          
+
         // Hide the last tip when clicked
         } else if ((tipContent.length - 1) < count) {
           if (skipCount > 0) {
@@ -184,14 +184,14 @@
           }
         }
         count++;
-        
+
         if (prevCount < 0) {
           prevCount = 0;
         } else {
           prevCount++;
         }
       }
-      
+
       if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
         $(window).resize(function() {
           var parentElementID = $(tipContent[prevCount]).attr('data-id'),
@@ -209,14 +209,14 @@
           }
         });
       }
-      
+
       // +++++++++++++++
-      //   Timer 
+      //   Timer
       // +++++++++++++++
-      
+
       var interval_id = null,
       showTimerState = false;
-      
+
       if (!settings.startTimerOnClick && settings.timer > 0){
        showNextTip();
        interval_id = setInterval(function() {showNextTip()}, settings.timer);
@@ -234,7 +234,7 @@
       $('.joyride-close-tip').click(function(e) {
         endTip(e, interval_id, settings.cookieMonster, this);
       });
-      
+
       // When the next button is clicked, show the next tip, only when cookie isn't present
         $('.joyride-next-tip').click(function(e) {
           e.preventDefault();
@@ -254,12 +254,12 @@
         });
     }); // each call
   }; // joyride plugin call
-  
-  
+
+
   // +++++++++++++++++++++++++++++
   //   jQuery Cookie plugin
   // +++++++++++++++++++++++++++++
-  
+
   // Copyright (c) 2010 Klaus Hartl (stilbuero.de)
   // Dual licensed under the MIT and GPL licenses:
   // http://www.opensource.org/licenses/mit-license.php
