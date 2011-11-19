@@ -103,9 +103,12 @@
         var windowHalf = Math.ceil($(window).height() / 2),
         currentTip = $('#joyRidePopup' + count),
         currentTipPosition = parentElement.offset(),
-        currentParentHeight = parentElement.height() + 10,
-        currentTipHeight = currentTip.height() + 4,
+        currentParentHeight = parentElement.outerHeight(),
+        currentTipHeight = currentTip.outerHeight(),
+        nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2),
         tipOffset = 0;
+
+        console.log(currentTipPosition);
 
         if (currentTip.length === 0) return;
 
@@ -131,14 +134,14 @@
           // ++++++++++++++++++
 
           if (settings.tipLocation == "bottom") {
-            currentTip.offset({top: (currentTipPosition.top + currentParentHeight + 14), left: (currentTipPosition.left - bodyOffset.left)});
+            currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight), left: (currentTipPosition.left - bodyOffset.left)});
             currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
           } else if (settings.tipLocation == "top") {
             if (currentTipHeight >= currentTipPosition.top) {
-              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + 10 - bodyOffset.top), left: (currentTipPosition.left - bodyOffset.left)});
+              currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top), left: (currentTipPosition.left - bodyOffset.left)});
               currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
             } else {
-              currentTip.offset({top: ((currentTipPosition.top - 4) - (currentParentHeight + currentTipHeight + bodyOffset.top)), left: (currentTipPosition.left - bodyOffset.left)});
+              currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)), left: (currentTipPosition.left - bodyOffset.left)});
               currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
             }
           }
@@ -196,15 +199,16 @@
         $(window).resize(function() {
           var parentElementID = $(tipContent[prevCount]).data('id'),
           currentTipPosition = $('#' + parentElementID).offset(),
-          currentParentHeight = $('#' + parentElementID).height(),
-          currentTipHeight = $('#joyRidePopup' + prevCount).height();
+          currentParentHeight = $('#' + parentElementID).outerHeight(),
+          currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
+          nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
           if (settings.tipLocation == "bottom") {
-            $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + 20), left: currentTipPosition.left});
+            $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + nubHeight), left: currentTipPosition.left});
           } else if (settings.tipLocation == "top") {
             if (currentTipPosition.top <= currentTipHeight) {
-              $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + 20), left: currentTipPosition.left});
+              $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + nubHeight + currentParentHeight), left: currentTipPosition.left});
             } else {
-              $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top - (currentTipHeight + currentParentHeight)), left: currentTipPosition.left});
+              $('#joyRidePopup' + prevCount).offset({top: ((currentTipPosition.top) - (currentTipHeight  + nubHeight)), left: currentTipPosition.left});
             }
           }
         });
