@@ -48,12 +48,12 @@
         if (index == 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer == 0) {
           timerIndicatorInstance = '';
         } else {
-          timerIndicatorInstance = timerIndicatorInstance;
+          timerIndicatorInstance = timerIndicatorTemplate;
         }
         if (!tipClass) tipClass = '';
         (buttonText != '') ? buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>': buttonText = '';
         if (settings.inline) {
-          $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).attr('data-id'));
+          $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).data('id'));
         } else {
           $(options.tipContainer).append(tipTemplate(tipClass, index, buttonText, self));
         }
@@ -114,7 +114,7 @@
           if (settings.tipAnimation == "pop") {
             $('.joyride-timer-indicator').width(0);
             if (settings.timer > 0) {
-              currentTip.show().children('.joyride-timer-indicator-wrap').children('.joyride-timer-indicator').animate({width: '100%'}, settings.timer);
+              currentTip.show().children('.joyride-timer-indicator-wrap').children('.joyride-timer-indicator').animate({width: $('.joyride-timer-indicator-wrap').width()}, settings.timer);
             } else {
               currentTip.show();
             }
