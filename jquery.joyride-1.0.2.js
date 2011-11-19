@@ -108,8 +108,6 @@
         nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2),
         tipOffset = 0;
 
-        console.log(currentTipPosition);
-
         if (currentTip.length === 0) return;
 
         if (count < tipContent.length) {
