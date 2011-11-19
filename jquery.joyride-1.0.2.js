@@ -1,5 +1,5 @@
 /*
- * jQuery Joyride Plugin 1.0.1
+ * jQuery Joyride Plugin 1.0.2
  * www.ZURB.com/playground
  * Copyright 2011, ZURB
  * Free to use under the MIT license.
