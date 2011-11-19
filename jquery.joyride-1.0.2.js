@@ -121,7 +121,7 @@
           } else if (settings.tipAnimation == "fade") {
             $('.joyride-timer-indicator').width(0);
             if (settings.timer > 0) {
-              currentTip.fadeIn(settings.tipAnimationFadeSpeed).children('.joyride-timer-indicator-wrap').children('.joyride-timer-indicator').animate({width: '100%'}, settings.timer);
+              currentTip.fadeIn(settings.tipAnimationFadeSpeed).children('.joyride-timer-indicator-wrap').children('.joyride-timer-indicator').animate({width: $('.joyride-timer-indicator-wrap').width()}, settings.timer);
             } else {
               currentTip.fadeIn(settings.tipAnimationFadeSpeed);
             }
