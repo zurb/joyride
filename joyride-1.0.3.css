@@ -19,13 +19,14 @@ body {
      -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
           border-radius: 4px;
+  text-align:justify;
 }
 /* Add a little css triangle pip, older browser just miss out on the fanciness of it */
 .joyride-tip-guide span.joyride-nub {
   display: block;
   position: absolute;
   left: 22px;
-  width: 0;
+  width: 0; 
   height: 0;
   border: solid 14px;
   border: solid 14px;
@@ -79,10 +80,12 @@ body {
 }
 
 /* Button Style */
-.joyride-tip-guide .joyride-next-tip:after {
+.joyride-tip-guide .joyride-next-tip:after,
+.joyride-tip-guide .joyride-prev-tip:after {
   clear: both;
 }
-.joyride-tip-guide .joyride-next-tip {
+.joyride-tip-guide .joyride-next-tip,
+.joyride-tip-guide .joyride-prev-tip {
   width: auto;
   padding: 6px 18px 4px;
   font-size: 13px;
@@ -107,7 +110,8 @@ body {
      -moz-box-shadow: 0px 1px 0px rgba(255,255,255,0.3) inset;
           box-shadow: 0px 1px 0px rgba(255,255,255,0.3) inset;
 }
-.joyride-next-tip:hover {
+.joyride-next-tip:hover,
+.joyride-prev-tip:hover {
   color: rgb(255,255,255) !important;
   border: solid 1px rgb(0,60,180) !important;
   background: rgb(43,128,255);
