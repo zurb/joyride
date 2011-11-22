@@ -25,7 +25,8 @@
       'cookieDomain': false, // Will this cookie be attached to a domain, ie. '.notableapp.com'
       'tipContainer': 'body', // Where will the tip be attached if not inline
       'inline': false, // true or false, if true the tip will be attached after the element
-      'tipContent': '#joyRideTipContent' // What is the ID of the <ol> you put the content in
+      'tipContent': '#joyRideTipContent', // What is the ID of the <ol> you put the content in
+      'postRideCallback': null // A possible method to call once the tour closes (cancled or complete)
     };
 
     //Extend those options
@@ -232,6 +233,9 @@
            $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
         }
         $(self).parent().hide();
+        if (settings.postRideCallback != null) {
+            settings.postRideCallback();
+        }
       }
       $('.joyride-close-tip').click(function(e) {
         endTip(e, interval_id, settings.cookieMonster, this);
