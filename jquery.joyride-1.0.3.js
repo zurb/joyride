@@ -18,6 +18,8 @@
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
       'nextButton': true, // true or false to control whether a next button is used
+      'prevButton': true, //true or false to control whether a previous button is used
+      'prevButtonText': 'Previous', // Text to show in the previous button
       'tipAnimation': 'pop', // 'pop' or 'fade' in each tip
       'tipAnimationFadeSpeed': 300, // when tipAnimation = 'fade' this is speed in milliseconds for the transition
       'cookieMonster': false, // true or false to control whether cookies are used
@@ -52,6 +54,9 @@
         }
         if (!tipClass) tipClass = '';
         (buttonText != '') ? buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>': buttonText = '';
+        if (index != 0 && settings.prevButton) {
+        	buttonText = '<a href="#" class="joyride-prev-tip button">' + settings.prevButtonText + '</a>&nbsp;' + buttonText;
+        }
         if (settings.inline) {
           $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).data('id'));
         } else {
@@ -85,9 +90,20 @@
         $('#joyRidePopup' + index).hide();
       });
     }
-
+      
+      showPrevTip = function() {
+        if (settings.tipAnimation == "pop") {
+           $('#joyRidePopup' + (count-1)).hide();
+        } else if (settings.tipAnimation == "fade") {
+           $('#joyRidePopup' + (count-1)).fadeOut(settings.tipAnimationFadeSpeed);
+        }
+      	count-=2;
+      	prevCount-=2;
+      	return showNextTip();
+      }
+      
       showNextTip = function() {
-        var parentElementID = $(tipContent[count]).data('id'),
+        var parentElementID = $(tipContent[count]).attr('data-id'),
         parentElement = $('#' + parentElementID);
 
         while (parentElement.offset() === null) {
