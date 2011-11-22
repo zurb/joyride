@@ -103,7 +103,7 @@
       }
       
       showNextTip = function() {
-        var parentElementID = $(tipContent[count]).attr('data-id'),
+        var parentElementID = $(tipContent[count]).data('id'),
         parentElement = $('#' + parentElementID);
 
         while (parentElement.offset() === null) {
