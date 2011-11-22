@@ -253,6 +253,10 @@
         endTip(e, interval_id, settings.cookieMonster, this);
       });
 
+        $('.joyride-prev-tip').click(function(e) {
+          showPrevTip();
+        });
+
       // When the next button is clicked, show the next tip, only when cookie isn't present
         $('.joyride-next-tip').click(function(e) {
           e.preventDefault();
