@@ -18,6 +18,7 @@
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
       'nextButton': true, // true or false to control whether a next button is used
+      'nextButtonText': 'Next', //Text to show in the next button
       'prevButton': true, //true or false to control whether a previous button is used
       'prevButtonText': 'Previous', // Text to show in the previous button
       'tipAnimation': 'pop', // 'pop' or 'fade' in each tip
@@ -46,17 +47,23 @@
       timerIndicatorInstance,
       timerIndicatorTemplate = '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
       tipTemplate = function(tipClass, index, buttonText, self) { return '<div class="joyride-tip-guide ' + tipClass + '" id="joyRidePopup' + index + '"><span class="joyride-nub"></span>' + $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' + timerIndicatorInstance + '</div>'; },
-      tipLayout = function(tipClass, index, buttonText, self) {
+      tipLayout = function(tipClass, index, nextText, prevText, self) {
+      	var buttonText = '';
         if (index == 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer == 0) {
           timerIndicatorInstance = '';
         } else {
           timerIndicatorInstance = timerIndicatorTemplate;
         }
         if (!tipClass) tipClass = '';
-        (buttonText != '') ? buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>': buttonText = '';
-        if (index != 0 && settings.prevButton) {
-        	buttonText = '<a href="#" class="joyride-prev-tip button">' + settings.prevButtonText + '</a>&nbsp;' + buttonText;
+
+        if (settings.nextButton || !settings.nextButton && settings.startTimerOnClick) {
+        	buttonText =  '<a href="#" class="joyride-next-tip small nice radius yellow button">' + nextText + '</a>'
         }
+
+        if (index != 0 && settings.prevButton) {
+        	buttonText = '<a href="#" class="joyride-prev-tip button">' + prevText + '</a>&nbsp;' + buttonText;
+        }
+
         if (settings.inline) {
           $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).data('id'));
         } else {
@@ -67,30 +74,28 @@
       if(!settings.cookieMonster || !$.cookie(settings.cookieName)) {
 
       tipContent.each(function(index) {
-        var buttonText = $(this).data('text'),
+        var nextText = $(this).data('next'),
+        prevText = $(this).data('previous'),
         tipClass = $(this).attr('class'),
         self = this;
 
-        if (settings.nextButton && buttonText == undefined) {
-          buttonText = 'Next';
+        if (settings.nextButton && nextText == undefined) {
+          nextText = settings.nextButtonText;
         }
-        if (settings.nextButton || !settings.nextButton && settings.startTimerOnClick) {
-          if ($(this).attr('class')) {
-            tipLayout(tipClass, index, buttonText, self);
-          } else {
-            tipLayout(false, index, buttonText, self);
-          }
-        } else if (!settings.nextButton) {
-          if ($(this).attr('class')) {
-            tipLayout(tipClass, index, '', self);
-          } else {
-            tipLayout(false, index, '', self);
-          }
+
+        if (settings.prevButtonText && prevText == undefined) {
+          prevText = settings.prevButtonText;
+        }
+
+        if ($(this).attr('class')) {
+          tipLayout(tipClass, index, nextText, prevText, self);
+        } else {
+          tipLayout(false, index, nextText, prevText, self);
         }
         $('#joyRidePopup' + index).hide();
       });
     }
-      
+
       showPrevTip = function() {
         if (settings.tipAnimation == "pop") {
            $('#joyRidePopup' + (count-1)).hide();
@@ -101,7 +106,7 @@
       	prevCount-=2;
       	return showNextTip();
       }
-      
+
       showNextTip = function() {
         var parentElementID = $(tipContent[count]).data('id'),
         parentElement = $('#' + parentElementID);
