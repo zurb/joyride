@@ -13,7 +13,7 @@
     //   Defaults
     // +++++++++++++++++++
     var settings = {
-      'tipLocation': 'bottom', // 'top' or 'bottom' in relation to parent
+      'tipLocation': 'bottom left', // 'top' or 'bottom' in relation to parent. Also can specify 'left' or 'right' justified
       'scrollSpeed': 300, // Page scrolling speed in milliseconds
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
