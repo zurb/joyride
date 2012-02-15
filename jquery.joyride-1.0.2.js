@@ -13,7 +13,6 @@
     //   Defaults
     // +++++++++++++++++++
     var settings = {
-      'tipLocation': 'bottom', // 'top' or 'bottom' in relation to parent
       'scrollSpeed': 300, // Page scrolling speed in milliseconds
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
@@ -91,7 +90,8 @@
         var parentElement = $( $(tipContent[count]).data('parent') ),
         //user modified position
         addedLeft = $(tipContent[count]).data('left') || 0,
-        addedTop = $(tipContent[count]).data('top') || 0;
+        addedTop = $(tipContent[count]).data('top') || 0,
+  	tipLocation = $(tipContent[count]).data('location') || 'bottom';
 
         while (parentElement.offset() === null) {
           count++;
@@ -133,10 +133,10 @@
           //   Tip Location
           // ++++++++++++++++++
 
-          if (settings.tipLocation == "bottom") {
+          if (tipLocation == "bottom") {
             currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight + addedTop ), left: (currentTipPosition.left - bodyOffset.left + addedLeft)});
             currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
-          } else if (settings.tipLocation == "top") {
+          } else if (tipLocation == "top") {
             if (currentTipHeight >= currentTipPosition.top) {
               currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top  + addedTop ), left: (currentTipPosition.left - bodyOffset.left + addedLeft)});
               currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
@@ -203,13 +203,14 @@
           var parentElement = $( $(tipContent[prevCount]).data('parent') ),
       addedLeft = $(tipContent[prevCount]).data('left') || 0,
           addedTop = $(tipContent[prevCount]).data('top') || 0,
+		  tipLocation = $(tipContent[prevCount]).data('location') || 'bottom';
           currentTipPosition = parentElement.offset(),
           currentParentHeight = parentElement.outerHeight(),
           currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
           nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
-          if (settings.tipLocation == "bottom") {
+          if (tipLocation == "bottom") {
             $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + nubHeight + addedTop), left: (currentTipPosition.left + addedLeft)});
-          } else if (settings.tipLocation == "top") {
+          } else if (tipLocation == "top") {
             if (currentTipPosition.top <= currentTipHeight) {
               $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + nubHeight + currentParentHeight + addedTop), left: (currentTipPosition.left + addedLeft)});
             } else {
