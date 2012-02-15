@@ -198,7 +198,7 @@
       }
 
       if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
-        $(window).resize(function() {
+        $(window).bind('resize.joyride' ,function() { 
           var parentElementID = $(tipContent[prevCount]).data('id'),
           currentTipPosition = $('#' + parentElementID).offset(),
           currentParentHeight = $('#' + parentElementID).outerHeight(),
@@ -239,6 +239,7 @@
         if (settings.postRideCallback != $.noop) {
           settings.postRideCallback();
         }
+        $(window).unbind('resize.joyride');
       }
       $('.joyride-close-tip').click(function(e) {
         endTip(e, interval_id, settings.cookieMonster, this);
