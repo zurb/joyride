@@ -54,7 +54,7 @@
         if (!tipClass) tipClass = '';
         (buttonText != '') ? buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>': buttonText = '';
         if (settings.inline) {
-          $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).data('id'));
+          $(tipTemplate(tipClass, index, buttonText, self)).insertAfter( $(self).data('parent') );
         } else {
           $(options.tipContainer).append(tipTemplate(tipClass, index, buttonText, self));
         }
@@ -88,18 +88,16 @@
     }
 
       showNextTip = function() {
-        var parentElementID = $(tipContent[count]).data('id'),
+        var parentElement = $( $(tipContent[count]).data('parent') ),
         //user modified position
         addedLeft = $(tipContent[count]).data('left') || 0,
         addedTop = $(tipContent[count]).data('top') || 0;
-        parentElement = $('#' + parentElementID);
 
         while (parentElement.offset() === null) {
           count++;
           skipCount++;
           prevCount++;
-          parentElementID = $(tipContent[count]).data('id'),
-          parentElement = $('#' + parentElementID);
+          parentElement = $( $(tipContent[count]).data('parent') );
 
           if ($(tipContent).length < count)
             break;
@@ -202,11 +200,11 @@
 
       if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
         $(window).bind('resize.joyride' ,function() { 
-          var parentElementID = $(tipContent[prevCount]).data('id'),
-  	  addedLeft = $(tipContent[prevCount]).data('left') || 0,
+          var parentElement = $( $(tipContent[prevCount]).data('parent') ),
+      addedLeft = $(tipContent[prevCount]).data('left') || 0,
           addedTop = $(tipContent[prevCount]).data('top') || 0,
-          currentTipPosition = $('#' + parentElementID).offset(),
-          currentParentHeight = $('#' + parentElementID).outerHeight(),
+          currentTipPosition = parentElement.offset(),
+          currentParentHeight = parentElement.outerHeight(),
           currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
           nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
           if (settings.tipLocation == "bottom") {
