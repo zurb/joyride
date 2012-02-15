@@ -26,10 +26,10 @@
       'tipContainer': 'body', // Where will the tip be attached if not inline
       'inline': false, // true or false, if true the tip will be attached after the element
       'tipContent': '#joyRideTipContent', // What is the ID of the <ol> you put the content in
-      'postRideCallback': null // A method to call once the tour closes (canceled or complete)
+      'postRideCallback': $.noop, // A method to call once the tour closes (canceled or complete)
+      'postStepCallback': $.noop // A method to call after each step
     };
 
-    //Extend those options
     var options = $.extend(settings, options);
 
     return this.each(function() {
@@ -192,6 +192,9 @@
         } else {
           prevCount++;
         }
+        if (settings.postStepCallback != $.noop) {
+          settings.postStepCallback(prevCount);
+        }
       }
 
       if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
@@ -233,8 +236,8 @@
            $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
         }
         $(self).parent().hide();
-        if (settings.postRideCallback != null) {
-            settings.postRideCallback();
+        if (settings.postRideCallback != $.noop) {
+          settings.postRideCallback();
         }
       }
       $('.joyride-close-tip').click(function(e) {
