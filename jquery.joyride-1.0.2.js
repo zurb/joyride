@@ -94,7 +94,7 @@
         while (parentElement.offset() === null) {
           count++;
           skipCount++;
-          prevCount++;
+          ((tipContent.length - 1) > prevCount) ? prevCount++ : prevCount;
           parentElementID = $(tipContent[count]).data('id'),
           parentElement = $('#' + parentElementID);
 
@@ -186,10 +186,9 @@
           }
         }
         count++;
-
         if (prevCount < 0) {
           prevCount = 0;
-        } else {
+        } else if ((tipContent.length - 1) > prevCount) {
           prevCount++;
         }
         if (settings.postStepCallback != $.noop) {
