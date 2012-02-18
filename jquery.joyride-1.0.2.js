@@ -244,6 +244,7 @@
           settings.postRideCallback();
         }
         $(window).unbind('resize.joyride');
+        $('[id^=joyRidePopup]').remove(); 
       }
       $('.joyride-close-tip').click(function(e) {
         endTip(e, interval_id, settings.cookieMonster, this);
