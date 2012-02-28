@@ -13,7 +13,7 @@
     //   Defaults
     // +++++++++++++++++++
     var settings = {
-      'tipLocation': 'bottom left', // 'top' or 'bottom' in relation to parent. Also can specify 'left' or 'right' justified
+      'tipLocation': 'bottom left', // 'top' or 'bottom' in relation to parent. Also can specify 'left' or 'right' justified. Use data-position attribute to override this setting.
       'scrollSpeed': 300, // Page scrolling speed in milliseconds
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
@@ -131,11 +131,11 @@
           // ++++++++++++++++++
           //   Tip Location
           // ++++++++++++++++++
-
-          if (settings.tipLocation.indexOf("bottom") != -1 ) {
+	    
+          if ($(tipContent[count]).data("position").indexOf("bottom") != -1 ) {
             currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight), left: (currentTipPosition.left - bodyOffset.left)});
             currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
-          } else if (settings.tipLocation.indexOf("top") != -1) {
+          } else if ($(tipContent[count]).data("position").indexOf("top") != -1) {
             if (currentTipHeight >= currentTipPosition.top) {
               currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top), left: (currentTipPosition.left - bodyOffset.left)});
               currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
@@ -144,10 +144,10 @@
               currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
             }
           }
-          if (settings.tipLocation.indexOf("right") != -1 ) {
+          if ($(tipContent[count]).data("position").indexOf("right") != -1 ) {
               currentTip.offset({left: (currentTipPosition.left - bodyOffset.left - currentTip.width() + parentElement.width())});
               currentTip.children('.joyride-nub').addClass('right');
-          } else if (settings.tipLocation.indexOf("left") != -1 ) {
+          } else if ($(tipContent[count]).data("position").indexOf("left") != -1 ) {
               currentTip.children('.joyride-nub').removeClass('right');
           }
 
