@@ -27,7 +27,8 @@
       'inline': false, // true or false, if true the tip will be attached after the element
       'tipContent': '#joyRideTipContent', // What is the ID of the <ol> you put the content in
       'postRideCallback': $.noop, // A method to call once the tour closes (canceled or complete)
-      'postStepCallback': $.noop // A method to call after each step
+      'postStepCallback': $.noop, // A method to call after each step
+      'preStepCallback': $.noop // A method to call before each step
     };
 
     var options = $.extend(settings, options);
@@ -88,6 +89,11 @@
     }
 
       showNextTip = function() {
+
+        if (settings.preStepCallback != $.noop) {
+            settings.preStepCallback(prevCount+1);
+        }
+
         var parentElementSelector = $(tipContent[count]).data('selector'),
         parentElement = $(parentElementSelector);
 
