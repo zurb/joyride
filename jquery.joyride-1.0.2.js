@@ -27,7 +27,8 @@
       'inline': false, // true or false, if true the tip will be attached after the element
       'tipContent': '#joyRideTipContent', // What is the ID of the <ol> you put the content in
       'postRideCallback': $.noop, // A method to call once the tour closes (canceled or complete)
-      'postStepCallback': $.noop // A method to call after each step
+      'postStepCallback': $.noop, // A method to call after each step
+      'preStepCallback': $.noop // A method to call before each step
     };
 
     var options = $.extend(settings, options);
@@ -54,7 +55,7 @@
         if (!tipClass) tipClass = '';
         (buttonText != '') ? buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>': buttonText = '';
         if (settings.inline) {
-          $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).data('id'));
+          $(tipTemplate(tipClass, index, buttonText, self)).insertAfter($($(self).data('selector')));
         } else {
           $(options.tipContainer).append(tipTemplate(tipClass, index, buttonText, self));
         }
@@ -88,15 +89,20 @@
     }
 
       showNextTip = function() {
-        var parentElementID = $(tipContent[count]).data('id'),
-        parentElement = $('#' + parentElementID);
+
+        if (settings.preStepCallback != $.noop) {
+            settings.preStepCallback(prevCount+1);
+        }
+
+        var parentElementSelector = $(tipContent[count]).data('selector'),
+        parentElement = $(parentElementSelector);
 
         while (parentElement.offset() === null) {
           count++;
           skipCount++;
           ((tipContent.length - 1) > prevCount) ? prevCount++ : prevCount;
-          parentElementID = $(tipContent[count]).data('id'),
-          parentElement = $('#' + parentElementID);
+          parentElementSelector = $(tipContent[count]).data('selector'),
+          parentElement = $(parentElementSelector);
 
           if ($(tipContent).length < count)
             break;
@@ -131,16 +137,20 @@
           // ++++++++++++++++++
           //   Tip Location
           // ++++++++++++++++++
+          // 
+          
+          var tipLocation = $(tipContent[count]).data('location') || settings.tipLocation;
+          var offsetx = parseInt($(tipContent[count]).data('offset-x'));
 
-          if (settings.tipLocation == "bottom") {
-            currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight), left: (currentTipPosition.left - bodyOffset.left)});
+          if (tipLocation == "bottom") {
+            currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight), left: (currentTipPosition.left - bodyOffset.left + offsetx)});
             currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
-          } else if (settings.tipLocation == "top") {
+          } else if (tipLocation == "top") {
             if (currentTipHeight >= currentTipPosition.top) {
-              currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top), left: (currentTipPosition.left - bodyOffset.left)});
+              currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top), left: (currentTipPosition.left - bodyOffset.left +offsetx)});
               currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
             } else {
-              currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)), left: (currentTipPosition.left - bodyOffset.left)});
+              currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)), left: (currentTipPosition.left - bodyOffset.left +offsetx)});
               currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
             }
           }
@@ -198,9 +208,9 @@
 
       if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
         $(window).resize(function() {
-          var parentElementID = $(tipContent[prevCount]).data('id'),
-          currentTipPosition = $('#' + parentElementID).offset(),
-          currentParentHeight = $('#' + parentElementID).outerHeight(),
+          var parentElementSelector = $(tipContent[prevCount]).data('selector'),
+          currentTipPosition = $(parentElementSelector).offset(),
+          currentParentHeight = $(parentElementSelector).outerHeight(),
           currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
           nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
           if (settings.tipLocation == "bottom") {
