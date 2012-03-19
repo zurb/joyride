@@ -89,7 +89,12 @@
 
       showNextTip = function() {
         var parentElementID = $(tipContent[count]).data('id'),
-        parentElement = $('#' + parentElementID);
+        parentElement = $('#' + parentElementID),
+        opt = {};
+        // Parse the options string
+        ($(tipContent[count]).data('options') || ':').split(';').map(function (s) { var p = s.split(':'); if(p.length == 2) opt[p[0].trim()] = p[1].trim(); });
+        options = $.extend(options, opt); // Update options and settings
+        settings = $.extend(settings, opt);
 
         while (parentElement.offset() === null) {
           count++;
@@ -147,7 +152,6 @@
 
           // Animate Scrolling when tip is off screen
           tipOffset = Math.ceil(currentTip.offset().top - windowHalf);
-
           $("html, body").animate({
             scrollTop: tipOffset
           }, settings.scrollSpeed);
