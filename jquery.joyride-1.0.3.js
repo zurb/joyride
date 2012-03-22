@@ -1,5 +1,5 @@
 /*
- * jQuery Joyride Plugin 1.0.2
+ * jQuery Joyride Plugin 1.0.3
  * www.ZURB.com/playground
  * Copyright 2011, ZURB
  * Free to use under the MIT license.
@@ -44,7 +44,10 @@
       prevCount = -1,
       timerIndicatorInstance,
       timerIndicatorTemplate = '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
-      tipTemplate = function(tipClass, index, buttonText, self) { return '<div class="joyride-tip-guide ' + tipClass + '" id="joyRidePopup' + index + '"><span class="joyride-nub"></span>' + $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' + timerIndicatorInstance + '</div>'; },
+      tipTemplate = function(tipClass, index, buttonText, self) { return '<div class="joyride-tip-guide ' +
+        tipClass + '" id="joyRidePopup' + index + '"><span class="joyride-nub"></span>' +
+        $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' +
+        timerIndicatorInstance + '</div>'; },
       tipLayout = function(tipClass, index, buttonText, self) {
         if (index == 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer == 0) {
           timerIndicatorInstance = '';
@@ -89,7 +92,16 @@
 
       showNextTip = function() {
         var parentElementID = $(tipContent[count]).data('id'),
-        parentElement = $('#' + parentElementID);
+        parentElement = $('#' + parentElementID),
+        opt = {};
+        // Parse the options string
+        ($(tipContent[count]).data('options') || ':').split(';')
+          .map(function (s) {
+            var p = s.split(':');
+            if (p.length == 2) opt[p[0].trim()] = p[1].trim();
+          });
+        options = $.extend(options, opt); // Update options and settings
+        settings = $.extend(settings, opt);
 
         while (parentElement.offset() === null) {
           count++;
@@ -115,14 +127,21 @@
           if (settings.tipAnimation == "pop") {
             $('.joyride-timer-indicator').width(0);
             if (settings.timer > 0) {
-              currentTip.show().children('.joyride-timer-indicator-wrap').children('.joyride-timer-indicator').animate({width: $('.joyride-timer-indicator-wrap').width()}, settings.timer);
+              currentTip.show().children('.joyride-timer-indicator-wrap')
+                .children('.joyride-timer-indicator')
+                .animate({width: $('.joyride-timer-indicator-wrap')
+                .width()}, settings.timer);
             } else {
               currentTip.show();
             }
           } else if (settings.tipAnimation == "fade") {
             $('.joyride-timer-indicator').width(0);
             if (settings.timer > 0) {
-              currentTip.fadeIn(settings.tipAnimationFadeSpeed).children('.joyride-timer-indicator-wrap').children('.joyride-timer-indicator').animate({width: $('.joyride-timer-indicator-wrap').width()}, settings.timer);
+              currentTip.fadeIn(settings.tipAnimationFadeSpeed)
+                .children('.joyride-timer-indicator-wrap')
+                .children('.joyride-timer-indicator')
+                .animate({width: $('.joyride-timer-indicator-wrap')
+                .width()}, settings.timer);
             } else {
               currentTip.fadeIn(settings.tipAnimationFadeSpeed);
             }
@@ -133,21 +152,23 @@
           // ++++++++++++++++++
 
           if (settings.tipLocation == "bottom") {
-            currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight), left: (currentTipPosition.left - bodyOffset.left)});
+            currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight),
+              left: (currentTipPosition.left - bodyOffset.left)});
             currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
           } else if (settings.tipLocation == "top") {
             if (currentTipHeight >= currentTipPosition.top) {
-              currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top), left: (currentTipPosition.left - bodyOffset.left)});
+              currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
+                left: (currentTipPosition.left - bodyOffset.left)});
               currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
             } else {
-              currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)), left: (currentTipPosition.left - bodyOffset.left)});
+              currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)),
+                left: (currentTipPosition.left - bodyOffset.left)});
               currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
             }
           }
 
           // Animate Scrolling when tip is off screen
           tipOffset = Math.ceil(currentTip.offset().top - windowHalf);
-
           $("html, body").animate({
             scrollTop: tipOffset
           }, settings.scrollSpeed);
@@ -176,8 +197,6 @@
           }
           if (settings.cookieMonster == true) {
             $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
-          } else {
-            // Do not include cookie
           }
           if (settings.tipAnimation == "pop") {
             $('#joyRidePopup' + hideCount).fadeTo(0, 0);
@@ -204,12 +223,15 @@
           currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
           nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
           if (settings.tipLocation == "bottom") {
-            $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + nubHeight), left: currentTipPosition.left});
+            $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + nubHeight),
+              left: currentTipPosition.left});
           } else if (settings.tipLocation == "top") {
             if (currentTipPosition.top <= currentTipHeight) {
-              $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + nubHeight + currentParentHeight), left: currentTipPosition.left});
+              $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + nubHeight + currentParentHeight),
+                left: currentTipPosition.left});
             } else {
-              $('#joyRidePopup' + prevCount).offset({top: ((currentTipPosition.top) - (currentTipHeight  + nubHeight)), left: currentTipPosition.left});
+              $('#joyRidePopup' + prevCount).offset({top: ((currentTipPosition.top) - (currentTipHeight  + nubHeight)),
+                left: currentTipPosition.left});
             }
           }
         });
@@ -260,8 +282,8 @@
             showNextTip();
           }
         });
-    }); // each call
-  }; // joyride plugin call
+    });
+  };
 
 
   // +++++++++++++++++++++++++++++
@@ -303,5 +325,5 @@
       options = value || {};
       var result, decode = options.raw ? function (s) { return s; } : decodeURIComponent;
       return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
-  }; // cookie plugin call
+  };
 })(jQuery);
