@@ -13,7 +13,7 @@
     //   Defaults
     // +++++++++++++++++++
     var settings = {
-      'tipLocation': 'bottom', // 'top' or 'bottom' in relation to parent
+      'tipLocation': 'bottom left', // 'top' or 'bottom' in relation to parent. Also can specify 'left' or 'right' justified. Use data-position attribute to override this setting.
       'scrollSpeed': 300, // Page scrolling speed in milliseconds
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
@@ -136,11 +136,11 @@
           // ++++++++++++++++++
           //   Tip Location
           // ++++++++++++++++++
-
-          if (settings.tipLocation == "bottom") {
+	    
+          if ($(tipContent[count]).data("position").indexOf("bottom") != -1 ) {
             currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight), left: (currentTipPosition.left - bodyOffset.left)});
             currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
-          } else if (settings.tipLocation == "top") {
+          } else if ($(tipContent[count]).data("position").indexOf("top") != -1) {
             if (currentTipHeight >= currentTipPosition.top) {
               currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top), left: (currentTipPosition.left - bodyOffset.left)});
               currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
@@ -148,6 +148,12 @@
               currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)), left: (currentTipPosition.left - bodyOffset.left)});
               currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
             }
+          }
+          if ($(tipContent[count]).data("position").indexOf("right") != -1 ) {
+              currentTip.offset({left: (currentTipPosition.left - bodyOffset.left - currentTip.width() + parentElement.width())});
+              currentTip.children('.joyride-nub').addClass('right');
+          } else if ($(tipContent[count]).data("position").indexOf("left") != -1 ) {
+              currentTip.children('.joyride-nub').removeClass('right');
           }
 
           // Animate Scrolling when tip is off screen
@@ -207,9 +213,9 @@
           currentParentHeight = $('#' + parentElementID).outerHeight(),
           currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
           nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
-          if (settings.tipLocation == "bottom") {
+          if (settings.tipLocation.indexOf("bottom") != -1 ) {
             $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + currentParentHeight + nubHeight), left: currentTipPosition.left});
-          } else if (settings.tipLocation == "top") {
+          } else if (settings.tipLocation.indexOf("top") != -1) {
             if (currentTipPosition.top <= currentTipHeight) {
               $('#joyRidePopup' + prevCount).offset({top: (currentTipPosition.top + nubHeight + currentParentHeight), left: currentTipPosition.left});
             } else {
