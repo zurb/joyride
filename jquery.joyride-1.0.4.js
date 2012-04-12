@@ -151,42 +151,37 @@
           //   Tip Location
           // ++++++++++++++++++
 
-         if (Modernizr.mq('only screen and (max-width: 769px)')) {
-		 //If the user is "mobile"
-		 //Do not add a left: position
-		 //instead add the left: position to the 'nub' since the tool tip will be 100% width.
-          if (settings.tipLocation == "bottom") {
-            currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight)});
-            currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
-          } else if (settings.tipLocation == "top") {
-            if (currentTipHeight >= currentTipPosition.top) {
-              currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top)});
+          if (Modernizr.mq('only screen and (max-width: 769px)')) {
+            //If the user is "mobile"
+            if (settings.tipLocation == "bottom") {
+              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight)});
               currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
-            } else {
-              currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight))});
-              currentTip.children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left)});
+            } else if (settings.tipLocation == "top") {
+              if (currentTipHeight >= currentTipPosition.top) {
+                currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top)});
+                currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
+              } else {
+                currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight))});
+                currentTip.children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left)});
+              }
             }
-          }
-		  }
-		  else
-		  //Default behavior
-		  {
-		            if (settings.tipLocation == "bottom") {
-            currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight),
-              left: (currentTipPosition.left - bodyOffset.left)});
-            currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
-          } else if (settings.tipLocation == "top") {
-            if (currentTipHeight >= currentTipPosition.top) {
-              currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
+          } else {
+            if (settings.tipLocation == "bottom") {
+              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight),
                 left: (currentTipPosition.left - bodyOffset.left)});
               currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
-            } else {
-              currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)),
-                left: (currentTipPosition.left - bodyOffset.left)});
-              currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
+            } else if (settings.tipLocation == "top") {
+              if (currentTipHeight >= currentTipPosition.top) {
+                currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
+                  left: (currentTipPosition.left - bodyOffset.left)});
+                currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
+              } else {
+                currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)),
+                  left: (currentTipPosition.left - bodyOffset.left)});
+                currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
+              }
             }
           }
-	}
 
           // Animate Scrolling when tip is off screen
           tipOffset = Math.ceil(currentTip.offset().top - windowHalf);
@@ -236,67 +231,67 @@
         }
       }
 
-		if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
-			$(window).resize(function () {
-				var parentElementID = $(tipContent[prevCount]).data('id'),
-				  currentTipPosition = $('#' + parentElementID).offset(),
-				  currentParentHeight = $('#' + parentElementID).outerHeight(),
-				  currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
-				  nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
-				if (Modernizr.mq('only screen and (max-width: 769px)')) {
-					if (settings.tipLocation == "bottom") {
-						$('#joyRidePopup' + prevCount).offset({
-							top: (currentTipPosition.top + currentParentHeight + nubHeight),
-							left: 0
-						});
-						$('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
-					}
-					else if (settings.tipLocation == "top") {
-						if (currentTipPosition.top <= currentTipHeight) {
-							$('#joyRidePopup' + prevCount).offset({
-								top: (currentTipPosition.top + nubHeight + currentParentHeight) ,
-								left: 0
-							});
-							$('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
+    if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
+      $(window).resize(function () {
+        var parentElementID = $(tipContent[prevCount]).data('id'),
+          currentTipPosition = $('#' + parentElementID).offset(),
+          currentParentHeight = $('#' + parentElementID).outerHeight(),
+          currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
+          nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
+        if (Modernizr.mq('only screen and (max-width: 769px)')) {
+          if (settings.tipLocation == "bottom") {
+            $('#joyRidePopup' + prevCount).offset({
+              top: (currentTipPosition.top + currentParentHeight + nubHeight),
+              left: 0
+            });
+            $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
+          }
+          else if (settings.tipLocation == "top") {
+            if (currentTipPosition.top <= currentTipHeight) {
+              $('#joyRidePopup' + prevCount).offset({
+                top: (currentTipPosition.top + nubHeight + currentParentHeight) ,
+                left: 0
+              });
+              $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
 
-						}
-						else {
-							$('#joyRidePopup' + prevCount).offset({
-								top: ((currentTipPosition.top) - (currentTipHeight + nubHeight))  ,
-								left: 0
-							});
-							$('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left) });
+            }
+            else {
+              $('#joyRidePopup' + prevCount).offset({
+                top: ((currentTipPosition.top) - (currentTipHeight + nubHeight))  ,
+                left: 0
+              });
+              $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left) });
 
-						}
-					}
-				}
-				else {
-					if (settings.tipLocation == "bottom") {
-						$('#joyRidePopup' + prevCount).offset({
-							top: (currentTipPosition.top + currentParentHeight + nubHeight),
-							left: currentTipPosition.left
-						});
-						$('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: '' });
-					}
-					else if (settings.tipLocation == "top") {
-						if (currentTipPosition.top <= currentTipHeight) {
-							$('#joyRidePopup' + prevCount).offset({
-								top: (currentTipPosition.top + nubHeight + currentParentHeight),
-								left: currentTipPosition.left
-							});
-							$('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: '' });
-						}
-						else {
-							$('#joyRidePopup' + prevCount).offset({
-								top: ((currentTipPosition.top) - (currentTipHeight + nubHeight)),
-								left: currentTipPosition.left
-							});
-							$('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: '' });
-						}
-					}
-				}
-			});
-		}
+            }
+          }
+        }
+        else {
+          if (settings.tipLocation == "bottom") {
+            $('#joyRidePopup' + prevCount).offset({
+              top: (currentTipPosition.top + currentParentHeight + nubHeight),
+              left: currentTipPosition.left
+            });
+            $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: '' });
+          }
+          else if (settings.tipLocation == "top") {
+            if (currentTipPosition.top <= currentTipHeight) {
+              $('#joyRidePopup' + prevCount).offset({
+                top: (currentTipPosition.top + nubHeight + currentParentHeight),
+                left: currentTipPosition.left
+              });
+              $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: '' });
+            }
+            else {
+              $('#joyRidePopup' + prevCount).offset({
+                top: ((currentTipPosition.top) - (currentTipHeight + nubHeight)),
+                left: currentTipPosition.left
+              });
+              $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: '' });
+            }
+          }
+        }
+      });
+    }
 
       // +++++++++++++++
       //   Timer
