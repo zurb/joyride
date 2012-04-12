@@ -18,9 +18,10 @@ Repo Contents
 
 * README
 * DEMO - Demo specific files, not necessary to use the plugin
-* joyride-1.0.3.css - Default Joyride styles, required
+* joyride-1.0.4.css - Default Joyride styles, required
 * jquery-1.7.2.min.js - A version of jQuery, required, 1.7+ is not required
-* jquery.joyride-1.0.3.js - The heart of Joyride, required
+* jquery.joyride-1.0.4.js - The heart of Joyride, required
+* modernizr.foundation.js - A custom build of Modernizr compatible with Foundation, required
 * .gitignore - Those pesky DS_Store files...this is not part of the plugin
 
 ZURB

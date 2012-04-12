@@ -1,5 +1,5 @@
 /*
- * jQuery Joyride Plugin 1.0.3
+ * jQuery Joyride Plugin 1.0.4
  * www.ZURB.com/playground
  * Copyright 2011, ZURB
  * Free to use under the MIT license.
@@ -152,7 +152,7 @@
           // ++++++++++++++++++
 
          if (Modernizr.mq('only screen and (max-width: 769px)')) {
-		 //If the user is "mobile" 
+		 //If the user is "mobile"
 		 //Do not add a left: position
 		 //instead add the left: position to the 'nub' since the tool tip will be 100% width.
           if (settings.tipLocation == "bottom") {
@@ -268,7 +268,7 @@
 							$('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left) });
 
 						}
-					} 
+					}
 				}
 				else {
 					if (settings.tipLocation == "bottom") {
@@ -293,7 +293,7 @@
 							});
 							$('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: '' });
 						}
-					} 
+					}
 				}
 			});
 		}
@@ -317,7 +317,7 @@
         if (cookie) {
            $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
         }
-        $(self).parent().parent().hide(); 
+        $(self).parent().parent().hide();
         if (settings.postRideCallback != $.noop) {
           settings.postRideCallback();
         }
