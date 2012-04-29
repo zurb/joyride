@@ -46,12 +46,15 @@
       skipCount = 0,
       prevCount = -1,
       timerIndicatorInstance,
-      timerIndicatorTemplate = '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
-      tipTemplate = function(tipClass, index, buttonText, self) { return '<div class="joyride-tip-guide ' +
-        tipClass + '" id="joyRidePopup' + index + '"><span class="joyride-nub"></span><div class="joyride-content-wrapper">' +
-        $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' +
-        timerIndicatorInstance + '</div></div>'; },
-      tipLayout = function(tipClass, index, buttonText, self) {
+      timerIndicatorTemplate = '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>';
+
+      var tipTemplate = function(tipClass, index, buttonText, self) { 
+        return '<div class="joyride-tip-guide ' +
+          tipClass + '" id="joyRidePopup' + index + '"><span class="joyride-nub"></span><div class="joyride-content-wrapper">' +
+          $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' +
+          timerIndicatorInstance + '</div></div>'; 
+      };
+      var tipLayout = function(tipClass, index, buttonText, self) {
         if (index === 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer === 0) {
           timerIndicatorInstance = '';
         } else {
@@ -72,32 +75,32 @@
         }
       };
 
-      if(!settings.cookieMonster || !$.cookie(settings.cookieName)) {
+      if (!settings.cookieMonster || !$.cookie(settings.cookieName)) {
 
-      tipContent.each(function(index) {
-        var buttonText = $(this).data('text'),
-        tipClass = $(this).attr('class'),
-        self = this;
+        tipContent.each(function(index) {
+          var buttonText = $(this).data('text'),
+          tipClass = $(this).attr('class'),
+          self = this;
 
-        if (settings.nextButton && !buttonText) {
-          buttonText = 'Next';
-        }
-        if (settings.nextButton || !settings.nextButton && settings.startTimerOnClick) {
-          if ($(this).attr('class')) {
-            tipLayout(tipClass, index, buttonText, self);
-          } else {
-            tipLayout(false, index, buttonText, self);
+          if (settings.nextButton && !buttonText) {
+            buttonText = 'Next';
           }
-        } else if (!settings.nextButton) {
-          if ($(this).attr('class')) {
-            tipLayout(tipClass, index, '', self);
-          } else {
-            tipLayout(false, index, '', self);
+          if (settings.nextButton || !settings.nextButton && settings.startTimerOnClick) {
+            if ($(this).attr('class')) {
+              tipLayout(tipClass, index, buttonText, self);
+            } else {
+              tipLayout(false, index, buttonText, self);
+            }
+          } else if (!settings.nextButton) {
+            if ($(this).attr('class')) {
+              tipLayout(tipClass, index, '', self);
+            } else {
+              tipLayout(false, index, '', self);
+            }
           }
-        }
-        $('#joyRidePopup' + index).hide();
-      });
-    }
+          $('#joyRidePopup' + index).hide();
+        });
+      }
 
       showNextTip = function() {
         var parentElementID = $(tipContent[count]).data('id'),
@@ -128,12 +131,12 @@
           }
         }
         var windowHalf = Math.ceil($(window).height() / 2),
-        currentTip = $('#joyRidePopup' + count),
-        currentTipPosition = parentElement.offset(),
-        currentParentHeight = parentElement.outerHeight(),
-        currentTipHeight = currentTip.outerHeight(),
-        nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2),
-        tipOffset = 0;
+          currentTip = $('#joyRidePopup' + count),
+          currentTipPosition = parentElement.offset(),
+          currentParentHeight = parentElement.outerHeight(),
+          currentTipHeight = currentTip.outerHeight(),
+          nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2),
+          tipOffset = 0;
 
         if (currentTip.length === 0) {
           return;
@@ -255,66 +258,66 @@
         }
       };
 
-    if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
-      $(window).resize(function () {
-        var parentElementID = $(tipContent[prevCount]).data('id'),
-          currentTipPosition = $('#' + parentElementID).offset(),
-          currentParentHeight = $('#' + parentElementID).outerHeight(),
-          currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
-          nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
-        if (Modernizr.mq('only screen and (max-width: 769px)')) {
-          if (settings.tipLocation.indexOf("bottom") != -1 ) {
-            $('#joyRidePopup' + prevCount).offset({
-              top: (currentTipPosition.top + currentParentHeight + nubHeight),
-              left: 0
-            });
-            $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
-          } else if (settings.tipLocation.indexOf("top") != -1) {
-            if (currentTipPosition.top <= currentTipHeight) {
+      if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
+        $(window).resize(function () {
+          var parentElementID = $(tipContent[prevCount]).data('id'),
+            currentTipPosition = $('#' + parentElementID).offset(),
+            currentParentHeight = $('#' + parentElementID).outerHeight(),
+            currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
+            nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
+          if (Modernizr.mq('only screen and (max-width: 769px)')) {
+            if (settings.tipLocation.indexOf("bottom") != -1 ) {
               $('#joyRidePopup' + prevCount).offset({
-                top: (currentTipPosition.top + nubHeight + currentParentHeight) ,
+                top: (currentTipPosition.top + currentParentHeight + nubHeight),
                 left: 0
               });
               $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
+            } else if (settings.tipLocation.indexOf("top") != -1) {
+              if (currentTipPosition.top <= currentTipHeight) {
+                $('#joyRidePopup' + prevCount).offset({
+                  top: (currentTipPosition.top + nubHeight + currentParentHeight) ,
+                  left: 0
+                });
+                $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
 
-            }
-            else {
-              $('#joyRidePopup' + prevCount).offset({
-                top: ((currentTipPosition.top) - (currentTipHeight + nubHeight))  ,
-                left: 0
-              });
-              $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left) });
+              }
+              else {
+                $('#joyRidePopup' + prevCount).offset({
+                  top: ((currentTipPosition.top) - (currentTipHeight + nubHeight))  ,
+                  left: 0
+                });
+                $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left) });
 
+              }
             }
           }
-        }
-        else {
-          if (settings.tipLocation == "bottom") {
-            $('#joyRidePopup' + prevCount).offset({
-              top: (currentTipPosition.top + currentParentHeight + nubHeight),
-              left: currentTipPosition.left
-            });
-            $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: '' });
-          }
-          else if (settings.tipLocation == "top") {
-            if (currentTipPosition.top <= currentTipHeight) {
+          else {
+            if (settings.tipLocation == "bottom") {
               $('#joyRidePopup' + prevCount).offset({
-                top: (currentTipPosition.top + nubHeight + currentParentHeight),
+                top: (currentTipPosition.top + currentParentHeight + nubHeight),
                 left: currentTipPosition.left
               });
               $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: '' });
             }
-            else {
-              $('#joyRidePopup' + prevCount).offset({
-                top: ((currentTipPosition.top) - (currentTipHeight + nubHeight)),
-                left: currentTipPosition.left
-              });
-              $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: '' });
+            else if (settings.tipLocation == "top") {
+              if (currentTipPosition.top <= currentTipHeight) {
+                $('#joyRidePopup' + prevCount).offset({
+                  top: (currentTipPosition.top + nubHeight + currentParentHeight),
+                  left: currentTipPosition.left
+                });
+                $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: '' });
+              }
+              else {
+                $('#joyRidePopup' + prevCount).offset({
+                  top: ((currentTipPosition.top) - (currentTipHeight + nubHeight)),
+                  left: currentTipPosition.left
+                });
+                $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: '' });
+              }
             }
           }
-        }
-      });
-    }
+        });
+      }
 
       // +++++++++++++++
       //   Timer
@@ -324,10 +327,10 @@
       showTimerState = false;
 
       if (!settings.startTimerOnClick && settings.timer > 0){
-       showNextTip();
-       interval_id = setInterval(function() {showNextTip();}, settings.timer);
+        showNextTip();
+        interval_id = setInterval(function() {showNextTip();}, settings.timer);
       } else {
-       showNextTip();
+        showNextTip();
       }
       var endTip = function(e, interval_id, cookie, self) {
         e.preventDefault();
@@ -345,22 +348,22 @@
       });
 
       // When the next button is clicked, show the next tip, only when cookie isn't present
-        $('.joyride-next-tip').click(function(e) {
-          e.preventDefault();
-          if (count >= tipContent.length) {
-            endTip(e, interval_id, settings.cookieMonster, this);
-          }
-          if (settings.timer > 0 && settings.startTimerOnClick) {
-            showNextTip();
-            clearInterval(interval_id);
-            interval_id = setInterval(function() {showNextTip();}, settings.timer);
-          } else if (settings.timer > 0 && !settings.startTimerOnClick){
-            clearInterval(interval_id);
-            interval_id = setInterval(function() {showNextTip();}, settings.timer);
-          } else {
-            showNextTip();
-          }
-        });
+      $('.joyride-next-tip').click(function(e) {
+        e.preventDefault();
+        if (count >= tipContent.length) {
+          endTip(e, interval_id, settings.cookieMonster, this);
+        }
+        if (settings.timer > 0 && settings.startTimerOnClick) {
+          showNextTip();
+          clearInterval(interval_id);
+          interval_id = setInterval(function() {showNextTip();}, settings.timer);
+        } else if (settings.timer > 0 && !settings.startTimerOnClick){
+          clearInterval(interval_id);
+          interval_id = setInterval(function() {showNextTip();}, settings.timer);
+        } else {
+          showNextTip();
+        }
+      });
     });
   };
 
