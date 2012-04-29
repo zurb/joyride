@@ -30,17 +30,20 @@
       'postStepCallback': $.noop // A method to call after each step
     };
 
-    var options = $.extend(settings, options);
+    options = $.extend(settings, options);
 
     return this.each(function() {
 
-      if ($(options.tipContent).length === 0) return;
+      if ($(options.tipContent).length === 0) {
+        return;
+      }
 
       $(options.tipContent).hide();
 
       var bodyOffset = $(options.tipContainer).children('*').first().position(),
       tipContent = $(options.tipContent + ' li'),
-      count = skipCount = 0,
+      count = 0,
+      skipCount = 0,
       prevCount = -1,
       timerIndicatorInstance,
       timerIndicatorTemplate = '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
@@ -49,13 +52,19 @@
         $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' +
         timerIndicatorInstance + '</div></div>'; },
       tipLayout = function(tipClass, index, buttonText, self) {
-        if (index == 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer == 0) {
+        if (index === 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer === 0) {
           timerIndicatorInstance = '';
         } else {
           timerIndicatorInstance = timerIndicatorTemplate;
         }
-        if (!tipClass) tipClass = '';
-        (buttonText != '') ? buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>': buttonText = '';
+        if (!tipClass) {
+          tipClass = '';
+        }
+        if (buttonText) {
+          buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>';
+        } else {
+          buttonText = '';
+        }
         if (settings.inline) {
           $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).data('id'));
         } else {
@@ -70,7 +79,7 @@
         tipClass = $(this).attr('class'),
         self = this;
 
-        if (settings.nextButton && buttonText == undefined) {
+        if (settings.nextButton && !buttonText) {
           buttonText = 'Next';
         }
         if (settings.nextButton || !settings.nextButton && settings.startTimerOnClick) {
@@ -98,7 +107,9 @@
         ($(tipContent[count]).data('options') || ':').split(';')
           .map(function (s) {
             var p = s.split(':');
-            if (p.length == 2) opt[p[0].trim()] = p[1].trim();
+            if (p.length == 2) {
+              opt[p[0].trim()] = p[1].trim();
+            }
           });
         options = $.extend(options, opt); // Update options and settings
         settings = $.extend(settings, opt);
@@ -106,12 +117,15 @@
         while (parentElement.offset() === null) {
           count++;
           skipCount++;
-          ((tipContent.length - 1) > prevCount) ? prevCount++ : prevCount;
-          parentElementID = $(tipContent[count]).data('id'),
+          if ((tipContent.length - 1) > prevCount) {
+            prevCount++;
+          }
+          parentElementID = $(tipContent[count]).data('id');
           parentElement = $('#' + parentElementID);
 
-          if ($(tipContent).length < count)
+          if ($(tipContent).length < count) {
             break;
+          }
         }
         var windowHalf = Math.ceil($(window).height() / 2),
         currentTip = $('#joyRidePopup' + count),
@@ -121,7 +135,9 @@
         nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2),
         tipOffset = 0;
 
-        if (currentTip.length === 0) return;
+        if (currentTip.length === 0) {
+          return;
+        }
 
         if (count < tipContent.length) {
           if (settings.tipAnimation == "pop") {
@@ -196,11 +212,12 @@
           }, settings.scrollSpeed);
 
           if (count > 0) {
+            var hideCount;
             if (skipCount > 0) {
-              var hideCount = prevCount - skipCount;
+              hideCount = prevCount - skipCount;
               skipCount = 0;
             } else {
-              var hideCount = prevCount;
+              hideCount = prevCount;
             }
             if (settings.tipAnimation == "pop") {
               $('#joyRidePopup' + hideCount).hide();
@@ -211,19 +228,20 @@
 
         // Hide the last tip when clicked
         } else if ((tipContent.length - 1) < count) {
+          var hideCnt;
           if (skipCount > 0) {
-            var hideCount = prevCount - skipCount;
+            hideCnt = prevCount - skipCount;
             skipCount = 0;
           } else {
-            var hideCount = prevCount;
+            hideCnt = prevCount;
           }
-          if (settings.cookieMonster == true) {
+          if (settings.cookieMonster === true) {
             $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
           }
           if (settings.tipAnimation == "pop") {
-            $('#joyRidePopup' + hideCount).fadeTo(0, 0);
+            $('#joyRidePopup' + hideCnt).fadeTo(0, 0);
           } else if (settings.tipAnimation == "fade") {
-            $('#joyRidePopup' + hideCount).fadeTo(settings.tipAnimationFadeSpeed, 0);
+            $('#joyRidePopup' + hideCnt).fadeTo(settings.tipAnimationFadeSpeed, 0);
           }
         }
         count++;
@@ -235,7 +253,7 @@
         if (settings.postStepCallback != $.noop) {
           settings.postStepCallback(prevCount);
         }
-      }
+      };
 
     if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
       $(window).resize(function () {
@@ -307,7 +325,7 @@
 
       if (!settings.startTimerOnClick && settings.timer > 0){
        showNextTip();
-       interval_id = setInterval(function() {showNextTip()}, settings.timer);
+       interval_id = setInterval(function() {showNextTip();}, settings.timer);
       } else {
        showNextTip();
       }
@@ -321,7 +339,7 @@
         if (settings.postRideCallback != $.noop) {
           settings.postRideCallback();
         }
-      }
+      };
       $('.joyride-close-tip').click(function(e) {
         endTip(e, interval_id, settings.cookieMonster, this);
       });
@@ -335,10 +353,10 @@
           if (settings.timer > 0 && settings.startTimerOnClick) {
             showNextTip();
             clearInterval(interval_id);
-            interval_id = setInterval(function() {showNextTip()}, settings.timer);
+            interval_id = setInterval(function() {showNextTip();}, settings.timer);
           } else if (settings.timer > 0 && !settings.startTimerOnClick){
             clearInterval(interval_id);
-            interval_id = setInterval(function() {showNextTip()}, settings.timer);
+            interval_id = setInterval(function() {showNextTip();}, settings.timer);
           } else {
             showNextTip();
           }
