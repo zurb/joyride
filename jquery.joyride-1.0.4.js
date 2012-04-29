@@ -107,13 +107,14 @@
         parentElement = $('#' + parentElementID),
         opt = {};
         // Parse the options string
-        ($(tipContent[count]).data('options') || ':').split(';')
-          .map(function (s) {
+        $.each(($(tipContent[count]).data('options') || ':').split(';'),
+          function (i, s) {
             var p = s.split(':');
             if (p.length == 2) {
-              opt[p[0].trim()] = p[1].trim();
+              opt[$.trim(p[0])] = $.trim(p[1]);
             }
-          });
+          }
+        );
         // Local settings for this tip only.
         var tipSettings = $.extend({}, settings, opt);
 
@@ -182,7 +183,7 @@
             nub.addClass("right");
           }
 
-          if (Modernizr.mq('only screen and (max-width: 769px)')) {
+          if (Modernizr.mediaqueries && Modernizr.mq('only screen and (max-width: 769px)')) {
             //If the user is "mobile"
             if (tipSettings.tipLocation.indexOf("top") != -1 ) {
               if (currentTipHeight >= currentTipPosition.top) {
@@ -286,7 +287,7 @@
             currentParentHeight = $('#' + parentElementID).outerHeight(),
             currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
             nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
-          if (Modernizr.mq('only screen and (max-width: 769px)')) {
+          if (Modernizr.mediaqueries && Modernizr.mq('only screen and (max-width: 769px)')) {
             if (settings.tipLocation.indexOf("bottom") != -1 ) {
               $('#joyRidePopup' + prevCount).offset({
                 top: (currentTipPosition.top + currentParentHeight + nubHeight),
