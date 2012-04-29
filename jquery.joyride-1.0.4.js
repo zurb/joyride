@@ -169,46 +169,64 @@
           // ++++++++++++++++++
           //   Tip Location
           // ++++++++++++++++++
+          var nub = currentTip.children('.joyride-nub');
+          var left = currentTipPosition.left - bodyOffset.left;
+          nub.removeClass('bottom')
+             .removeClass('top')
+             .removeClass('right');
+          
+          // Update the tip position so it is in the same position
+          // but the nub is right aligned.
+          if ($(window).scrollLeft() + $(window).width() < left + currentTip.width()) {
+            left -= (currentTip.width() - nub.offset().left * 2);
+            nub.addClass("right");
+          }
 
           if (Modernizr.mq('only screen and (max-width: 769px)')) {
             //If the user is "mobile"
             if (tipSettings.tipLocation.indexOf("top") != -1 ) {
               if (currentTipHeight >= currentTipPosition.top) {
                 currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top)});
-                currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
+                nub.addClass('top').css({ left: left });
               } else {
                 currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight))});
-                currentTip.children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left)});
+                nub.addClass('bottom').css({ left: left });
               }
             } else {
               // Default is bottom alignment.
               currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight)});
-              currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
+              nub.addClass('top').css({ left: left });
             }
           } else {
             if (tipSettings.tipLocation == "top") {
               if (currentTipHeight >= currentTipPosition.top) {
-                currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
-                  left: (currentTipPosition.left - bodyOffset.left)});
-                currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
+                currentTip.offset({
+                  top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
+                  left: left
+                });
+                nub.addClass('top');
               } else {
-                currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)),
-                  left: (currentTipPosition.left - bodyOffset.left)});
-                currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
+                currentTip.offset({
+                  top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)),
+                  left: left
+                });
+                nub.addClass('bottom');
               }
             } else {
               // Default is bottom alignment.
-              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight),
-                left: (currentTipPosition.left - bodyOffset.left)});
-              currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
+              currentTip.offset({
+                top: (currentTipPosition.top + currentParentHeight + nubHeight),
+                left: left
+              });
+              nub.addClass('top');
             }
           }
+
+          // Default is left alignment.
           if (tipSettings.tipLocation.indexOf("right") != -1) {
+              // Here we ignore the viewport alignment.
               currentTip.offset({left: (currentTipPosition.left - bodyOffset.left - currentTip.width() + parentElement.width())});
               currentTip.children('.joyride-nub').addClass('right');
-          } else { 
-              // Default is left alignment.
-              currentTip.children('.joyride-nub').removeClass('right');
           }
 
           // Animate Scrolling when tip is off screen
