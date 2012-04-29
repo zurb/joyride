@@ -115,7 +115,7 @@
             }
           });
         options = $.extend(options, opt); // Update options and settings
-        settings = $.extend(settings, opt);
+        var tipSettings = $.extend(settings, opt);
 
         while (parentElement.offset() === null) {
           count++;
@@ -172,10 +172,7 @@
 
           if (Modernizr.mq('only screen and (max-width: 769px)')) {
             //If the user is "mobile"
-            if (settings.tipLocation.indexOf("bottom") != -1 ) {
-              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight)});
-              currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
-            } else if (settings.tipLocation.indexOf("top") != -1 ) {
+            if (settings.tipLocation.indexOf("top") != -1 ) {
               if (currentTipHeight >= currentTipPosition.top) {
                 currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top)});
                 currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
@@ -183,13 +180,13 @@
                 currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight))});
                 currentTip.children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left)});
               }
+            } else {
+              // Default is bottom alignment.
+              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight)});
+              currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
             }
           } else {
-            if (settings.tipLocation.indexOf("bottom") != -1 ) {
-              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight),
-                left: (currentTipPosition.left - bodyOffset.left)});
-              currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
-            } else if (settings.tipLocation == "top") {
+            if (settings.tipLocation == "top") {
               if (currentTipHeight >= currentTipPosition.top) {
                 currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
                   left: (currentTipPosition.left - bodyOffset.left)});
@@ -199,12 +196,18 @@
                   left: (currentTipPosition.left - bodyOffset.left)});
                 currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
               }
+            } else {
+              // Default is bottom alignment.
+              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight),
+                left: (currentTipPosition.left - bodyOffset.left)});
+              currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
             }
           }
-          if (settings.tipLocation.indexOf("right") != -1 ) {
+          if (settings.tipLocation.indexOf("right") != -1) {
               currentTip.offset({left: (currentTipPosition.left - bodyOffset.left - currentTip.width() + parentElement.width())});
               currentTip.children('.joyride-nub').addClass('right');
-          } else if (settings.tipLocation.indexOf("left") != -1 ) {
+          } else { 
+              // Default is left alignment.
               currentTip.children('.joyride-nub').removeClass('right');
           }
 
