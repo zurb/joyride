@@ -119,8 +119,13 @@
         currentParentHeight = parentElement.outerHeight(),
         currentTipHeight = currentTip.outerHeight(),
         nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2),
+        currentTipWidth = Math.ceil($('.joyride-tip-guide').outerWidth()),
+        nubOffset = currentTip.find('.joyride-nub').css('left'),
         tipOffset = 0;
 
+        if(currentTipPosition != null && currentTipPosition.left+currentTipWidth*1.2 > $(window).innerWidth()) {
+            currentTip.addClass('right');
+        }
         if (currentTip.length === 0) return;
 
         if (count < tipContent.length) {
@@ -167,17 +172,23 @@
             }
           } else {
             if (settings.tipLocation == "bottom") {
-              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight),
-                left: (currentTipPosition.left - bodyOffset.left)});
+              currentTip.offset({
+              	  top: (currentTipPosition.top + currentParentHeight + nubHeight),
+                  left: currentTip.hasClass('right') ? (currentTipPosition.left - bodyOffset.left-currentTipWidth + 3*parseInt(nubOffset)) : (currentTipPosition.left - bodyOffset.left)
+                  });
               currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
             } else if (settings.tipLocation == "top") {
               if (currentTipHeight >= currentTipPosition.top) {
-                currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
-                  left: (currentTipPosition.left - bodyOffset.left)});
+                currentTip.offset({
+                	top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
+                  	left: currentTip.hasClass('right') ? (currentTipPosition.left - bodyOffset.left-currentTipWidth + 3*parseInt(nubOffset)) : (currentTipPosition.left - bodyOffset.left)
+                });
                 currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
               } else {
-                currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)),
-                  left: (currentTipPosition.left - bodyOffset.left)});
+                currentTip.offset({
+                	top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)),
+                  	left: currentTip.hasClass('right') ? (currentTipPosition.left - bodyOffset.left-currentTipWidth + 3*parseInt(nubOffset)) : (currentTipPosition.left - bodyOffset.left)
+                });
                 currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
               }
             }
