@@ -28,6 +28,7 @@ Repo Contents
 * jquery-1.7.2.min.js - A version of jQuery, required, 1.7+ is not required
 * jquery.joyride-1.0.5.js - The heart of Joyride, required
 * modernizr.foundation.js - A custom build of Modernizr compatible with Foundation, required
+* jquery.cookie.js - required
 * .gitignore - Those pesky DS_Store files...this is not part of the plugin
 
 ZURB
