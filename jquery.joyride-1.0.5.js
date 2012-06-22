@@ -1,5 +1,5 @@
 /*
- * jQuery Joyride Plugin 1.0.4
+ * jQuery Joyride Plugin 1.0.5
  * www.ZURB.com/playground
  * Copyright 2011, ZURB
  * Free to use under the MIT license.
@@ -43,19 +43,32 @@
       count = skipCount = 0,
       prevCount = -1,
       timerIndicatorInstance,
-      timerIndicatorTemplate = '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
-      tipTemplate = function(tipClass, index, buttonText, self) { return '<div class="joyride-tip-guide ' +
-        tipClass + '" id="joyRidePopup' + index + '"><span class="joyride-nub"></span><div class="joyride-content-wrapper">' +
-        $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' +
-        timerIndicatorInstance + '</div></div>'; },
-      tipLayout = function(tipClass, index, buttonText, self) {
+      timerIndicatorTemplate = '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>';
+
+      var tipTemplate = function(tipClass, index, buttonText, self) {
+        return '<div class="joyride-tip-guide ' +
+          tipClass + '" id="joyRidePopup' + index + '"><span class="joyride-nub"></span><div class="joyride-content-wrapper">' +
+          $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' +
+          timerIndicatorInstance + '</div></div>';
+      };
+
+      var tipLayout = function(tipClass, index, buttonText, self) {
         if (index == 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer == 0) {
           timerIndicatorInstance = '';
         } else {
           timerIndicatorInstance = timerIndicatorTemplate;
         }
-        if (!tipClass) tipClass = '';
-        (buttonText != '') ? buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>': buttonText = '';
+
+        if (!tipClass) {
+          tipClass = '';
+        }
+
+        if (buttonText) {
+          buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>'
+        } else {
+          buttonText = '';
+        }
+
         if (settings.inline) {
           $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).data('id'));
         } else {
@@ -70,9 +83,10 @@
         tipClass = $(this).attr('class'),
         self = this;
 
-        if (settings.nextButton && buttonText == undefined) {
+        if (settings.nextButton && !buttonText) {
           buttonText = 'Next';
         }
+
         if (settings.nextButton || !settings.nextButton && settings.startTimerOnClick) {
           if ($(this).attr('class')) {
             tipLayout(tipClass, index, buttonText, self);
@@ -94,34 +108,43 @@
         var parentElementID = $(tipContent[count]).data('id'),
         parentElement = $('#' + parentElementID),
         opt = {};
+
         // Parse the options string
-        ($(tipContent[count]).data('options') || ':').split(';')
-          .map(function (s) {
+        $.each(($(tipContent[count]).data('options') || ':').split(';'),
+          function (i, s) {
             var p = s.split(':');
-            if (p.length == 2) opt[p[0].trim()] = p[1].trim();
-          });
-        options = $.extend(options, opt); // Update options and settings
-        settings = $.extend(settings, opt);
+            if (p.length == 2) {
+              opt[$.trim(p[0])] = $.trim(p[1]);
+            }
+          }
+        );
+
+        var tipSettings = $.extend({}, settings, opt);
 
         while (parentElement.offset() === null) {
           count++;
           skipCount++;
-          ((tipContent.length - 1) > prevCount) ? prevCount++ : prevCount;
+          if ((tipContent.length - 1) > prevCount) {
+            prevCount++;
+          }
           parentElementID = $(tipContent[count]).data('id'),
           parentElement = $('#' + parentElementID);
 
-          if ($(tipContent).length < count)
+          if ($(tipContent).length < count) {
             break;
+          }
         }
         var windowHalf = Math.ceil($(window).height() / 2),
-        currentTip = $('#joyRidePopup' + count),
-        currentTipPosition = parentElement.offset(),
-        currentParentHeight = parentElement.outerHeight(),
-        currentTipHeight = currentTip.outerHeight(),
-        nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2),
-        tipOffset = 0;
+          currentTip = $('#joyRidePopup' + count),
+          currentTipPosition = parentElement.offset(),
+          currentParentHeight = parentElement.outerHeight(),
+          currentTipHeight = currentTip.outerHeight(),
+          nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2),
+          tipOffset = 0;
 
-        if (currentTip.length === 0) return;
+        if (currentTip.length === 0) {
+          return;
+        }
 
         if (count < tipContent.length) {
           if (settings.tipAnimation == "pop") {
@@ -150,37 +173,64 @@
           // ++++++++++++++++++
           //   Tip Location
           // ++++++++++++++++++
+          var nub = currentTip.children('.joyride-nub');
+          var left = currentTipPosition.left - bodyOffset.left;
+          nub.removeClass('bottom')
+             .removeClass('top')
+             .removeClass('right');
 
-          if (Modernizr.mq('only screen and (max-width: 769px)')) {
+          // Update the tip position so it is in the same position
+          // but the nub is right aligned.
+          if ($(window).scrollLeft() + $(window).width() < left + currentTip.width()) {
+            left -= (currentTip.width() - nub.offset().left * 2);
+            nub.addClass("right");
+          }
+
+          if (Modernizr.mediaqueries && Modernizr.mq('only screen and (max-width: 769px)')) {
             //If the user is "mobile"
-            if (settings.tipLocation == "bottom") {
-              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight)});
-              currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
-            } else if (settings.tipLocation == "top") {
+            if (tipSettings.tipLocation.indexOf("top") != -1 ) {
               if (currentTipHeight >= currentTipPosition.top) {
                 currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top)});
-                currentTip.children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
+                nub.addClass('top').css({ left: left });
               } else {
                 currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight))});
-                currentTip.children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left)});
+                nub.addClass('bottom').css({ left: left });
               }
+            } else {
+              // Default is bottom alignment.
+              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight)});
+              nub.addClass('top').css({ left: left });
             }
           } else {
-            if (settings.tipLocation == "bottom") {
-              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight),
-                left: (currentTipPosition.left - bodyOffset.left)});
-              currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
-            } else if (settings.tipLocation == "top") {
+            if (tipSettings.tipLocation == "top") {
               if (currentTipHeight >= currentTipPosition.top) {
-                currentTip.offset({top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
-                  left: (currentTipPosition.left - bodyOffset.left)});
-                currentTip.children('.joyride-nub').addClass('top').removeClass('bottom');
+                currentTip.offset({
+                  top: ((currentTipPosition.top + currentParentHeight + nubHeight) - bodyOffset.top),
+                  left: left
+                });
+                nub.addClass('top');
               } else {
-                currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)),
-                  left: (currentTipPosition.left - bodyOffset.left)});
-                currentTip.children('.joyride-nub').addClass('bottom').removeClass('top');
+                currentTip.offset({
+                  top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight)),
+                  left: left
+                });
+                nub.addClass('bottom');
               }
+            } else {
+              // Default is bottom alignment.
+              currentTip.offset({
+                top: (currentTipPosition.top + currentParentHeight + nubHeight),
+                left: left
+              });
+              nub.addClass('top');
             }
+          }
+
+          // Default is left alignment.
+          if (tipSettings.tipLocation.indexOf("right") != -1) {
+            // Here we ignore the viewport alignment.
+            currentTip.offset({left: (currentTipPosition.left - bodyOffset.left - currentTip.width() + parentElement.width())});
+            currentTip.children('.joyride-nub').addClass('right');
           }
 
           // Animate Scrolling when tip is off screen
@@ -205,11 +255,12 @@
 
         // Hide the last tip when clicked
         } else if ((tipContent.length - 1) < count) {
+          var hideCnt;
           if (skipCount > 0) {
-            var hideCount = prevCount - skipCount;
+            hideCount = prevCount - skipCount;
             skipCount = 0;
           } else {
-            var hideCount = prevCount;
+            hideCount = prevCount;
           }
           if (settings.cookieMonster == true) {
             $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
@@ -238,42 +289,37 @@
           currentParentHeight = $('#' + parentElementID).outerHeight(),
           currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
           nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
-        if (Modernizr.mq('only screen and (max-width: 769px)')) {
+        if (Modernizr.mediaqueries && Modernizr.mq('only screen and (max-width: 769px)')) {
           if (settings.tipLocation == "bottom") {
             $('#joyRidePopup' + prevCount).offset({
               top: (currentTipPosition.top + currentParentHeight + nubHeight),
               left: 0
             });
             $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
-          }
-          else if (settings.tipLocation == "top") {
+          } else if (settings.tipLocation == "top") {
             if (currentTipPosition.top <= currentTipHeight) {
               $('#joyRidePopup' + prevCount).offset({
-                top: (currentTipPosition.top + nubHeight + currentParentHeight) ,
+                top: (currentTipPosition.top + nubHeight + currentParentHeight),
                 left: 0
               });
               $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: (currentTipPosition.left - bodyOffset.left) });
 
-            }
-            else {
+            } else {
               $('#joyRidePopup' + prevCount).offset({
-                top: ((currentTipPosition.top) - (currentTipHeight + nubHeight))  ,
+                top: ((currentTipPosition.top) - (currentTipHeight + nubHeight)),
                 left: 0
               });
               $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left) });
-
             }
           }
-        }
-        else {
+        } else {
           if (settings.tipLocation == "bottom") {
             $('#joyRidePopup' + prevCount).offset({
               top: (currentTipPosition.top + currentParentHeight + nubHeight),
               left: currentTipPosition.left
             });
             $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: '' });
-          }
-          else if (settings.tipLocation == "top") {
+          } else if (settings.tipLocation == "top") {
             if (currentTipPosition.top <= currentTipHeight) {
               $('#joyRidePopup' + prevCount).offset({
                 top: (currentTipPosition.top + nubHeight + currentParentHeight),
@@ -322,22 +368,22 @@
       });
 
       // When the next button is clicked, show the next tip, only when cookie isn't present
-        $('.joyride-next-tip').click(function(e) {
-          e.preventDefault();
-          if (count >= tipContent.length) {
-            endTip(e, interval_id, settings.cookieMonster, this);
-          }
-          if (settings.timer > 0 && settings.startTimerOnClick) {
-            showNextTip();
-            clearInterval(interval_id);
-            interval_id = setInterval(function() {showNextTip()}, settings.timer);
-          } else if (settings.timer > 0 && !settings.startTimerOnClick){
-            clearInterval(interval_id);
-            interval_id = setInterval(function() {showNextTip()}, settings.timer);
-          } else {
-            showNextTip();
-          }
-        });
+      $('.joyride-next-tip').click(function(e) {
+        e.preventDefault();
+        if (count >= tipContent.length) {
+          endTip(e, interval_id, settings.cookieMonster, this);
+        }
+        if (settings.timer > 0 && settings.startTimerOnClick) {
+          showNextTip();
+          clearInterval(interval_id);
+          interval_id = setInterval(function() {showNextTip()}, settings.timer);
+        } else if (settings.timer > 0 && !settings.startTimerOnClick){
+          clearInterval(interval_id);
+          interval_id = setInterval(function() {showNextTip()}, settings.timer);
+        } else {
+          showNextTip();
+        }
+      });
     });
   };
 

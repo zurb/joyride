@@ -12,42 +12,43 @@
 
 
 
-	<head>
-		<meta charset="utf-8" />
-		<title>Joyride Demo</title>
+  <head>
+    <meta charset="utf-8" />
+    <title>Joyride Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<!-- Attach our CSS -->
-	  	<link rel="stylesheet" href="../joyride-1.0.4.css">
-	  	<link rel="stylesheet" href="demo-style.css">
-		<link rel="stylesheet" href="mobile.css">
+    <!-- Attach our CSS -->
+      <link rel="stylesheet" href="../joyride-1.0.5.css">
+      <link rel="stylesheet" href="demo-style.css">
+    <link rel="stylesheet" href="mobile.css">
 
-		<!-- Attach necessary JS -->
-		<script type="text/javascript" src="../jquery-1.7.2.min.js"></script>
-		<script type="text/javascript" src="../modernizr.foundation.js"></script>
-		<script type="text/javascript" src="../jquery.joyride-1.0.4.js"></script>
+    <!-- Attach necessary JS -->
+    <script type="text/javascript" src="../jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../modernizr.foundation.js"></script>
+    <script type="text/javascript" src="../jquery.joyride-1.0.5.js"></script>
 
-	</head>
-	<body>
+  </head>
+  <body>
 
-	<div class="container">
-		<div class="row">
-		  <div class="twelve columns">
-		    <h1>ZURB's Joyride Feature Tour Plugin</h1>
-		    <a href="http://www.zurb.com/playground/jquery_joyride_feature_tour_plugin">View Docs + Playground for Joyride</a>
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns">
+        <h1>ZURB's Joyride Feature Tour Plugin</h1>
+        <a href="http://www.zurb.com/playground/jquery_joyride_feature_tour_plugin">View Docs + Playground for Joyride</a>
 
-		    <hr>
-		  </div>
-		</div>
+        <hr>
+      </div>
+    </div>
 
-		<br><br>
+    <br><br>
 
-  	<div class="row">
+    <div class="row">
       <div class="six columns">
         <h2 id="numero1">Point Out Those New Features!</h2>
         <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum. Cras mattis consectetur purus sit amet fermentum.</p>
       </div>
       <div class="six columns">
-        <img id="numero3" src="http://placehold.it/430x200">
+        <img id="numero5" src="http://placehold.it/430x200">
       </div>
     </div>
 
@@ -55,7 +56,7 @@
 
     <div class="row">
       <div class="twelve columns">
-        <h3>Get the Most Out of Your App!</h3>
+        <h3 id="numero3">Get the Most Out of Your App!</h3>
         <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
       </div>
     </div>
@@ -74,7 +75,7 @@
 
     <br><br><br><br>
 
-		<div class="row">
+    <div class="row">
       <div class="six columns">
         <h4>Make Every Click Count</h4>
         <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum. Cras mattis consectetur purus sit amet fermentum.</p>
@@ -86,30 +87,40 @@
 
     <br><br><br><br>
 
-	</div>
-	    <!-- Tip Content -->
-  	<ol id="joyRideTipContent">
-  	  <li data-id="numero1" data-text="Next" class="custom">
-  	    <h2>Stop #1</h2>
-  	    <p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>
-  	  </li>
-  	  <li data-id="numero2" data-text="Next" data-options="tipLocation:top;tipAnimation:fade">
-  	    <h2>Stop #2</h2>
-  	    <p>Get the details right by styling Joyride with a custom stylesheet!</p>
-  	  </li>
-  	  <li data-id="numero3" data-text="Close">
-  	    <h2>Stop #3</h2>
+    <div style="float:right">It even works <span id="numero4">here.</span></div>
+
+  </div>
+      <!-- Tip Content -->
+    <ol id="joyRideTipContent">
+      <li data-id="numero1" data-text="Next" class="custom">
+        <h2>Stop #1</h2>
+        <p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>
+      </li>
+      <li data-id="numero2" data-text="Next" data-options="tipLocation:top;tipAnimation:fade">
+        <h2>Stop #2</h2>
+        <p>Get the details right by styling Joyride with a custom stylesheet!</p>
+      </li>
+      <li data-id="numero3" data-text="Next" data-options="tipLocation:top right;">
+        <h2>Stop #3</h2>
+        <p>It works right aligned.</p>
+      </li>
+      <li data-id="numero4" data-text="Next">
+        <h2>Stop #4</h2>
+        <p>It works when tips run off the viewport.</p>
+      </li>
+      <li data-id="numero5" data-text="Close">
+        <h2>Stop #5</h2>
         <p>Now what are you waiting for? Add this to your projects and get the most out of your apps!</p>
-  	  </li>
-  	</ol>
+      </li>
+    </ol>
 
-  	<!-- Run the plugin -->
-		<script type="text/javascript">
-			$(window).load(function() {
-				$(this).joyride();
-			});
-		</script>
+    <!-- Run the plugin -->
+    <script type="text/javascript">
+      $(window).load(function() {
+        $(this).joyride();
+      });
+    </script>
 
 
-	</body>
+  </body>
 </html>

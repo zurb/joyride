@@ -8,6 +8,12 @@ Download:      http://www.zurb.com/playground/joyride/joyride-1.0.3.zip
 
 Joyride is MIT-licensed and absolutely free to use.
 
+New in 1.0.5
+* Support for older browsers [IanLewis]
+* Added support for reversing the orientation of the tip when it goes off [IanLewis]
+* Add the ability to align the tip right-justified with the target [IanLewis]
+* Fixed window resize bug
+
 Documentation
 ==============
 
@@ -18,9 +24,9 @@ Repo Contents
 
 * README
 * DEMO - Demo specific files, not necessary to use the plugin
-* joyride-1.0.4.css - Default Joyride styles, required
+* joyride-1.0.5.css - Default Joyride styles, required
 * jquery-1.7.2.min.js - A version of jQuery, required, 1.7+ is not required
-* jquery.joyride-1.0.4.js - The heart of Joyride, required
+* jquery.joyride-1.0.5.js - The heart of Joyride, required
 * modernizr.foundation.js - A custom build of Modernizr compatible with Foundation, required
 * .gitignore - Those pesky DS_Store files...this is not part of the plugin
 
