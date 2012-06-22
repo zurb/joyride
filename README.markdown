@@ -4,7 +4,6 @@ Welcome to Joyride
 Joyride is an easy to configure jQuery site tour wizard.
 
 Homepage:      http://www.zurb.com/playground/jquery-joyride-feature-tour-plugin
-Download:      http://www.zurb.com/playground/joyride/joyride-1.0.3.zip
 
 Joyride is MIT-licensed and absolutely free to use.
 
