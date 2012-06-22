@@ -27,7 +27,7 @@ Repo Contents
 * joyride-1.0.5.css - Default Joyride styles, required
 * jquery-1.7.2.min.js - A version of jQuery, required, 1.7+ is not required
 * jquery.joyride-1.0.5.js - The heart of Joyride, required
-* modernizr.foundation.js - A custom build of Modernizr compatible with Foundation, required
+* modernizr.mq.js - A custom build of Modernizr with just medaiqueries
 * jquery.cookie.js - required
 * .gitignore - Those pesky DS_Store files...this is not part of the plugin
 

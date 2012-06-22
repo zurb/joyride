@@ -186,7 +186,7 @@
             nub.addClass("right");
           }
 
-          if (Modernizr.mediaqueries && Modernizr.mq('only screen and (max-width: 769px)')) {
+          if (Modernizr.mq('only screen and (max-width: 769px)')) {
             //If the user is "mobile"
             if (tipSettings.tipLocation.indexOf("top") != -1 ) {
               if (currentTipHeight >= currentTipPosition.top) {
@@ -289,7 +289,7 @@
           currentParentHeight = $('#' + parentElementID).outerHeight(),
           currentTipHeight = $('#joyRidePopup' + prevCount).outerHeight(),
           nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2);
-        if (Modernizr.mediaqueries && Modernizr.mq('only screen and (max-width: 769px)')) {
+        if (Modernizr.mq('only screen and (max-width: 769px)')) {
           if (settings.tipLocation == "bottom") {
             $('#joyRidePopup' + prevCount).offset({
               top: (currentTipPosition.top + currentParentHeight + nubHeight),
