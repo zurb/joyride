@@ -18,6 +18,7 @@
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
       'nextButton': true, // true or false to control whether a next button is used
+      'closeButton': true, // true or false to control whether a close button is used
       'tipAnimation': 'pop', // 'pop' or 'fade' in each tip
       'tipAnimationFadeSpeed': 300, // when tipAnimation = 'fade' this is speed in milliseconds for the transition
       'cookieMonster': false, // true or false to control whether cookies are used
@@ -53,7 +54,7 @@
           '<div class="joyride-content-wrapper">' + html + '</div></div>';
       };
 
-      var tipLayout = function(tipClass, index, buttonText, self) {
+      var tipLayout = function(tipClass, index, buttonText, closeButton, self) {
         var tipId = 'joyRidePopup' + index;
 
         if (!tipClass) {
@@ -66,7 +67,9 @@
           tipContents += '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>'
         }
 
-        tipContents += '<a href="#close" class="joyride-close-tip">X</a>';
+        if(closeButton) {
+          tipContents += '<a href="#close" class="joyride-close-tip">X</a>';
+        }
 
         if (settings.timer > 0 && (!settings.startTimerOnClick || index > 0)) {
           tipContents += timerIndicatorTemplate;
@@ -93,17 +96,9 @@
         }
 
         if (settings.nextButton || !settings.nextButton && settings.startTimerOnClick) {
-          if ($(this).attr('class')) {
-            tipLayout(tipClass, index, buttonText, self);
-          } else {
-            tipLayout(false, index, buttonText, self);
-          }
+          tipLayout(tipClass, index, buttonText, settings.closeButton, self);
         } else if (!settings.nextButton) {
-          if ($(this).attr('class')) {
-            tipLayout(tipClass, index, '', self);
-          } else {
-            tipLayout(false, index, '', self);
-          }
+          tipLayout(tipClass, index, '', settings.closeButton, self);
         }
         $('#joyRidePopup' + index).hide();
       });
