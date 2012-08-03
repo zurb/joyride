@@ -13,7 +13,7 @@
     //   Defaults
     // +++++++++++++++++++
     var settings = {
-      'tipLocation': 'bottom', // 'top' or 'bottom' in relation to parent
+      'tipLocation': 'bottom', // 'top', 'bottom' and 'right*' in relation to parent *only in browsers no mobile top-right will align the nub in the top right corner
       'scrollSpeed': 300, // Page scrolling speed in milliseconds
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
@@ -216,6 +216,9 @@
                 });
                 nub.addClass('bottom');
               }
+            }else if (tipSettings.tipLocation == "right") {
+              currentTip.offset({top: currentTipPosition.top , left: (currentTipPosition.left + parentElement.width() + nubHeight )});
+              nub.addClass('left').removeClass('top');  
             }else {
               // Default is bottom alignment.
               currentTip.offset({
@@ -227,11 +230,11 @@
           }
 
           // Default is left alignment.
-          if (tipSettings.tipLocation.indexOf("right") != -1) {
+          if (tipSettings.tipLocation.indexOf("top-right") != -1) {
             // Here we ignore the viewport alignment.
             currentTip.offset({top: currentTipPosition.top , left: (currentTipPosition.left + parentElement.width() + nubHeight )});
            // currentTip.offset({left: (currentTipPosition.left - bodyOffset.left - currentTip.width() + parentElement.width())});
-            currentTip.children('.joyride-nub').addClass('right');
+            currentTip.children('.joyride-nub').addClass('top').addClass('right');
           }
 
           // Animate Scrolling when tip is off screen
@@ -315,7 +318,7 @@
             }
           } else if (settings.tipLocation == "right"){
             $('#joyRidePopup' + prevCount).offset({top: currentTipPosition.top , left: (currentTipPosition.left + currentParentWidth  + nubHeight )});
-            $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('right').removeClass('top');   
+            $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('left').removeClass('top');   
           }
         } else {
           if (settings.tipLocation == "bottom") {
@@ -341,7 +344,7 @@
             }
           } else if (settings.tipLocation == "right"){
             $('#joyRidePopup' + prevCount).offset({top: currentTipPosition.top , left: (currentTipPosition.left + currentParentWidth  + nubHeight )});
-            $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('right').removeClass('top');
+            $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('left').removeClass('top');
           }
         }
       });
