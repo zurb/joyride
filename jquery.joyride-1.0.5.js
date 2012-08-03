@@ -45,34 +45,39 @@
       timerIndicatorInstance,
       timerIndicatorTemplate = '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>';
 
-      var tipTemplate = function(tipClass, index, buttonText, self) {
-        return '<div class="joyride-tip-guide ' +
-          tipClass + '" id="joyRidePopup' + index + '"><span class="joyride-nub"></span><div class="joyride-content-wrapper">' +
-          $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' +
-          timerIndicatorInstance + '</div></div>';
+      var tipWrapper = function(html, tipClass, tipId) {
+        tipClass = 'joyride-tip-guide ' + tipClass;
+
+        return '<div class="' + tipClass + '" id="' + tipId + '">' +
+          '<span class="joyride-nub"></span>' +
+          '<div class="joyride-content-wrapper">' + html + '</div></div>';
       };
 
       var tipLayout = function(tipClass, index, buttonText, self) {
-        if (index == 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer == 0) {
-          timerIndicatorInstance = '';
-        } else {
-          timerIndicatorInstance = timerIndicatorTemplate;
-        }
+        var tipId = 'joyRidePopup' + index;
 
         if (!tipClass) {
           tipClass = '';
         }
 
+        var tipContents = $(self).html();
+
         if (buttonText) {
-          buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>'
-        } else {
-          buttonText = '';
+          tipContents += '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>'
         }
 
+        tipContents += '<a href="#close" class="joyride-close-tip">X</a>';
+
+        if (settings.timer > 0 && (!settings.startTimerOnClick || index > 0)) {
+          tipContents += timerIndicatorTemplate;
+        }
+
+        var tipHtml = tipWrapper(tipContents, tipClass, tipId);
+
         if (settings.inline) {
-          $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).data('id'));
+          $(tipHtml).insertAfter('#' + $(self).data('id'));
         } else {
-          $(options.tipContainer).append(tipTemplate(tipClass, index, buttonText, self));
+          $(options.tipContainer).append(tipHtml);
         }
       };
 
