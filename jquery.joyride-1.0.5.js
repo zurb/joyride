@@ -18,6 +18,7 @@
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
       'nextButton': true, // true or false to control whether a next button is used
+      'closeButton': true, // true or false to control whether a close button is used
       'tipAnimation': 'pop', // 'pop' or 'fade' in each tip
       'tipAnimationFadeSpeed': 300, // when tipAnimation = 'fade' this is speed in milliseconds for the transition
       'cookieMonster': false, // true or false to control whether cookies are used
@@ -45,34 +46,41 @@
       timerIndicatorInstance,
       timerIndicatorTemplate = '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>';
 
-      var tipTemplate = function(tipClass, index, buttonText, self) {
-        return '<div class="joyride-tip-guide ' +
-          tipClass + '" id="joyRidePopup' + index + '"><span class="joyride-nub"></span><div class="joyride-content-wrapper">' +
-          $(self).html() + buttonText + '<a href="#close" class="joyride-close-tip">X</a>' +
-          timerIndicatorInstance + '</div></div>';
+      var tipWrapper = function(html, tipClass, tipId) {
+        tipClass = 'joyride-tip-guide ' + tipClass;
+
+        return '<div class="' + tipClass + '" id="' + tipId + '">' +
+          '<span class="joyride-nub"></span>' +
+          '<div class="joyride-content-wrapper">' + html + '</div></div>';
       };
 
-      var tipLayout = function(tipClass, index, buttonText, self) {
-        if (index == 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer == 0) {
-          timerIndicatorInstance = '';
-        } else {
-          timerIndicatorInstance = timerIndicatorTemplate;
-        }
+      var tipLayout = function(tipClass, index, buttonText, closeButton, self) {
+        var tipId = 'joyRidePopup' + index;
 
         if (!tipClass) {
           tipClass = '';
         }
 
+        var tipContents = $(self).html();
+
         if (buttonText) {
-          buttonText = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>'
-        } else {
-          buttonText = '';
+          tipContents += '<a href="#" class="joyride-next-tip small nice radius yellow button">' + buttonText + '</a>'
         }
 
+        if(closeButton) {
+          tipContents += '<a href="#close" class="joyride-close-tip">X</a>';
+        }
+
+        if (settings.timer > 0 && (!settings.startTimerOnClick || index > 0)) {
+          tipContents += timerIndicatorTemplate;
+        }
+
+        var tipHtml = tipWrapper(tipContents, tipClass, tipId);
+
         if (settings.inline) {
-          $(tipTemplate(tipClass, index, buttonText, self)).insertAfter('#' + $(self).data('id'));
+          $(tipHtml).insertAfter('#' + $(self).data('id'));
         } else {
-          $(options.tipContainer).append(tipTemplate(tipClass, index, buttonText, self));
+          $(options.tipContainer).append(tipHtml);
         }
       };
 
@@ -88,17 +96,9 @@
         }
 
         if (settings.nextButton || !settings.nextButton && settings.startTimerOnClick) {
-          if ($(this).attr('class')) {
-            tipLayout(tipClass, index, buttonText, self);
-          } else {
-            tipLayout(false, index, buttonText, self);
-          }
+          tipLayout(tipClass, index, buttonText, settings.closeButton, self);
         } else if (!settings.nextButton) {
-          if ($(this).attr('class')) {
-            tipLayout(tipClass, index, '', self);
-          } else {
-            tipLayout(false, index, '', self);
-          }
+          tipLayout(tipClass, index, '', settings.closeButton, self);
         }
         $('#joyRidePopup' + index).hide();
       });
