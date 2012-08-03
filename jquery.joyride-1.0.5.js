@@ -27,7 +27,8 @@
       'inline': false, // true or false, if true the tip will be attached after the element
       'tipContent': '#joyRideTipContent', // What is the ID of the <ol> you put the content in
       'postRideCallback': $.noop, // A method to call once the tour closes (canceled or complete)
-      'postStepCallback': $.noop // A method to call after each step
+      'postStepCallback': $.noop, // A method to call after each step
+      'blurPage': false //true or false to control blur page     
     };
 
     var options = $.extend(settings, options);
@@ -169,6 +170,14 @@
               currentTip.fadeIn(settings.tipAnimationFadeSpeed);
             }
           }
+          
+          // ++++++++++++++++++  
+          //   Blur Page
+          // ++++++++++++++++++  
+          
+          if (settings.blurPage){
+            parentElement.addClass('currentTipFocus'); 
+          }
 
           // ++++++++++++++++++
           //   Tip Location
@@ -281,6 +290,17 @@
           settings.postStepCallback(prevCount);
         }
       }
+    // ++++++++++++++++++  
+    //   Blur Page
+    // ++++++++++++++++++  
+    if (settings.blurPage){
+      var blurdiv = '<div class="joyride-blurpage"></div>'
+      $('body').append(blurdiv);
+      var parentElementID = $(tipContent[prevCount]).data('id');
+      var parentElement = $('#' + parentElementID); 
+      parentElement.addClass('currentTipFocus');
+    }  
+      
 
     if (!settings.inline || !settings.cookieMonster || !$.cookie(settings.cookieName)) {
       $(window).resize(function () {
@@ -359,6 +379,9 @@
            $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
         }
         $(self).parent().parent().hide();
+        if (settings.blurPage) {
+          $('.joyride-blurpage').remove(); 
+        }   
         if (settings.postRideCallback != $.noop) {
           settings.postRideCallback();
         }
@@ -372,6 +395,9 @@
         e.preventDefault();
         if (count >= tipContent.length) {
           endTip(e, interval_id, settings.cookieMonster, this);
+        }
+        if (settings.blurPage){
+          $('.currentTipFocus').removeClass('currentTipFocus');
         }
         if (settings.timer > 0 && settings.startTimerOnClick) {
           showNextTip();
