@@ -56,6 +56,15 @@ width: 100%;
    left: auto;
    right: 22px;
 }
+.joyride-tip-guide span.joyride-nub.top.center {
+   left: 45%;
+   right: auto;
+}
+.joyride-tip-guide span.joyride-nub.left.center {
+  left: -28px;
+  top: 45%;
+}
+
 .joyride-tip-guide span.joyride-nub.left {
   border-top-color: transparent !important;
   border-left-color: transparent !important;

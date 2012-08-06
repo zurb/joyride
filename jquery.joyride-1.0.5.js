@@ -13,7 +13,8 @@
     //   Defaults
     // +++++++++++++++++++
     var settings = {
-      'tipLocation': 'bottom', // 'top', 'bottom' and 'right*' in relation to parent *only in browsers no mobile top-right will align the nub in the top right corner
+      'tipLocation': 'bottom', // 'top', 'bottom' and 'right' in relation to parent; right only in browsers no mobile
+      'nubAlignment': 'left', // 'left', 'right' and 'center' in relation to tip container
       'scrollSpeed': 300, // Page scrolling speed in milliseconds
       'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
       'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
@@ -139,6 +140,7 @@
           currentTipPosition = parentElement.offset(),
           currentParentHeight = parentElement.outerHeight(),
           currentTipHeight = currentTip.outerHeight(),
+          currentTipWidth = currentTip.outerWidth(),
           nubHeight = Math.ceil($('.joyride-nub').outerHeight() / 2),
           tipOffset = 0;
 
@@ -196,6 +198,9 @@
                 currentTip.offset({top: ((currentTipPosition.top) - (currentTipHeight + bodyOffset.top + nubHeight))});
                 nub.addClass('bottom').css({ left: left });
               }
+            } else if (tipSettings.tipLocation.indexOf("center") != -1 ){ 
+              currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight) , left: parentElement.width()/2 - currentTipWidth/2 });
+              nub.addClass('left').removeClass('top');  
             } else {
               // Default is bottom alignment.
               currentTip.offset({top: (currentTipPosition.top + currentParentHeight + nubHeight)});
@@ -216,9 +221,12 @@
                 });
                 nub.addClass('bottom');
               }
-            }else if (tipSettings.tipLocation == "right") {
+            }else if (tipSettings.tipLocation.indexOf("right") != -1 ){
               currentTip.offset({top: currentTipPosition.top , left: (currentTipPosition.left + parentElement.width() + nubHeight )});
-              nub.addClass('left').removeClass('top');  
+              nub.addClass('left').removeClass('top');
+            }else if (tipSettings.tipLocation.indexOf("center") != -1 ){ 
+              currentTip.offset({top: ( currentTipPosition.top + currentParentHeight + nubHeight) , left: parentElement.width()/2 - currentTipWidth/2 });
+              nub.addClass('top').removeClass('top');
             }else {
               // Default is bottom alignment.
               currentTip.offset({
@@ -230,11 +238,19 @@
           }
 
           // Default is left alignment.
-          if (tipSettings.tipLocation.indexOf("top-right") != -1) {
+          if (tipSettings.nubAlignment.indexOf("right") != -1) {
             // Here we ignore the viewport alignment.
             currentTip.offset({top: currentTipPosition.top , left: (currentTipPosition.left + parentElement.width() + nubHeight )});
            // currentTip.offset({left: (currentTipPosition.left - bodyOffset.left - currentTip.width() + parentElement.width())});
             currentTip.children('.joyride-nub').addClass('top').addClass('right');
+          } else if (tipSettings.nubAlignment.indexOf("center") != -1){
+            if (tipSettings.tipLocation.indexOf("right") != -1) {
+              currentTip.offset({top: (currentTipPosition.top - currentTipHeight/2 ) , left: ( currentTipPosition.left + parentElement.width() + nubHeight ) });
+              currentTip.children('.joyride-nub').addClass('left').addClass('center');
+            }else{  
+              currentTip.offset({top: ( currentTipPosition.top + currentParentHeight + nubHeight ) , left: (parentElement.width()/2 - currentTipWidth/2) });
+              currentTip.children('.joyride-nub').addClass('top').addClass('center');
+            }
           }
 
           // Animate Scrolling when tip is off screen
@@ -282,7 +298,7 @@
           prevCount++;
         }
         if (settings.postStepCallback != $.noop) {
-          settings.postStepCallback(prevCount);
+          settings.postStepCallback(prevCount); 
         }
       }
 
@@ -316,9 +332,9 @@
               });
               $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: (currentTipPosition.left - bodyOffset.left) });
             }
-          } else if (settings.tipLocation == "right"){
-            $('#joyRidePopup' + prevCount).offset({top: currentTipPosition.top , left: (currentTipPosition.left + currentParentWidth  + nubHeight )});
-            $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('left').removeClass('top');   
+          } else if (tipSettings.tipLocation.indexOf("center") != -1){ 
+            currentTip.offset({top: ( currentTipPosition.top + currentParentHeight + nubHeight) , left: parentElement.width()/2 - currentTipWidth/2 });
+            nub.addClass('left').removeClass('top');
           }
         } else {
           if (settings.tipLocation == "bottom") {
@@ -334,17 +350,19 @@
                 left: currentTipPosition.left
               });
               $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('top').removeClass('bottom').css({ left: '' });
-            }
-            else {
+            } else {
               $('#joyRidePopup' + prevCount).offset({
                 top: ((currentTipPosition.top) - (currentTipHeight + nubHeight)),
                 left: currentTipPosition.left
               });
               $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('bottom').removeClass('top').css({ left: '' });
             }
-          } else if (settings.tipLocation == "right"){
+          } else if (settings.tipLocation.indexOf("right") != -1 ){
             $('#joyRidePopup' + prevCount).offset({top: currentTipPosition.top , left: (currentTipPosition.left + currentParentWidth  + nubHeight )});
             $('#joyRidePopup' + prevCount).children('.joyride-nub').addClass('left').removeClass('top');
+          } else if (tipSettings.tipLocation.indexOf("center") != -1 ){ 
+              currentTip.offset({top: ( currentTipPosition.top + currentParentHeight + nubHeight) , left: parentElement.width()/2 - currentTipWidth/2 });
+              nub.addClass('left').removeClass('top');
           }
         }
       });
