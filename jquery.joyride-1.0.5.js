@@ -41,7 +41,16 @@
           settings.cnt = settings.skip_cnt = 0;
           settings.prev_cnt = -1;
 
-          console.log(methods.tip_template({tip_class : 'yay', index : 1, tip : settings.$tip_content.first(), timer_instance : ''}))
+          // can we create cookies?
+          if (!$.isFunction($.cookie())) {
+            settings.cookieMonster = false;
+          }
+
+          if(!settings.cookieMonster || !$.cookie(settings.cookieName)) {
+            settings.$tip_content.each(function (index) {
+              methods.create_tip({$li : $(this), index : index});
+            });
+          }
 
         });
       },
@@ -72,6 +81,23 @@
 
         $blank.attr('id', 'joyRidePopup' + opts.index);
         return $('.joyride-content-wrapper', $blank).append(content)[0];
+      },
+      create_tip : function (opts) {
+        var buttonText = opts.$li.data('text'),
+            tipClass = opts.$li.attr('class'),
+            $tip_content = $(methods.tip_template({
+              tip_class : tipClass,
+              index : opts.index,
+              button_text : buttonText,
+              tip : opts.$li
+            }));
+
+        if (settings.inline) {
+          $tip_content.insertAfter('#' + opts.$li.data('id'));
+        } else {
+          $(settings.tipContainer).append($tip_content);
+        }
+
       }
     };
 
