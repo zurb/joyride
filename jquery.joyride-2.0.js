@@ -12,20 +12,26 @@
   'use strict';
 
   var settings = {
-    'tipLocation': 'bottom', // 'top' or 'bottom' in relation to parent
-    'scrollSpeed': 300, // Page scrolling speed in milliseconds
-    'timer': 0, // 0 = no timer, all other numbers = timer in milliseconds
-    'startTimerOnClick': false, // true or false - true requires clicking the first button start the timer
-    'nextButton': true, // true or false to control whether a next button is used
-    'tipAnimation': 'pop', // 'pop' or 'fade' in each tip
-    'tipAnimationFadeSpeed': 300, // when tipAnimation = 'fade' this is speed in milliseconds for the transition
-    'cookieMonster': false, // true or false to control whether cookies are used
-    'cookieName': 'JoyRide', // Name the cookie you'll use
-    'cookieDomain': false, // Will this cookie be attached to a domain, ie. '.notableapp.com'
-    'tipContainer': 'body', // Where will the tip be attached if not inline
-    'inline': false, // true or false, if true the tip will be attached after the element
-    'postRideCallback': $.noop, // A method to call once the tour closes (canceled or complete)
-    'postStepCallback': $.noop // A method to call after each step
+    'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
+    'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
+    'timer'                : 0,         // 0 = no timer, all other numbers = timer in milliseconds
+    'startTimerOnClick'    : false,     // true or false - true requires clicking the first button start the timer
+    'nextButton'           : true,      // true or false to control whether a next button is used
+    'tipAnimation'         : 'pop',     // 'pop' or 'fade' in each tip
+    'tipAnimationFadeSpeed': 300,       // when tipAnimation = 'fade' this is speed in milliseconds for the transition
+    'cookieMonster'        : false,     // true or false to control whether cookies are used
+    'cookieName'           : 'JoyRide', // Name the cookie you'll use
+    'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
+    'tipContainer'         : 'body',    // Where will the tip be attached if not inline
+    'inline'               : false,     // true or false, if true the tip will be attached after the element
+    'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
+    'postStepCallback'     : $.noop,    // A method to call after each step
+    'click_target'         : '',        // if blank, tour auto starts, if set, clicking the element with class or ID
+    'template' : { // HTML segments for tip layout
+      'link' : '<a href="#close" class="joyride-close-tip">X</a>',
+      'timer': '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator">',
+      'tip'  : '<div class="joyride-tipe-guide"><span class="joyride-nub"></span><div class="joyride-content-wrapper">'
+    }
   },
   methods = {
     init : function (opts) {
@@ -50,37 +56,42 @@
           });
         }
 
-        // register tip delegations (resize, etc)
+        // register event delegations (window.resize, etc)
 
       });
     },
     tip_template : function (opts) {
       var $blank, content;
-
-      opts = opts || {};
-
-      if (settings.nextButton) {
-        opts.button_text = opts.button_text || 'Next';
-        opts.button_text = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + opts.button_text + '</a>';
-      } else {
-        opts.button_text = '';
-      }
       
-      opts.timer_instance = opts.timer_instance || '';
       opts.tip_class = opts.tip_class || '';
-      opts.index = opts.index || 0;
 
-      if (settings.index === 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer === 0) {
-        opts.timer_instance = '';
-      } else {
-        opts.timer_instance = $('<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator">')[0];
-      }
-
-      $blank = $('<div class="joyride-tipe-guide"><span class="joyride-nub"></span><div class="joyride-content-wrapper">'),
-      content = $.trim($(opts.tip).html()) + opts.button_text + '<a href="#close" class="joyride-close-tip">X</a>' + opts.timer_instance;
+      $blank = $(settings.template.tip),
+      content = $.trim($(opts.li).html()) + 
+        methods.button_text(opts.button_text) + 
+        settings.template.link + 
+        methods.timer_instance(opts.index);
 
       $blank.attr('id', 'joyRidePopup' + opts.index);
       return $('.joyride-content-wrapper', $blank).append(content)[0];
+    },
+    timer_instance : function (index) {
+      var txt;
+
+      if (index === 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer === 0) {
+        txt = '';
+      } else {
+        txt = $(settings.template.timer)[0];
+      }
+      return txt;
+    },
+    button_text : function (txt) {
+      if (settings.nextButton) {
+        txt = txt || 'Next';
+        txt = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + txt + '</a>';
+      } else {
+        txt = '';
+      }
+      return txt;
     },
     create_tip : function (opts) {
       var buttonText = opts.$li.data('text'),
@@ -89,7 +100,7 @@
             tip_class : tipClass,
             index : opts.index,
             button_text : buttonText,
-            tip : opts.$li
+            li : opts.$li
           }));
 
       if (settings.inline) {
