@@ -1,5 +1,5 @@
 /*
- * jQuery Foundation Tooltip Plugin 2.0
+ * jQuery Foundation Joyride Plugin 2.0
  * http://foundation.zurb.com
  * Copyright 2012, ZURB
  * Free to use under the MIT license.
@@ -188,8 +188,6 @@
     position : function (tipSettings) {
       var half_fold = Math.ceil($(window).height() / 2),
           tip_position = settings.$next_tip.offset(),
-          parent_height = settings.$target.outerHeight(),
-          tip_height = settings.$next_tip.outerHeight(),
           $nub = $('.joyride-nub', settings.$next_tip),
           nub_height = Math.ceil($nub.outerHeight() / 2),
           tip_offset = 0,
@@ -201,13 +199,14 @@
 
       if (settings.inline) {
         if (methods.bottom(tipSettings)) {
-          settings.$next_tip.css({top: (parent_height + nub_height)});
+          settings.$next_tip.css({top: (settings.$target.outerHeight() + nub_height)});
           $nub.addClass('top').css('left', left);
         } else if (methods.top(tipSettings)) {
-          settings.$next_tip.css({top: (- tip_height - nub_height)});
+          settings.$next_tip.css({top: (- settings.$next_tip.outerHeight() - nub_height)});
           $nub.addClass('bottom').css('left', left);
         } else if (methods.right(tipSettings)) {
-          // position right
+          settings.$next_tip.css({left: (settings.$target.outerWidth() + settings.$next_tip.outerWidth())});
+          $nub.addClass('left').css('left', left);
         } else {
           // position left
         }
