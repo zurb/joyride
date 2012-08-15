@@ -95,7 +95,7 @@
         <h2>Stop #2</h2>
         <p>Get the details right by styling Joyride with a custom stylesheet!</p>
       </li>
-      <li data-id="numero3" data-text="Next" data-options="tipLocation:top right;">
+      <li data-id="numero3" data-text="Next" data-options="tipLocation:right;">
         <h2>Stop #3</h2>
         <p>It works right aligned.</p>
       </li>
@@ -116,7 +116,7 @@
     <script type="text/javascript" src="../jquery.joyride-2.0.js"></script>
     <script type="text/javascript">
       $(window).load(function() {
-        $('#joyRideTipContent').joyride();
+        $('#joyRideTipContent').joyride({inline : true});
       });
     </script>
 

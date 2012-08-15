@@ -64,6 +64,12 @@
           }
         }
 
+        $(document).on('click', '.joyride-next-tip', function (e) {
+          e.preventDefault();
+          methods.hide();
+          methods.show();
+        });
+
         // register event delegations (window.resize, etc)
 
       });
@@ -138,9 +144,11 @@
 
       tipSettings = $.extend({}, settings, opts);
 
-      console.log(settings.$current_tip, settings.$next_tip, settings.$li);
+      methods.position(tipSettings);
 
-      // methods.position_tip();
+      settings.$next_tip.show();
+
+      settings.$current_tip = settings.$next_tip;
 
       // mehots.animate();
 
@@ -151,9 +159,13 @@
       // do timer stuff
 
     },
+    hide : function () {
+      // add animate out support here
+      settings.$current_tip.hide();
+    },
     set_li : function (init) {
-      if (init.length < 1) {
-        settings.$li = settings.$tip_content.next();
+      if (!init) {
+        settings.$li = settings.$li.next();
         methods.set_next_tip();
       } else {
         settings.$li = settings.$tip_content.first();
@@ -172,6 +184,58 @@
       } else {
         settings.$target = 'modal';
       }
+    },
+    position : function (tipSettings) {
+      var half_fold = Math.ceil($(window).height() / 2),
+          tip_position = settings.$next_tip.offset(),
+          parent_height = settings.$target.outerHeight(),
+          tip_height = settings.$next_tip.outerHeight(),
+          $nub = $('.joyride-nub', settings.$next_tip),
+          nub_height = Math.ceil($nub.outerHeight() / 2),
+          tip_offset = 0,
+          left = tip_position.left - settings.body_offset.left;
+
+      // tip must not be "display: none" to calculate position
+      settings.$next_tip.css('visibility', 'hidden');
+      settings.$next_tip.show();
+
+      if (settings.inline) {
+        if (methods.bottom(tipSettings)) {
+          settings.$next_tip.css({top: (parent_height + nub_height)});
+          $nub.addClass('top').css('left', left);
+        } else if (methods.top(tipSettings)) {
+          settings.$next_tip.css({top: (- tip_height - nub_height)});
+          $nub.addClass('bottom').css('left', left);
+        } else if (methods.right(tipSettings)) {
+          // position right
+        } else {
+          // position left
+        }
+      } else {
+
+      }
+
+      settings.$next_tip.hide();
+      settings.$next_tip.css('visibility', 'visible');
+    },
+    bottom : function (tipSettings) {
+      return ((tipSettings.tipLocation === "bottom" && methods.border_safe('bottom')) || 
+        (tipSettings.tipLocation === "top" && !methods.border_safe('top'))) ? true : false;
+    },
+    top : function (tipSettings) {
+      return ((tipSettings.tipLocation === "top" && methods.border_safe('top')) || 
+        (tipSettings.tipLocation === "bottom" && !methods.border_safe('bottom'))) ? true : false;
+    },
+    right : function (tipSettings) {
+      return ((tipSettings.tipLocation === "right" && methods.border_safe('right')) || 
+        (tipSettings.tipLocation === "left" && !methods.border_safe('left'))) ? true : false;
+    },
+    left : function (tipSettings) {
+      return ((tipSettings.tipLocation === "left" && methods.border_safe('left')) || 
+        (tipSettings.tipLocation === "right" && !methods.border_safe('right'))) ? true : false;
+    },
+    border_safe : function (pos) {
+      return true;
     },
     startTimer : function () {
 
