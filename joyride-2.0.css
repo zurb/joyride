@@ -10,7 +10,8 @@ body {
   position: absolute;
   background: #000;
   background: rgba(0,0,0,0.8);
-
+/*  display: none;
+*/
   color: #fff;
   width: 300px;
   z-index: 10;

@@ -26,11 +26,12 @@
     'inline'               : false,     // true or false, if true the tip will be attached after the element
     'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
     'postStepCallback'     : $.noop,    // A method to call after each step
-    'click_target'         : '',        // if blank, tour auto starts, if set, clicking the element with class or ID
     'template' : { // HTML segments for tip layout
-      'link' : '<a href="#close" class="joyride-close-tip">X</a>',
-      'timer': '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator">',
-      'tip'  : '<div class="joyride-tipe-guide"><span class="joyride-nub"></span><div class="joyride-content-wrapper">'
+      'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
+      'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator">',
+      'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub">',
+      'wrapper' : '<div class="joyride-content-wrapper">',
+      'button'  : '<a href="#" class="joyride-next-tip small nice radius yellow button">'
     }
   },
   methods = {
@@ -50,6 +51,7 @@
           settings.cookieMonster = false;
         }
 
+        // generate the tips and insert into dom.
         if(!settings.cookieMonster || !$.cookie(settings.cookieName)) {
           settings.$tip_content.each(function (index) {
             methods.create_tip({$li : $(this), index : index});
@@ -65,14 +67,17 @@
       
       opts.tip_class = opts.tip_class || '';
 
-      $blank = $(settings.template.tip),
+      $blank = $(settings.template.tip);
       content = $.trim($(opts.li).html()) + 
         methods.button_text(opts.button_text) + 
         settings.template.link + 
         methods.timer_instance(opts.index);
 
-      $blank.attr('id', 'joyRidePopup' + opts.index);
-      return $('.joyride-content-wrapper', $blank).append(content)[0];
+      $blank.append($(settings.template.wrapper));
+      $blank.first().attr('id', 'joyRidePopup' + opts.index);
+      $('.joyride-content-wrapper', $blank).append(content);
+
+      return $blank[0];
     },
     timer_instance : function (index) {
       var txt;
@@ -86,8 +91,8 @@
     },
     button_text : function (txt) {
       if (settings.nextButton) {
-        txt = txt || 'Next';
-        txt = '<a href="#" class="joyride-next-tip small nice radius yellow button">' + txt + '</a>';
+        txt = $.trim(txt) || 'Next';
+        txt = $(settings.template.button).append(txt)[0].outerHTML;
       } else {
         txt = '';
       }
