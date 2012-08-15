@@ -43,8 +43,6 @@
         settings.$content_el = $(this);
         settings.body_offset = $(settings.tipContainer).children('*').first().position();
         settings.$tip_content = $('li', settings.$content_el);
-        settings.cnt = settings.skip_cnt = 0;
-        settings.prev_cnt = -1;
 
         // can we create cookies?
         if (!$.isFunction($.cookie())) {
@@ -54,8 +52,16 @@
         // generate the tips and insert into dom.
         if(!settings.cookieMonster || !$.cookie(settings.cookieName)) {
           settings.$tip_content.each(function (index) {
-            methods.create_tip({$li : $(this), index : index});
+            methods.create({$li : $(this), index : index});
           });
+
+          // show first tip
+          if (!settings.startTimerOnClick && settings.timer > 0) {
+            methods.show('init');
+            methods.startTimer();
+          } else {
+            methods.show('init');
+          }
         }
 
         // register event delegations (window.resize, etc)
@@ -74,7 +80,7 @@
         methods.timer_instance(opts.index);
 
       $blank.append($(settings.template.wrapper));
-      $blank.first().attr('id', 'joyRidePopup' + opts.index);
+      $blank.first().attr('data-index', opts.index);
       $('.joyride-content-wrapper', $blank).append(content);
 
       return $blank[0];
@@ -98,7 +104,7 @@
       }
       return txt;
     },
-    create_tip : function (opts) {
+    create : function (opts) {
       var buttonText = opts.$li.data('text'),
           tipClass = opts.$li.attr('class'),
           $tip_content = $(methods.tip_template({
@@ -113,9 +119,27 @@
       } else {
         $(settings.tipContainer).append($tip_content);
       }
-
     },
-    show_tip : function () {
+    show : function (init) {
+      var opts = {},
+          tipSettings = {};
+
+      methods.set_li(init);
+
+      // parse options
+      $.each((settings.$li.data('options') || ':').split(';'),
+        function (i, s) {
+          var p = s.split(':');
+          if (p.length == 2) {
+            opts[$.trim(p[0])] = $.trim(p[1]);
+          }
+        }
+      );
+
+      tipSettings = $.extend({}, settings, opts);
+
+      console.log(settings.$current_tip, settings.$next_tip, settings.$li);
+
       // methods.position_tip();
 
       // mehots.animate();
@@ -125,6 +149,31 @@
       // methods.hide_prev();
 
       // do timer stuff
+
+    },
+    set_li : function (init) {
+      if (init.length < 1) {
+        settings.$li = settings.$tip_content.next();
+        methods.set_next_tip();
+      } else {
+        settings.$li = settings.$tip_content.first();
+        methods.set_next_tip();
+        settings.$current_tip = settings.$next_tip;
+      }
+      methods.set_target();
+    },
+    set_next_tip : function () {
+      settings.$next_tip = $('.joyride-tip-guide[data-index=' + settings.$li.index() + ']');
+    },
+    set_target : function () {
+      var id = settings.$li.data('id');
+      if (id) {
+        settings.$target = $('#' + id);
+      } else {
+        settings.$target = 'modal';
+      }
+    },
+    startTimer : function () {
 
     }
 
