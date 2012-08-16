@@ -55,10 +55,6 @@ width: 100%;
   border: solid 14px;
   border: solid 14px;
 }
-.joyride-tip-guide span.joyride-nub.right {
-   left: auto;
-   right: 22px;
-}
 .joyride-tip-guide span.joyride-nub.top {
   /*
   IE7/IE8 Don't support rgba so we set the fallback
@@ -92,6 +88,29 @@ width: 100%;
   bottom: none;
 }
 
+.joyride-tip-guide span.joyride-nub.right {
+  border-color: #000;
+  border-color: rgba(0,0,0,0.8) !important;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  top: 22px;
+  bottom: none;
+  left: auto;
+  right: -28px;
+}
+
+.joyride-tip-guide span.joyride-nub.left {
+  border-color: #000;
+  border-color: rgba(0,0,0,0.8) !important;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-bottom-color: transparent !important;
+  top: 22px;
+  left: -28px;
+  right: auto;
+  bottom: none;
+}
 
 /* Typography */
 .joyride-tip-guide h1,.joyride-tip-guide h2,.joyride-tip-guide h3,.joyride-tip-guide h4,.joyride-tip-guide h5,.joyride-tip-guide h6 {

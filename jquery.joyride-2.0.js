@@ -13,14 +13,15 @@
 
   var settings = {
     'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
+    'nubPosition'          : 'auto',    // override on a per tooltip bases 
     'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
-    'timer'                : 0,         // 0 = no timer, all other numbers = timer in milliseconds
+    'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
     'startTimerOnClick'    : false,     // true or false - true requires clicking the first button start the timer
     'nextButton'           : true,      // true or false to control whether a next button is used
     'tipAnimation'         : 'pop',     // 'pop' or 'fade' in each tip
     'tipAnimationFadeSpeed': 300,       // when tipAnimation = 'fade' this is speed in milliseconds for the transition
     'cookieMonster'        : false,     // true or false to control whether cookies are used
-    'cookieName'           : 'JoyRide', // Name the cookie you'll use
+    'cookieName'           : 'joyride', // Name the cookie you'll use
     'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
     'tipContainer'         : 'body',    // Where will the tip be attached if not inline
     'inline'               : false,     // true or false, if true the tip will be attached after the element
@@ -43,6 +44,7 @@
         settings.$content_el = $(this);
         settings.body_offset = $(settings.tipContainer).children('*').first().position();
         settings.$tip_content = $('li', settings.$content_el);
+        settings.attempts = 0;
 
         // can we create cookies?
         if (!$.isFunction($.cookie())) {
@@ -111,7 +113,8 @@
       return txt;
     },
     create : function (opts) {
-      var buttonText = opts.$li.data('text'),
+      // backwards compatability with data-text attribute
+      var buttonText = opts.$li.data('button') || opts.$li.data('text'),
           tipClass = opts.$li.attr('class'),
           $tip_content = $(methods.tip_template({
             tip_class : tipClass,
@@ -131,6 +134,7 @@
           tipSettings = {};
 
       methods.set_li(init);
+      settings.attempts = 0;
 
       // parse options
       $.each((settings.$li.data('options') || ':').split(';'),
@@ -144,15 +148,13 @@
 
       tipSettings = $.extend({}, settings, opts);
 
+      // scroll and position tooltip
+      methods.scroll_to();
       methods.position(tipSettings);
 
       settings.$next_tip.show();
 
       settings.$current_tip = settings.$next_tip;
-
-      // mehots.animate();
-
-      // methods.scroll_to();
 
       // methods.hide_prev();
 
@@ -185,6 +187,19 @@
         settings.$target = 'modal';
       }
     },
+    scroll_to : function () {
+      var window_half, tipOffset;
+
+      // only scroll if target if off screen
+      if (!methods.visible(methods.corners(settings.$target))) {
+        window_half = $(window).height() / 2,
+        tipOffset = Math.ceil(settings.$target.offset().top - window_half);
+
+        $("html, body").animate({
+          scrollTop: tipOffset
+        }, settings.scrollSpeed);
+      }
+    },
     position : function (tipSettings) {
       var half_fold = Math.ceil($(window).height() / 2),
           tip_position = settings.$next_tip.offset(),
@@ -199,42 +214,114 @@
 
       if (settings.inline) {
         if (methods.bottom(tipSettings)) {
+          console.log('bottom inline');
           settings.$next_tip.css({top: (settings.$target.outerHeight() + nub_height)});
-          $nub.addClass('top').css('left', left);
+          methods.nub_position($nub, tipSettings.nubPosition, 'top');
         } else if (methods.top(tipSettings)) {
+          console.log('top inline');
           settings.$next_tip.css({top: (- settings.$next_tip.outerHeight() - nub_height)});
-          $nub.addClass('bottom').css('left', left);
+          methods.nub_position($nub, tipSettings.nubPosition, 'bottom');
         } else if (methods.right(tipSettings)) {
+          console.log('right inline');
           settings.$next_tip.css({left: (settings.$target.outerWidth() + settings.$next_tip.outerWidth())});
-          $nub.addClass('left').css('left', left);
-        } else {
-          // position left
+          methods.nub_position($nub, tipSettings.nubPosition, 'left');
+        } else if (methods.left(tipSettings)) {
+          console.log('left inline');
+          settings.$next_tip.css({left: (settings.$target.outerWidth() - settings.$next_tip.outerWidth())});
+          methods.nub_position($nub, tipSettings.nubPosition, 'right');
         }
       } else {
-
+        if (methods.bottom(tipSettings)) {
+          console.log('bottom absolute');
+          settings.$next_tip.css({
+            top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
+            left: settings.$target.offset().left});
+          methods.nub_position($nub, tipSettings.nubPosition, 'top');
+        } else if (methods.top(tipSettings)) {
+          console.log('top absolute');
+          settings.$next_tip.css({
+            top: (settings.$target.offset().top - settings.$next_tip.outerHeight() - nub_height),
+            left: settings.$target.offset().left});
+          methods.nub_position($nub, tipSettings.nubPosition, 'bottom');
+        } else if (methods.right(tipSettings)) {
+          console.log('right absolute');
+          settings.$next_tip.css({
+            top: settings.$target.offset().top,
+            left: (settings.$target.outerWidth() + settings.$next_tip.outerWidth())});
+          methods.nub_position($nub, tipSettings.nubPosition, 'left');
+        } else if (methods.left(tipSettings)) {
+          console.log('left absolute');
+          settings.$next_tip.css({
+            top: settings.$target.offset().top - settings.$target.outerHeight(),
+            left: (settings.$target.offset().left)});
+          methods.nub_position($nub, tipSettings.nubPosition, 'right');
+        }
       }
+
+      console.log(methods.visible(methods.corners(settings.$next_tip)));
 
       settings.$next_tip.hide();
       settings.$next_tip.css('visibility', 'visible');
+
+      settings.attempts++;
+
+      if (!methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < 2) {
+        $nub.removeClass('bottom')
+             .removeClass('top')
+             .removeClass('right')
+             .removeClass('left');
+        tipSettings.tipLocation = methods.invert_pos(tipSettings.tipLocation);
+        methods.position(tipSettings);
+      }
     },
     bottom : function (tipSettings) {
-      return ((tipSettings.tipLocation === "bottom" && methods.border_safe('bottom')) || 
-        (tipSettings.tipLocation === "top" && !methods.border_safe('top'))) ? true : false;
+      return (tipSettings.tipLocation === "bottom");
     },
     top : function (tipSettings) {
-      return ((tipSettings.tipLocation === "top" && methods.border_safe('top')) || 
-        (tipSettings.tipLocation === "bottom" && !methods.border_safe('bottom'))) ? true : false;
+      return (tipSettings.tipLocation === "top");
     },
     right : function (tipSettings) {
-      return ((tipSettings.tipLocation === "right" && methods.border_safe('right')) || 
-        (tipSettings.tipLocation === "left" && !methods.border_safe('left'))) ? true : false;
+      return (tipSettings.tipLocation === "right");
     },
     left : function (tipSettings) {
-      return ((tipSettings.tipLocation === "left" && methods.border_safe('left')) || 
-        (tipSettings.tipLocation === "right" && !methods.border_safe('right'))) ? true : false;
+      return (tipSettings.tipLocation === "left");
     },
-    border_safe : function (pos) {
+    corners : function (el) {
+      var w = $(window),
+          right = w.width() + w.scrollLeft(),
+          bottom = w.height() + w.scrollTop();    
+      
+      return [
+        el.offset().top <= w.scrollTop(),
+        right <= el.offset().left + el.width(),
+        bottom <= el.offset().top + el.height(),
+        w.scrollLeft() >= el.offset().left
+      ];
+    },
+    visible : function (hidden_corners) {
+      var i = hidden_corners.length;
+      while (i--) {
+        if (hidden_corners[i]) { return false; }  
+      }
       return true;
+    },
+    invert_pos : function (pos) {
+      if (pos === 'right') {
+        return 'left';
+      } else if (pos === 'top') {
+        return 'bottom';
+      } else if (pos === 'bottom') {
+        return 'top';
+      } else {
+        return 'right';
+      }
+    },
+    nub_position : function (nub, pos, def) {
+      if (pos === 'auto') {
+        nub.addClass(def);
+      } else {
+        nub.addClass(pos);
+      }
     },
     startTimer : function () {
 
