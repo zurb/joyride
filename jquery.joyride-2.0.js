@@ -68,8 +68,31 @@
 
         $(document).on('click', '.joyride-next-tip', function (e) {
           e.preventDefault();
-          methods.hide();
-          methods.show();
+          if (settings.$current_tip.next().length === 0) {
+            console.log('end');
+            methods.end();
+          } else if (settings.timer > 0 && settings.startTimerOnClick) {
+            methods.hide();
+            methods.show();
+            clearInterval(settings.interval_id);
+            settings.interval_id = setInterval(function () {
+              methods.hide();
+              methods.show();
+            }, settings.timer);
+          } else if (settings.timer > 0 && !settings.startTimerOnClick) {
+            clearInterval(settings.interval_id);
+            settings.interval_id = setInterval(function () {
+              methods.hide();
+              methods.show();
+            }, settings.timer);
+          } else {
+            methods.hide();
+            methods.show();
+          }
+        });
+
+        $('.joyride-close-tip').on('click', function (e) {
+          methods.end();
         });
 
         // register event delegations (window.resize, etc)
@@ -204,9 +227,7 @@
       var half_fold = Math.ceil($(window).height() / 2),
           tip_position = settings.$next_tip.offset(),
           $nub = $('.joyride-nub', settings.$next_tip),
-          nub_height = Math.ceil($nub.outerHeight() / 2),
-          tip_offset = 0,
-          left = tip_position.left - settings.body_offset.left;
+          nub_height = Math.ceil($nub.outerHeight() / 2);
 
       // tip must not be "display: none" to calculate position
       settings.$next_tip.css('visibility', 'hidden');
@@ -258,21 +279,19 @@
         }
       }
 
-      console.log(methods.visible(methods.corners(settings.$next_tip)));
-
-      settings.$next_tip.hide();
-      settings.$next_tip.css('visibility', 'visible');
-
-      settings.attempts++;
-
-      if (!methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < 2) {
+      if (!methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < 1) {
         $nub.removeClass('bottom')
              .removeClass('top')
              .removeClass('right')
              .removeClass('left');
+
         tipSettings.tipLocation = methods.invert_pos(tipSettings.tipLocation);
+        settings.attempts++;
         methods.position(tipSettings);
       }
+
+      settings.$next_tip.hide();
+      settings.$next_tip.css('visibility', 'visible');
     },
     bottom : function (tipSettings) {
       return (tipSettings.tipLocation === "bottom");
@@ -324,7 +343,27 @@
       }
     },
     startTimer : function () {
+      settings.interval_id = null;
+      settings.showTimerState = false;
 
+      if (!settings.startTimerOnClick && settings.timer > 0) {
+        settings.interval_id = setInterval(function () {
+          methods.show();
+        }, settings.timer);
+      }
+    },
+    end : function () {
+      clearInterval(settings.interval_id);
+
+      if (settings.cookieMonster) {
+        $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
+      }
+
+      settings.$current_tip.hide();
+
+      if (settings.postRideCallback != $.noop) {
+        settings.postRideCallback();
+      }
     }
 
   };
