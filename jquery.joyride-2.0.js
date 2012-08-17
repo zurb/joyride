@@ -91,6 +91,7 @@
 
       });
     },
+
     tip_template : function (opts) {
       var $blank, content;
       
@@ -108,6 +109,7 @@
 
       return $blank[0];
     },
+
     timer_instance : function (index) {
       var txt;
 
@@ -118,6 +120,7 @@
       }
       return txt;
     },
+
     button_text : function (txt) {
       if (settings.nextButton) {
         txt = $.trim(txt) || 'Next';
@@ -127,6 +130,7 @@
       }
       return txt;
     },
+
     create : function (opts) {
       // backwards compatability with data-text attribute
       var buttonText = opts.$li.data('button') || opts.$li.data('text'),
@@ -144,6 +148,7 @@
         $(settings.tipContainer).append($tip_content);
       }
     },
+
     show : function (init) {
       var opts = {},
           tipSettings = {};
@@ -152,6 +157,7 @@
       settings.attempts = 0;
 
       if (settings.$li.next()) {
+        
         // parse options
         $.each((settings.$li.data('options') || ':').split(';'),
           function (i, s) {
@@ -169,25 +175,37 @@
         methods.position(tipSettings);
 
         if (settings.tipAnimation === "pop") {
+
           $('.joyride-timer-indicator').width(0);
+
           if (settings.timer > 0) {
 
             settings.$next_tip.show()
               .find('.joyride-timer-indicator')
               .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
               .width()}, settings.timer);
+
           } else {
+
             settings.$next_tip.show();
           }
+
+
         } else if (settings.tipAnimation === "fade") {
+
           $('.joyride-timer-indicator').width(0);
+
           if (settings.timer > 0) {
+
             settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed)
               .find('.joyride-timer-indicator')
               .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
               .width()}, settings.timer);
+
           } else {
+
             settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
+
           }
         }
 
@@ -198,14 +216,18 @@
         }
 
       } else {
+
         methods.end();
+
       }
 
     },
+
     hide : function () {
       // add animate out support here
       settings.$current_tip.hide();
     },
+
     set_li : function (init) {
       if (!init) {
         settings.$li = settings.$li.next();
@@ -215,24 +237,30 @@
         methods.set_next_tip();
         settings.$current_tip = settings.$next_tip;
       }
+
       methods.set_target();
     },
+
     set_next_tip : function () {
       settings.$next_tip = $('.joyride-tip-guide[data-index=' + settings.$li.index() + ']');
     },
+
     set_target : function () {
       var id = settings.$li.data('id');
+
       if (id) {
         settings.$target = $('#' + id);
       } else {
         settings.$target = $('body');
       }
     },
+
     scroll_to : function () {
       var window_half, tipOffset;
 
       // only scroll if target if off screen
       if (!methods.visible(methods.corners(settings.$target))) {
+
         window_half = $(window).height() / 2,
         tipOffset = Math.ceil(settings.$target.offset().top - window_half);
 
@@ -241,6 +269,7 @@
         }, settings.scrollSpeed);
       }
     },
+
     position : function (tipSettings) {
       var half_fold = Math.ceil($(window).height() / 2),
           tip_position = settings.$next_tip.offset(),
@@ -251,92 +280,119 @@
       settings.$next_tip.css('visibility', 'hidden');
       settings.$next_tip.show();
 
-      console.log(settings.$target.selector);
-
       if (settings.$target.selector !== 'body') {
 
         // TODO: add mobile positioning
         // TODO: Refine left and right positioning
 
         if (settings.inline) {
+
           if (methods.bottom(tipSettings)) {
-            console.log('bottom inline');
+
             settings.$next_tip.css({top: (settings.$target.outerHeight() + nub_height)});
             methods.nub_position($nub, tipSettings.nubPosition, 'top');
+
           } else if (methods.top(tipSettings)) {
-            console.log('top inline');
+
             settings.$next_tip.css({top: (- settings.$next_tip.outerHeight() - nub_height)});
             methods.nub_position($nub, tipSettings.nubPosition, 'bottom');
+
           } else if (methods.right(tipSettings)) {
-            console.log('right inline');
+
             settings.$next_tip.css({left: (settings.$target.outerWidth() + settings.$next_tip.outerWidth())});
             methods.nub_position($nub, tipSettings.nubPosition, 'left');
+
           } else if (methods.left(tipSettings)) {
-            console.log('left inline');
+
             settings.$next_tip.css({left: (settings.$target.outerWidth() - settings.$next_tip.outerWidth())});
             methods.nub_position($nub, tipSettings.nubPosition, 'right');
+
           }
         } else {
           if (methods.bottom(tipSettings)) {
-            console.log('bottom absolute');
+
             settings.$next_tip.css({
               top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
               left: settings.$target.offset().left});
+
             methods.nub_position($nub, tipSettings.nubPosition, 'top');
+
           } else if (methods.top(tipSettings)) {
-            console.log('top absolute');
+
             settings.$next_tip.css({
               top: (settings.$target.offset().top - settings.$next_tip.outerHeight() - nub_height),
               left: settings.$target.offset().left});
+
             methods.nub_position($nub, tipSettings.nubPosition, 'bottom');
+
           } else if (methods.right(tipSettings)) {
-            console.log('right absolute');
+
             settings.$next_tip.css({
               top: settings.$target.offset().top,
               left: (settings.$target.outerWidth() + settings.$next_tip.outerWidth())});
+
             methods.nub_position($nub, tipSettings.nubPosition, 'left');
+
           } else if (methods.left(tipSettings)) {
-            console.log('left absolute');
+
             settings.$next_tip.css({
               top: settings.$target.offset().top - settings.$target.outerHeight(),
               left: (settings.$target.offset().left)});
+
             methods.nub_position($nub, tipSettings.nubPosition, 'right');
+
           }
 
           if (!methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < 1) {
+
             $nub.removeClass('bottom')
-                 .removeClass('top')
-                 .removeClass('right')
-                 .removeClass('left');
+              .removeClass('top')
+              .removeClass('right')
+              .removeClass('left');
 
             tipSettings.tipLocation = methods.invert_pos(tipSettings.tipLocation);
+
             settings.attempts++;
+
             methods.position(tipSettings);
+
           }
+
         }
+
       } else {
+
         console.log('is modal!');
+
         // show modal styling
         // append mobal curtain
         // show modal curtain if not visible
         // position modal
+
       }
 
       settings.$next_tip.hide();
+
       settings.$next_tip.css('visibility', 'visible');
+
     },
+
     bottom : function (tipSettings) {
       return (tipSettings.tipLocation === "bottom");
     },
+
     top : function (tipSettings) {
       return (tipSettings.tipLocation === "top");
     },
+
     right : function (tipSettings) {
       return (tipSettings.tipLocation === "right");
     },
+
     left : function (tipSettings) {
       return (tipSettings.tipLocation === "left");
     },
+
     corners : function (el) {
       var w = $(window),
           right = w.width() + w.scrollLeft(),
@@ -349,13 +405,17 @@
         w.scrollLeft() >= el.offset().left
       ];
     },
+
     visible : function (hidden_corners) {
       var i = hidden_corners.length;
+
       while (i--) {
         if (hidden_corners[i]) return false;
       }
+
       return true;
     },
+
     invert_pos : function (pos) {
       if (pos === 'right') {
         return 'left';
@@ -367,6 +427,7 @@
         return 'right';
       }
     },
+
     nub_position : function (nub, pos, def) {
       if (pos === 'auto') {
         nub.addClass(def);
@@ -374,13 +435,16 @@
         nub.addClass(pos);
       }
     },
+
     startTimer : function () {
       clearInterval(interval_id);
+
       window.interval_id = setInterval(function () {
         methods.hide();
         methods.show();
       }, settings.timer);
     },
+
     end : function () {
       clearInterval(interval_id);
 
