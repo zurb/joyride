@@ -15,15 +15,15 @@
     'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
     'nubPosition'          : 'auto',    // override on a per tooltip bases 
     'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
-    'timer'                : 5000,         // 0 = no timer , all other numbers = timer in milliseconds
-    'startTimerOnClick'    : true,     // true or false - true requires clicking the first button start the timer
+    'timer'                : 5000,      // 0 = no timer , all other numbers = timer in milliseconds
+    'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
     'nextButton'           : true,      // true or false to control whether a next button is used
-    'tipAnimation'         : 'fade',     // 'pop' or 'fade' in each tip
+    'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
     'tipAnimationFadeSpeed': 300,       // when tipAnimation = 'fade' this is speed in milliseconds for the transition
     'cookieMonster'        : false,     // true or false to control whether cookies are used
     'cookieName'           : 'joyride', // Name the cookie you'll use
     'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
-    'tipContainer'         : 'body',    // Where will the tip be attached if not inline
+    'tipContainer'         : 'body',    // Where will the tip be attached
     'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
     'postStepCallback'     : $.noop,    // A method to call after each step
     'template' : { // HTML segments for tip layout
@@ -144,11 +144,7 @@
             li : opts.$li
           }));
 
-      if (settings.inline) {
-        $tip_content.insertAfter('#' + opts.$li.data('id'));
-      } else {
-        $(settings.tipContainer).append($tip_content);
-      }
+      $(settings.tipContainer).append($tip_content);
     },
 
     show : function (init) {
@@ -174,6 +170,8 @@
 
         // scroll and position tooltip
         methods.scroll_to();
+        
+        // TODO: split into .pos_phone() and .pos_default()
         methods.position(tipSettings);
 
         if (settings.tipAnimation === "pop") {
