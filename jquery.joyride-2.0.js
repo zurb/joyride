@@ -15,7 +15,7 @@
     'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
     'nubPosition'          : 'auto',    // override on a per tooltip bases 
     'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
-    'timer'                : 3000,         // 0 = no timer , all other numbers = timer in milliseconds
+    'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
     'startTimerOnClick'    : false,     // true or false - true requires clicking the first button start the timer
     'nextButton'           : true,      // true or false to control whether a next button is used
     'tipAnimation'         : 'fade',     // 'pop' or 'fade' in each tip
@@ -68,20 +68,20 @@
 
         $(document).on('click', '.joyride-next-tip', function (e) {
           e.preventDefault();
+
           if (settings.$current_tip.next().length === 0) {
-            console.log('end');
             methods.end();
           } else if (settings.timer > 0 && settings.startTimerOnClick) {
             methods.hide();
             methods.show();
-            clearInterval(settings.interval_id);
-            settings.interval_id = window.setInterval(function () {
+            clearInterval(interval_id);
+            window.interval_id = setInterval(function () {
               methods.hide();
               methods.show();
             }, settings.timer);
           } else if (settings.timer > 0 && !settings.startTimerOnClick) {
-            clearInterval(settings.interval_id);
-            settings.interval_id = window.setInterval(function () {
+            clearInterval(interval_id);
+            window.interval_id = setInterval(function () {
               methods.hide();
               methods.show();
             }, settings.timer);
@@ -262,6 +262,9 @@
       console.log(settings.$target.selector);
 
       if (settings.$target.selector !== 'body') {
+
+        // TODO: add mobile positioning
+
         if (settings.inline) {
           if (methods.bottom(tipSettings)) {
             console.log('bottom inline');
@@ -376,18 +379,17 @@
       }
     },
     startTimer : function () {
-      settings.interval_id = null;
-      settings.showTimerState = false;
+      window.interval_id = null;
 
       if (!settings.startTimerOnClick && settings.timer > 0) {
-        settings.interval_id = window.setInterval(function () {
+        window.interval_id = setInterval(function () {
           methods.hide();
           methods.show();
         }, settings.timer);
       }
     },
     end : function () {
-      clearInterval(settings.interval_id);
+      clearInterval(interval_id);
 
       if (settings.cookieMonster) {
         $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
