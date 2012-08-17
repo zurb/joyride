@@ -34,9 +34,12 @@
       'button'  : '<a href="#" class="joyride-next-tip small nice radius yellow button">'
     }
   },
+
   methods = {
+
     init : function (opts) {
       return this.each(function () {
+
         settings = $.extend(settings, opts);
 
         // non configureable settings
@@ -170,7 +173,7 @@
 
         // scroll and position tooltip
         methods.scroll_to();
-        
+
         // TODO: split into .pos_phone() and .pos_default()
         methods.position(tipSettings);
 
@@ -450,4 +453,5 @@
       $.error('Method ' +  method + ' does not exist on jQuery.joyride');
     }
   };
+  
 }(jQuery));
