@@ -24,7 +24,6 @@
     'cookieName'           : 'joyride', // Name the cookie you'll use
     'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
     'tipContainer'         : 'body',    // Where will the tip be attached if not inline
-    'inline'               : false,     // true or false, if true the tip will be attached after the element
     'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
     'postStepCallback'     : $.noop,    // A method to call after each step
     'template' : { // HTML segments for tip layout
@@ -55,6 +54,7 @@
 
         // generate the tips and insert into dom.
         if(!settings.cookieMonster || !$.cookie(settings.cookieName)) {
+
           settings.$tip_content.each(function (index) {
             methods.create({$li : $(this), index : index});
           });
@@ -66,6 +66,7 @@
           } else {
             methods.show('init');
           }
+
         }
 
         $(document).on('click', '.joyride-next-tip', function (e) {
@@ -81,13 +82,14 @@
             methods.hide();
             methods.show();
           }
+
         });
 
         $('.joyride-close-tip').on('click', function (e) {
           methods.end();
         });
 
-        // register event delegations (window.resize, etc)
+        // TODO: register resize event
 
       });
     },
@@ -270,6 +272,11 @@
       }
     },
 
+    /* .position()
+      does all of the positioning heavy lifting;
+      mobile and desktop, may want to break them
+      out into their own methods to provide clarity
+    */
     position : function (tipSettings) {
       var half_fold = Math.ceil($(window).height() / 2),
           tip_position = settings.$next_tip.offset(),
@@ -285,30 +292,6 @@
         // TODO: add mobile positioning
         // TODO: Refine left and right positioning
 
-        if (settings.inline) {
-
-          if (methods.bottom(tipSettings)) {
-
-            settings.$next_tip.css({top: (settings.$target.outerHeight() + nub_height)});
-            methods.nub_position($nub, tipSettings.nubPosition, 'top');
-
-          } else if (methods.top(tipSettings)) {
-
-            settings.$next_tip.css({top: (- settings.$next_tip.outerHeight() - nub_height)});
-            methods.nub_position($nub, tipSettings.nubPosition, 'bottom');
-
-          } else if (methods.right(tipSettings)) {
-
-            settings.$next_tip.css({left: (settings.$target.outerWidth() + settings.$next_tip.outerWidth())});
-            methods.nub_position($nub, tipSettings.nubPosition, 'left');
-
-          } else if (methods.left(tipSettings)) {
-
-            settings.$next_tip.css({left: (settings.$target.outerWidth() - settings.$next_tip.outerWidth())});
-            methods.nub_position($nub, tipSettings.nubPosition, 'right');
-
-          }
-        } else {
           if (methods.bottom(tipSettings)) {
 
             settings.$next_tip.css({
@@ -358,9 +341,9 @@
 
           }
 
-        }
-
       } else {
+
+        // TODO: add modal functionality
 
         console.log('is modal!');
 
@@ -372,7 +355,6 @@
       }
 
       settings.$next_tip.hide();
-
       settings.$next_tip.css('visibility', 'visible');
 
     },
