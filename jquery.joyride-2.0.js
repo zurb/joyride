@@ -15,8 +15,8 @@
     'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
     'nubPosition'          : 'auto',    // override on a per tooltip bases 
     'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
-    'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
-    'startTimerOnClick'    : false,     // true or false - true requires clicking the first button start the timer
+    'timer'                : 5000,         // 0 = no timer , all other numbers = timer in milliseconds
+    'startTimerOnClick'    : true,     // true or false - true requires clicking the first button start the timer
     'nextButton'           : true,      // true or false to control whether a next button is used
     'tipAnimation'         : 'fade',     // 'pop' or 'fade' in each tip
     'tipAnimationFadeSpeed': 300,       // when tipAnimation = 'fade' this is speed in milliseconds for the transition
@@ -46,6 +46,8 @@
         settings.$tip_content = $('li', settings.$content_el);
         settings.attempts = 0;
 
+        if (settings.timer > 0) window.interval_id = null;
+
         // can we create cookies?
         if (!$.isFunction($.cookie())) {
           settings.cookieMonster = false;
@@ -71,20 +73,10 @@
 
           if (settings.$current_tip.next().length === 0) {
             methods.end();
-          } else if (settings.timer > 0 && settings.startTimerOnClick) {
+          } else if (settings.timer > 0) {
             methods.hide();
             methods.show();
-            clearInterval(interval_id);
-            window.interval_id = setInterval(function () {
-              methods.hide();
-              methods.show();
-            }, settings.timer);
-          } else if (settings.timer > 0 && !settings.startTimerOnClick) {
-            clearInterval(interval_id);
-            window.interval_id = setInterval(function () {
-              methods.hide();
-              methods.show();
-            }, settings.timer);
+            methods.startTimer();
           } else {
             methods.hide();
             methods.show();
@@ -264,6 +256,7 @@
       if (settings.$target.selector !== 'body') {
 
         // TODO: add mobile positioning
+        // TODO: Refine left and right positioning
 
         if (settings.inline) {
           if (methods.bottom(tipSettings)) {
@@ -322,8 +315,11 @@
           }
         }
       } else {
-        // show modal styling
         console.log('is modal!');
+        // show modal styling
+        // append mobal curtain
+        // show modal curtain if not visible
+        // position modal
       }
 
       settings.$next_tip.hide();
@@ -356,7 +352,7 @@
     visible : function (hidden_corners) {
       var i = hidden_corners.length;
       while (i--) {
-        if (hidden_corners[i]) { return false; }  
+        if (hidden_corners[i]) return false;
       }
       return true;
     },
@@ -379,14 +375,11 @@
       }
     },
     startTimer : function () {
-      window.interval_id = null;
-
-      if (!settings.startTimerOnClick && settings.timer > 0) {
-        window.interval_id = setInterval(function () {
-          methods.hide();
-          methods.show();
-        }, settings.timer);
-      }
+      clearInterval(interval_id);
+      window.interval_id = setInterval(function () {
+        methods.hide();
+        methods.show();
+      }, settings.timer);
     },
     end : function () {
       clearInterval(interval_id);
