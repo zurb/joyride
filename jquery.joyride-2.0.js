@@ -56,7 +56,7 @@
         }
 
         // generate the tips and insert into dom.
-        if(!settings.cookieMonster || !$.cookie(settings.cookieName)) {
+        if (!settings.cookieMonster || !$.cookie(settings.cookieName)) {
 
           settings.$tip_content.each(function (index) {
             methods.create({$li : $(this), index : index});
@@ -179,14 +179,14 @@
 
         if (settings.tipAnimation === "pop") {
 
-          $('.joyride-timer-indicator').width(0);
+          $('.joyride-timer-indicator').outerWidth(0);
 
           if (settings.timer > 0) {
 
             settings.$next_tip.show()
               .find('.joyride-timer-indicator')
               .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
-              .width()}, settings.timer);
+              .outerWidth()}, settings.timer);
 
           } else {
 
@@ -196,14 +196,14 @@
 
         } else if (settings.tipAnimation === "fade") {
 
-          $('.joyride-timer-indicator').width(0);
+          $('.joyride-timer-indicator').outerWidth(0);
 
           if (settings.timer > 0) {
 
             settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed)
               .find('.joyride-timer-indicator')
               .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
-              .width()}, settings.timer);
+              .outerWidth()}, settings.timer);
 
           } else {
 
@@ -232,13 +232,13 @@
     },
 
     set_li : function (init) {
-      if (!init) {
-        settings.$li = settings.$li.next();
-        methods.set_next_tip();
-      } else {
+      if (init) {
         settings.$li = settings.$tip_content.first();
         methods.set_next_tip();
         settings.$current_tip = settings.$next_tip;
+      } else {
+        settings.$li = settings.$li.next();
+        methods.set_next_tip();
       }
 
       methods.set_target();
@@ -254,6 +254,7 @@
       if (id) {
         settings.$target = $('#' + id);
       } else {
+        // this tip is a modal
         settings.$target = $('body');
       }
     },
@@ -272,6 +273,9 @@
         }, settings.scrollSpeed);
       }
     },
+
+    // TODO: add a destroy method
+    //
 
     /* .position()
       does all of the positioning heavy lifting;
@@ -378,13 +382,13 @@
 
     corners : function (el) {
       var w = $(window),
-          right = w.width() + w.scrollLeft(),
-          bottom = w.height() + w.scrollTop();    
+          right = w.outerWidth() + w.scrollLeft(),
+          bottom = w.outerWidth() + w.scrollTop();    
       
       return [
         el.offset().top <= w.scrollTop(),
-        right <= el.offset().left + el.width(),
-        bottom <= el.offset().top + el.height(),
+        right <= el.offset().left + el.outerWidth(),
+        bottom <= el.offset().top + el.outerHeight(),
         w.scrollLeft() >= el.offset().left
       ];
     },
@@ -453,5 +457,5 @@
       $.error('Method ' +  method + ' does not exist on jQuery.joyride');
     }
   };
-  
+
 }(jQuery));
