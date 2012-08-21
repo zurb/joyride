@@ -7,11 +7,19 @@ Homepage:      http://www.zurb.com/playground/jquery-joyride-feature-tour-plugin
 
 Joyride is MIT-licensed and absolutely free to use.
 
-New in 1.0.5
-* Support for older browsers [IanLewis]
-* Added support for reversing the orientation of the tip when it goes off [IanLewis]
-* Add the ability to align the tip right-justified with the target [IanLewis]
-* Fixed window resize bug
+VERSION 2.0 IS A WORK IN PROGRESS AND IS NOT YET STABLE
+
+New in 2.0
+* remove counters in favor of jQuery's in-built .next() method
+* button text is now defined with a data-button attribute, data-text will be deprecated in 3.0
+* edge-aware tooltips that reposition based on proximity to edge of screen
+* support for manually triggering next tooltip (requires breaking flow)
+* support for jQuery 1.8, and 1.4.2+
+* move tooltip templating to settings
+* make cookie support an option
+* better support for right and left aligned tooltips
+* override nub position on a per tooltip bases
+* deprecate inline positioning of tooltips
 
 Documentation
 ==============
@@ -23,9 +31,9 @@ Repo Contents
 
 * README
 * DEMO - Demo specific files, not necessary to use the plugin
-* joyride-1.0.5.css - Default Joyride styles, required
-* jquery-1.7.2.min.js - A version of jQuery, required, 1.7+ is not required
-* jquery.joyride-1.0.5.js - The heart of Joyride, required
+* joyride-2.0.css - Default Joyride styles, required
+* jquery-1.8.min.js - A version of jQuery, required, 1.4.2+ is required
+* jquery.joyride-2.0.js - The heart of Joyride, required
 * modernizr.mq.js - A custom build of Modernizr with just mediaqueries
 * jquery.cookie.js - required
 * .gitignore - Those pesky DS_Store files...this is not part of the plugin
