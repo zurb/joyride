@@ -286,17 +286,11 @@
       }
     },
 
-    // TODO: add a destroy method
     destroy : function () {
-      // remove events
-      // remove tooltips
+      $(window).off('joyride');
+      $('.joyride-tip-guide').remove();
     },
 
-    /* .position()
-      does all of the positioning heavy lifting;
-      mobile and desktop, may want to break them
-      out into their own methods to provide clarity
-    */
     pos_default : function (tipSettings) {
       var half_fold = Math.ceil($(window).height() / 2),
           tip_position = settings.$next_tip.offset(),
@@ -384,9 +378,6 @@
           target_height = settings.$target.outerHeight(),
           $nub = $('.joyride-nub', settings.$next_tip),
           nub_height = Math.ceil($nub.outerHeight() / 2);
-
-
-      console.log(target_height);
 
       $nub.removeClass('bottom')
         .removeClass('top')

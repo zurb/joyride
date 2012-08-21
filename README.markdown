@@ -20,6 +20,7 @@ New in 2.0
 * better support for right and left aligned tooltips
 * override nub position on a per tooltip bases
 * deprecate inline positioning of tooltips
+* new destroy method: `$(window).joyride('destroy')`
 
 Documentation
 ==============
