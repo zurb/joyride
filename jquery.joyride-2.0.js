@@ -19,6 +19,7 @@
     'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
     'nextButton'           : true,      // true or false to control whether a next button is used
     'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
+    'pauseAfter'           : [],        // array of indexes where to pause the tour after
     'tipAnimationFadeSpeed': 300,       // when tipAnimation = 'fade' this is speed in milliseconds for the transition
     'cookieMonster'        : false,     // true or false to control whether cookies are used
     'cookieName'           : 'joyride', // Name the cookie you'll use
@@ -46,6 +47,7 @@
         settings.$content_el = $(this);
         settings.body_offset = $(settings.tipContainer).children('*').first().position();
         settings.$tip_content = $('li', settings.$content_el);
+        settings.paused = false;
         settings.attempts = 0;
 
         if (settings.timer > 0) window.interval_id = null;
@@ -95,6 +97,12 @@
         // TODO: register resize event
 
       });
+    },
+
+    // call this method when you want to resume the tour
+    resume : function () {
+      methods.set_li();
+      methods.show();
     },
 
     tip_template : function (opts) {
@@ -154,82 +162,91 @@
       var opts = {},
           tipSettings = {};
 
-      methods.set_li(init);
-      settings.attempts = 0;
+      if (settings.$li === undefined || ($.inArray(settings.$li.index(), settings.pauseAfter) === -1)) {
+        if (settings.paused) {
+          settings.paused = false;
+        } else {
+          methods.set_li(init);
+        }
 
-      if (settings.$li.next()) {
-        
-        // parse options
-        $.each((settings.$li.data('options') || ':').split(';'),
-          function (i, s) {
-            var p = s.split(':');
-            if (p.length == 2) {
-              opts[$.trim(p[0])] = $.trim(p[1]);
+        settings.attempts = 0;
+
+        if (settings.$li.next()) {
+          
+          // parse options
+          $.each((settings.$li.data('options') || ':').split(';'),
+            function (i, s) {
+              var p = s.split(':');
+              if (p.length == 2) {
+                opts[$.trim(p[0])] = $.trim(p[1]);
+              }
+            }
+          );
+
+          tipSettings = $.extend({}, settings, opts);
+
+          // scroll and position tooltip
+          methods.scroll_to();
+
+          if (methods.is_phone()) {
+            methods.pos_phone(tipSettings);
+          } else {
+            methods.pos_default(tipSettings);
+          }
+
+          if (settings.tipAnimation === "pop") {
+
+            $('.joyride-timer-indicator').outerWidth(0);
+
+            if (settings.timer > 0) {
+
+              settings.$next_tip.show()
+                .find('.joyride-timer-indicator')
+                .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
+                .outerWidth()}, settings.timer);
+
+            } else {
+
+              settings.$next_tip.show();
+            }
+
+
+          } else if (settings.tipAnimation === "fade") {
+
+            $('.joyride-timer-indicator').outerWidth(0);
+
+            if (settings.timer > 0) {
+
+              settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed)
+                .find('.joyride-timer-indicator')
+                .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
+                .outerWidth()}, settings.timer);
+
+            } else {
+
+              settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
+
             }
           }
-        );
 
-        tipSettings = $.extend({}, settings, opts);
+          settings.$current_tip = settings.$next_tip;
 
-        // scroll and position tooltip
-        methods.scroll_to();
+          if (settings.postStepCallback !== $.noop) {
+            settings.postStepCallback(prevCount);
+          }
 
-        if (methods.is_phone()) {
-          methods.pos_phone(tipSettings);
         } else {
-          methods.pos_default(tipSettings);
+
+          methods.end();
+
         }
-
-        if (settings.tipAnimation === "pop") {
-
-          $('.joyride-timer-indicator').outerWidth(0);
-
-          if (settings.timer > 0) {
-
-            settings.$next_tip.show()
-              .find('.joyride-timer-indicator')
-              .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
-              .outerWidth()}, settings.timer);
-
-          } else {
-
-            settings.$next_tip.show();
-          }
-
-
-        } else if (settings.tipAnimation === "fade") {
-
-          $('.joyride-timer-indicator').outerWidth(0);
-
-          if (settings.timer > 0) {
-
-            settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed)
-              .find('.joyride-timer-indicator')
-              .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
-              .outerWidth()}, settings.timer);
-
-          } else {
-
-            settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
-
-          }
-        }
-
-        settings.$current_tip = settings.$next_tip;
-
-        if (settings.postStepCallback !== $.noop) {
-          settings.postStepCallback(prevCount);
-        }
-
       } else {
-
-        methods.end();
-
+        settings.paused = true;
       }
 
     },
 
-    // detect phones with mediaqueries if supported.
+    // detect phones with media queries if supported.
     is_phone : function () {
       if (Modernizr) {
         return Modernizr.mq('only screen and (max-width: 768px)');
@@ -357,8 +374,8 @@
       } else {
 
         // TODO: add modal functionality
-
-        console.log('is modal!');
+        methods.center();
+        $nub.hide();
 
         // show modal styling
         // append mobal curtain
@@ -396,6 +413,17 @@
         $nub.addClass('top');
 
       }
+    },
+
+    center : function () {
+      var $w = $(window);
+
+      settings.$next_tip.css({
+        top : ((($w.height() - settings.$next_tip.outerHeight()) / 2) + $w.scrollTop()),
+        left : ((($w.width() - settings.$next_tip.outerWidth()) / 2) + $w.scrollLeft())
+      });
+
+      return true;
     },
 
     bottom : function (tipSettings) {
@@ -467,7 +495,9 @@
     },
 
     end : function () {
-      clearInterval(interval_id);
+      if (window.interval_id) {
+        clearInterval(interval_id);
+      }
 
       if (settings.cookieMonster) {
         $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });

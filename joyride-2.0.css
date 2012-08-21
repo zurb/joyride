@@ -71,6 +71,7 @@ width: 100%;
   top: -28px;
   bottom: none;
 }
+
 .joyride-tip-guide span.joyride-nub.bottom {
   /*
   IE7/IE8 Don't support rgba so we set the fallback
@@ -205,4 +206,8 @@ width: 100%;
 }
 .joyride-close-tip:hover {
   color: rgba(255,255,255,0.9) !important;
+}
+
+.joyride-tip-guide.modal {
+  
 }
