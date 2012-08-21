@@ -163,6 +163,8 @@
           tipSettings = {};
 
       if (settings.$li === undefined || ($.inArray(settings.$li.index(), settings.pauseAfter) === -1)) {
+
+        // don't go to the next li if the tour was paused
         if (settings.paused) {
           settings.paused = false;
         } else {
@@ -208,6 +210,7 @@
             } else {
 
               settings.$next_tip.show();
+
             }
 
 
@@ -241,7 +244,9 @@
 
         }
       } else {
+
         settings.paused = true;
+
       }
 
     },
@@ -292,7 +297,7 @@
       var window_half, tipOffset;
 
       // only scroll if target if off screen
-      if (!methods.visible(methods.corners(settings.$target))) {
+      if (methods.visible(methods.corners(settings.$target))) {
 
         window_half = $(window).height() / 2,
         tipOffset = Math.ceil(settings.$target.offset().top - window_half);
@@ -445,7 +450,7 @@
     corners : function (el) {
       var w = $(window),
           right = w.outerWidth() + w.scrollLeft(),
-          bottom = w.outerWidth() + w.scrollTop();    
+          bottom = w.outerWidth() + w.scrollTop();
       
       return [
         el.offset().top <= w.scrollTop(),
