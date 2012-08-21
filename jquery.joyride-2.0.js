@@ -15,7 +15,7 @@
     'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
     'nubPosition'          : 'auto',    // override on a per tooltip bases 
     'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
-    'timer'                : 5000,      // 0 = no timer , all other numbers = timer in milliseconds
+    'timer'                : 0,      // 0 = no timer , all other numbers = timer in milliseconds
     'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
     'nextButton'           : true,      // true or false to control whether a next button is used
     'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
@@ -174,8 +174,11 @@
         // scroll and position tooltip
         methods.scroll_to();
 
-        // TODO: split into .pos_phone() and .pos_default()
-        methods.position(tipSettings);
+        if (methods.is_phone()) {
+          methods.pos_phone(tipSettings);
+        } else {
+          methods.pos_default(tipSettings);
+        }
 
         if (settings.tipAnimation === "pop") {
 
@@ -224,6 +227,15 @@
 
       }
 
+    },
+
+    // detect phones with mediaqueries if supported.
+    is_phone : function () {
+      if (Modernizr) {
+        return Modernizr.mq('only screen and (max-width: 768px)');
+      } else {
+        return ($(window).width() < 769) ? true : false;
+      }
     },
 
     hide : function () {
@@ -275,14 +287,17 @@
     },
 
     // TODO: add a destroy method
-    //
+    destroy : function () {
+      // remove events
+      // remove tooltips
+    },
 
     /* .position()
       does all of the positioning heavy lifting;
       mobile and desktop, may want to break them
       out into their own methods to provide clarity
     */
-    position : function (tipSettings) {
+    pos_default : function (tipSettings) {
       var half_fold = Math.ceil($(window).height() / 2),
           tip_position = settings.$next_tip.offset(),
           $nub = $('.joyride-nub', settings.$next_tip),
@@ -294,7 +309,6 @@
 
       if (settings.$target.selector !== 'body') {
 
-        // TODO: add mobile positioning
         // TODO: Refine left and right positioning
 
           if (methods.bottom(tipSettings)) {
@@ -342,7 +356,7 @@
 
             settings.attempts++;
 
-            methods.position(tipSettings);
+            methods.pos_default(tipSettings);
 
           }
 
@@ -362,6 +376,35 @@
       settings.$next_tip.hide();
       settings.$next_tip.css('visibility', 'visible');
 
+    },
+
+    pos_phone : function (tipSettings) {
+      var tip_height = settings.$next_tip.outerHeight(),
+          tip_offset = settings.$next_tip.offset(),
+          target_height = settings.$target.outerHeight(),
+          $nub = $('.joyride-nub', settings.$next_tip),
+          nub_height = Math.ceil($nub.outerHeight() / 2);
+
+
+      console.log(target_height);
+
+      $nub.removeClass('bottom')
+        .removeClass('top')
+        .removeClass('right')
+        .removeClass('left');
+
+      if (methods.top(tipSettings)) {
+
+          settings.$next_tip.offset({top: settings.$target.offset().top - tip_height - (nub_height*2) + target_height});
+          $nub.addClass('bottom');
+
+      } else {
+
+        // Default is bottom alignment.
+        settings.$next_tip.offset({top: settings.$target.offset().top + target_height + nub_height});
+        $nub.addClass('top');
+
+      }
     },
 
     bottom : function (tipSettings) {
