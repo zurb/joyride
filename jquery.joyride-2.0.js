@@ -8,6 +8,8 @@
 
 /*jslint unparam: true, browser: true, indent: 2 */
 
+// TODO: test IE 8
+
 ;(function ($) {
   'use strict';
 
@@ -543,7 +545,7 @@
 
     outerHTML : function (el) {
       // support FireFox < 11
-      return el.outerHTML || new XMLSerializer().serializeToString(el);
+      return el.outerHTML || new XMLSerializer().serializeToString(node);
     }
 
   };
