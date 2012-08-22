@@ -529,6 +529,7 @@
         $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
       }
 
+      $('.joyride-modal-bg').hide();
       settings.$current_tip.hide();
 
       if (settings.postRideCallback !== $.noop) {
