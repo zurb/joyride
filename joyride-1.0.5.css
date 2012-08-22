@@ -56,13 +56,25 @@ width: 100%;
    left: auto;
    right: 22px;
 }
+.joyride-tip-guide span.joyride-nub.bottom.right {
+   left: auto;
+   right: 22px;
+}
 .joyride-tip-guide span.joyride-nub.top.center {
+   left: 45%;
+   right: auto;
+}
+.joyride-tip-guide span.joyride-nub.bottom.center {
    left: 45%;
    right: auto;
 }
 .joyride-tip-guide span.joyride-nub.left.center {
   left: -28px;
   top: 45%;
+}
+.joyride-tip-guide span.joyride-nub.left.right{
+  left: -28px;
+  top: 65%;
 }
 
 .joyride-tip-guide span.joyride-nub.left {
@@ -221,9 +233,17 @@ width: 100%;
    z-index: 2000;
 }
 .currentTipFocus{
-  background: transparent;
+  font-weight: bolder;
   filter: alpha(opacity = 100);
   opacity: 1; 
   position: relative;
-  z-index: 4000; 
+  z-index: 3000;
+   
+}
+.containerTipFocus{
+  border: 2px dashed white;
+  filter: alpha(opacity = 100);
+  opacity: 1; 
+  position: absolute;
+  z-index: 2010;  
 }
