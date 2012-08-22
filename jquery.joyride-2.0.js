@@ -521,6 +521,11 @@
       if (settings.postRideCallback !== $.noop) {
         settings.postRideCallback();
       }
+    },
+
+    new_jquery : function () {
+      // are we using jQuery 1.7+? (tentative)
+      return $.isFunction($.fn.on);
     }
 
   };
