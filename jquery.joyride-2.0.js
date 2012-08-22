@@ -74,7 +74,7 @@
 
         }
 
-        $(document).on('click', '.joyride-next-tip', function (e) {
+        $(document).on('click.joyride', '.joyride-next-tip', function (e) {
           e.preventDefault();
 
           if (settings.$current_tip.next().length === 0) {
@@ -90,11 +90,17 @@
 
         });
 
-        $('.joyride-close-tip').on('click', function (e) {
+        $('.joyride-close-tip').on('click.joyride', function (e) {
           methods.end();
         });
 
-        // TODO: register resize event
+        $(window).on('resize.joyride', function (e) {
+          if (methods.is_phone()) {
+            methods.pos_phone();
+          } else {
+            methods.pos_default();
+          }
+        });
 
       });
     },
@@ -159,8 +165,7 @@
     },
 
     show : function (init) {
-      var opts = {},
-          tipSettings = {};
+      var opts = {};
 
       if (settings.$li === undefined || ($.inArray(settings.$li.index(), settings.pauseAfter) === -1)) {
 
@@ -185,15 +190,15 @@
             }
           );
 
-          tipSettings = $.extend({}, settings, opts);
+          settings.tipSettings = $.extend({}, settings, opts);
 
           // scroll and position tooltip
           methods.scroll_to();
 
           if (methods.is_phone()) {
-            methods.pos_phone(tipSettings);
+            methods.pos_phone(true);
           } else {
-            methods.pos_default(tipSettings);
+            methods.pos_default(true);
           }
 
           if (settings.tipAnimation === "pop") {
@@ -313,51 +318,54 @@
       $('.joyride-tip-guide').remove();
     },
 
-    pos_default : function (tipSettings) {
+    pos_default : function (init) {
       var half_fold = Math.ceil($(window).height() / 2),
           tip_position = settings.$next_tip.offset(),
           $nub = $('.joyride-nub', settings.$next_tip),
-          nub_height = Math.ceil($nub.outerHeight() / 2);
+          nub_height = Math.ceil($nub.outerHeight() / 2),
+          toggle = init || false;
 
       // tip must not be "display: none" to calculate position
-      settings.$next_tip.css('visibility', 'hidden');
-      settings.$next_tip.show();
+      if (toggle) {
+        settings.$next_tip.css('visibility', 'hidden');
+        settings.$next_tip.show();
+      }
 
       if (settings.$target.selector !== 'body') {
 
         // TODO: Refine left and right positioning
 
-          if (methods.bottom(tipSettings)) {
+          if (methods.bottom()) {
 
             settings.$next_tip.css({
               top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
               left: settings.$target.offset().left});
 
-            methods.nub_position($nub, tipSettings.nubPosition, 'top');
+            methods.nub_position($nub, settings.tipSettings.nubPosition, 'top');
 
-          } else if (methods.top(tipSettings)) {
+          } else if (methods.top()) {
 
             settings.$next_tip.css({
               top: (settings.$target.offset().top - settings.$next_tip.outerHeight() - nub_height),
               left: settings.$target.offset().left});
 
-            methods.nub_position($nub, tipSettings.nubPosition, 'bottom');
+            methods.nub_position($nub, settings.tipSettings.nubPosition, 'bottom');
 
-          } else if (methods.right(tipSettings)) {
+          } else if (methods.right()) {
 
             settings.$next_tip.css({
               top: settings.$target.offset().top,
               left: (settings.$target.outerWidth() + settings.$next_tip.outerWidth())});
 
-            methods.nub_position($nub, tipSettings.nubPosition, 'left');
+            methods.nub_position($nub, settings.tipSettings.nubPosition, 'left');
 
-          } else if (methods.left(tipSettings)) {
+          } else if (methods.left()) {
 
             settings.$next_tip.css({
               top: settings.$target.offset().top - settings.$target.outerHeight(),
               left: (settings.$target.offset().left)});
 
-            methods.nub_position($nub, tipSettings.nubPosition, 'right');
+            methods.nub_position($nub, settings.tipSettings.nubPosition, 'right');
 
           }
 
@@ -368,33 +376,33 @@
               .removeClass('right')
               .removeClass('left');
 
-            tipSettings.tipLocation = methods.invert_pos(tipSettings.tipLocation);
+            settings.tipSettings.tipLocation = methods.invert_pos();
 
             settings.attempts++;
 
-            methods.pos_default(tipSettings);
+            methods.pos_default();
 
           }
 
       } else {
 
-        // TODO: add modal functionality
+        // show tooltip as modal
         methods.center();
         $nub.hide();
 
-        // show modal styling
-        // append mobal curtain
-        // show modal curtain if not visible
-        // position modal
+        // TODO: append modal bg if not present
+        // TODO: show modal bg if not visible
 
       }
 
-      settings.$next_tip.hide();
-      settings.$next_tip.css('visibility', 'visible');
+      if (toggle) {
+        settings.$next_tip.hide();
+        settings.$next_tip.css('visibility', 'visible');
+      }
 
     },
 
-    pos_phone : function (tipSettings) {
+    pos_phone : function () {
       var tip_height = settings.$next_tip.outerHeight(),
           tip_offset = settings.$next_tip.offset(),
           target_height = settings.$target.outerHeight(),
@@ -406,7 +414,7 @@
         .removeClass('right')
         .removeClass('left');
 
-      if (methods.top(tipSettings)) {
+      if (methods.top()) {
 
           settings.$next_tip.offset({top: settings.$target.offset().top - tip_height - (nub_height*2) + target_height});
           $nub.addClass('bottom');
@@ -431,20 +439,20 @@
       return true;
     },
 
-    bottom : function (tipSettings) {
-      return (tipSettings.tipLocation === "bottom");
+    bottom : function () {
+      return (settings.tipSettings.tipLocation === "bottom");
     },
 
-    top : function (tipSettings) {
-      return (tipSettings.tipLocation === "top");
+    top : function () {
+      return (settings.tipSettings.tipLocation === "top");
     },
 
-    right : function (tipSettings) {
-      return (tipSettings.tipLocation === "right");
+    right : function () {
+      return (settings.tipSettings.tipLocation === "right");
     },
 
-    left : function (tipSettings) {
-      return (tipSettings.tipLocation === "left");
+    left : function () {
+      return (settings.tipSettings.tipLocation === "left");
     },
 
     corners : function (el) {
