@@ -242,10 +242,6 @@
 
           settings.$current_tip = settings.$next_tip;
 
-          if (settings.postStepCallback !== $.noop) {
-            settings.postStepCallback(prevCount);
-          }
-
         } else {
 
           methods.end();
@@ -269,8 +265,8 @@
     },
 
     hide : function () {
+      settings.postStepCallback();
       $('.joyride-modal-bg').hide();
-
       settings.$current_tip.hide();
     },
 
@@ -314,6 +310,14 @@
         $("html, body").animate({
           scrollTop: tipOffset
         }, settings.scrollSpeed);
+      }
+    },
+
+    paused : function () {
+      if (($.inArray((settings.$li.index() + 1), settings.pauseAfter) === -1)) {
+        return true;
+      } else {
+        return false;
       }
     },
 
@@ -533,9 +537,7 @@
       $('.joyride-modal-bg').hide();
       settings.$current_tip.hide();
 
-      if (settings.postRideCallback !== $.noop) {
-        settings.postRideCallback();
-      }
+      settings.postRideCallback();
     },
 
     new_jquery : function () {
