@@ -135,7 +135,7 @@
       if (index === 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer === 0) {
         txt = '';
       } else {
-        txt = $(settings.template.timer)[0].outerHTML;
+        txt = methods.outerHTML($(settings.template.timer)[0]);
       }
       return txt;
     },
@@ -143,7 +143,7 @@
     button_text : function (txt) {
       if (settings.nextButton) {
         txt = $.trim(txt) || 'Next';
-        txt = $(settings.template.button).append(txt)[0].outerHTML;
+        txt = methods.outerHTML($(settings.template.button).append(txt)[0]);
       } else {
         txt = '';
       }
@@ -524,7 +524,6 @@
         clearInterval(interval_id);
       }
 
-      // TODO: test cookies
       if (settings.cookieMonster) {
         $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
       }
@@ -540,6 +539,11 @@
     new_jquery : function () {
       // are we using jQuery 1.7+? (tentative)
       return $.isFunction($.fn.on);
+    },
+
+    outerHTML : function (el) {
+      // support FireFox < 11
+      return el.outerHTML || new XMLSerializer().serializeToString(el);
     }
 
   };
