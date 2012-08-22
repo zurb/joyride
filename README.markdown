@@ -13,14 +13,13 @@ New in 2.0
 * remove counters in favor of jQuery's in-built .next() method
 * button text is now defined with a data-button attribute, data-text will be deprecated in 3.0
 * edge-aware tooltips that reposition based on proximity to edge of screen
-* support for pause and resume
+* support for pause, resume, restart, and destroy
 * support for jQuery 1.8, and 1.4.2+
 * move tooltip templating to settings
 * make cookie support an option
 * better support for right and left aligned tooltips
 * override nub position on a per tooltip bases
 * deprecate inline positioning of tooltips
-* new destroy method: `$(window).joyride('destroy')`
 
 Documentation
 ==============

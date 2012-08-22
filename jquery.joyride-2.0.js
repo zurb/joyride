@@ -318,6 +318,12 @@
       $('.joyride-tip-guide').remove();
     },
 
+    restart : function () {
+      methods.hide();
+      settings.$li = undefined;
+      methods.show('init');
+    },
+
     pos_default : function (init) {
       var half_fold = Math.ceil($(window).height() / 2),
           tip_position = settings.$next_tip.offset(),
@@ -332,8 +338,6 @@
       }
 
       if (settings.$target.selector !== 'body') {
-
-        // TODO: Refine left and right positioning
 
           if (methods.bottom()) {
 
@@ -380,7 +384,7 @@
 
             settings.attempts++;
 
-            methods.pos_default();
+            methods.pos_default(true);
 
           }
 
@@ -480,13 +484,13 @@
 
     invert_pos : function (pos) {
       if (pos === 'right') {
-        return 'left';
+        return 'bottom';
       } else if (pos === 'top') {
         return 'bottom';
       } else if (pos === 'bottom') {
         return 'top';
       } else {
-        return 'right';
+        return 'bottom';
       }
     },
 
