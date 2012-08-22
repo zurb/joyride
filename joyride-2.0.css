@@ -14,7 +14,7 @@ body {
 
   color: #fff;
   width: 300px;
-  z-index: 10;
+  z-index: 101;
   top: 0; /* keeps the page from scrolling when calculating position */
   left: 0;
   font-family: "HelveticaNeue", "Helvetica Neue", "Helvetica", Helvetica, Arial, Lucida, sans-serif;
@@ -208,6 +208,15 @@ width: 100%;
   color: rgba(255,255,255,0.9) !important;
 }
 
-.joyride-tip-guide.modal {
-  
+.joyride-modal-bg {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background: #000;
+  opacity: 0.5;
+  z-index: 100;
+  display: none;
+  top: 0;
+  left: 0;
+  cursor: pointer;
 }

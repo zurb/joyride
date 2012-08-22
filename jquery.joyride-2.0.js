@@ -21,7 +21,7 @@
     'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
     'pauseAfter'           : [],        // array of indexes where to pause the tour after
     'tipAnimationFadeSpeed': 300,       // when tipAnimation = 'fade' this is speed in milliseconds for the transition
-    'cookieMonster'        : true,     // true or false to control whether cookies are used
+    'cookieMonster'        : false,     // true or false to control whether cookies are used
     'cookieName'           : 'joyride', // Name the cookie you'll use
     'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
     'tipContainer'         : 'body',    // Where will the tip be attached
@@ -74,10 +74,10 @@
 
         }
 
-        $(document).on('click.joyride', '.joyride-next-tip', function (e) {
+        $(document).on('click.joyride', '.joyride-next-tip, .joyride-modal-bg', function (e) {
           e.preventDefault();
 
-          if (settings.$current_tip.next().length === 0) {
+          if (settings.$li.next().length < 1) {
             methods.end();
           } else if (settings.timer > 0) {
             methods.hide();
@@ -267,7 +267,8 @@
     },
 
     hide : function () {
-      // add animate out support here
+      $('.joyride-modal-bg').hide();
+
       settings.$current_tip.hide();
     },
 
@@ -390,13 +391,19 @@
           }
 
       } else {
-
         // show tooltip as modal
         methods.center();
         $nub.hide();
 
-        // TODO: append modal bg if not present
-        // TODO: show modal bg if not visible
+        if ($('.joyride-modal-bg').length < 1) {
+          $('body').append('<div class="joyride-modal-bg">');
+        }
+
+        if (settings.tipAnimation === "pop") {
+          $('.joyride-modal-bg').show();
+        } else {
+          $('.joyride-modal-bg').fadeIn(settings.tipAnimationFadeSpeed);
+        }
 
       }
 
