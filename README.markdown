@@ -15,6 +15,7 @@ New in 2.0
 * edge-aware tooltips that reposition based on proximity to edge of screen
 * support for pause, resume, restart, and destroy
 * support for jQuery 1.8, and 1.4.2+
+* modal style tooltips that have (li elements without data-ids)
 * move tooltip templating to settings
 * make cookie support an option
 * better support for right and left aligned tooltips
