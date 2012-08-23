@@ -17,7 +17,7 @@
     'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
     'nubPosition'          : 'auto',    // override on a per tooltip bases 
     'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
-    'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
+    'timer'                : 3000,         // 0 = no timer , all other numbers = timer in milliseconds
     'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
     'nextButton'           : true,      // true or false to control whether a next button is used
     'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
@@ -61,8 +61,6 @@
         // are we using jQuery 1.7+
         methods.jquery_check();
 
-        if (settings.timer > 0) window.interval_id = null;
-
         // can we create cookies?
         if (!$.isFunction($.cookie)) {
           settings.cookieMonster = false;
@@ -91,6 +89,7 @@
           if (settings.$li.next().length < 1) {
             methods.end();
           } else if (settings.timer > 0) {
+            clearTimeout(settings.automate);
             methods.hide();
             methods.show();
             methods.startTimer();
@@ -191,7 +190,7 @@
 
         settings.attempts = 0;
 
-        if (settings.$li.next()) {
+        if (settings.$li.length) {
           
           // parse options
           $.each((settings.$li.data('options') || ':').split(';'),
@@ -554,19 +553,18 @@
     },
 
     startTimer : function () {
-      clearInterval(interval_id);
-
-      window.interval_id = setInterval(function () {
-        methods.hide();
-        methods.show();
-      }, settings.timer);
+      if (settings.$li.length) {
+        settings.automate = setTimeout(function () {
+          methods.hide();
+          methods.show();
+          methods.startTimer();
+        }, settings.timer);
+      } else {
+        clearTimeout(settings.automate);
+      }
     },
 
     end : function () {
-      if (window.interval_id) {
-        clearInterval(interval_id);
-      }
-
       if (settings.cookieMonster) {
         $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
       }
