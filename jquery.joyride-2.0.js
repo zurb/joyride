@@ -10,7 +10,7 @@
 
 // TODO: test IE 8, hook up jQuery 1.7 detection, class targeting, skip functionality, more mobile testing
 
-;(function ($) {
+;(function ($, window, document, undefined) {
   'use strict';
 
   var settings = {
@@ -563,4 +563,4 @@
     }
   };
 
-}(jQuery));
+}(jQuery, window, document));
