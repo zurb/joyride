@@ -413,7 +413,7 @@
 
       } else {
         
-        methods.modal_pos($nub);
+        methods.pos_modal($nub);
 
       }
 
@@ -446,7 +446,7 @@
 
         if (methods.top()) {
 
-            settings.$next_tip.offset({top: settings.$target.offset().top - tip_height - (nub_height*2)});
+            settings.$next_tip.offset({top: settings.$target.offset().top - tip_height - nub_height});
             $nub.addClass('bottom');
 
         } else {
@@ -457,8 +457,8 @@
         }
 
       } else {
-
-        methods.modal($nub);
+        
+        methods.pos_modal($nub);
 
       }
 
@@ -468,7 +468,7 @@
       }
     },
 
-    modal_pos : function ($nub) {
+    pos_modal : function ($nub) {
       methods.center();
       $nub.hide();
 
