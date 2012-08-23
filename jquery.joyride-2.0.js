@@ -51,6 +51,12 @@
         settings.$tip_content = $('li', settings.$content_el);
         settings.paused = false;
         settings.attempts = 0;
+        settings.tipLocationPatterns = {
+            top: ['bottom', 'right', 'left'],
+            bottom: ['top', 'right', 'left'],
+            left: ['right', 'top', 'bottom'],
+            right: ['left', 'top', 'bottom']
+          };
         
         // are we using jQuery 1.7+
         methods.jquery_check();
@@ -96,6 +102,7 @@
         });
 
         $('.joyride-close-tip').on('click.joyride', function (e) {
+          e.preventDefault()
           methods.end();
         });
 
@@ -157,7 +164,7 @@
 
     create : function (opts) {
       // backwards compatability with data-text attribute
-      var buttonText = opts.$li.data('button') || opts.$li.data('text'),
+      var buttonText = opts.$li.attr('data-button') || opts.$li.attr('data-text'),
           tipClass = opts.$li.attr('class'),
           $tip_content = $(methods.tip_template({
             tip_class : tipClass,
@@ -197,6 +204,8 @@
           );
 
           settings.tipSettings = $.extend({}, settings, opts);
+
+          settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
 
           // scroll and position tooltip
           methods.scroll_to();
@@ -291,15 +300,19 @@
     },
 
     set_target : function () {
-      // TODO: add support for classes
-      var id = settings.$li.data('id');
+      var cl = settings.$li.attr('data-class'),
+          id = settings.$li.attr('data-id'),
+          $sel = function () {
+            if (id) {
+              return $('#' + id);
+            } else if (cl) {
+              return $('.' + cl);
+            } else {
+              return $('body');
+            }
+          };
 
-      if (id) {
-        settings.$target = $('#' + id);
-      } else {
-        // this tip is a modal
-        settings.$target = $('body');
-      }
+      settings.$target = $sel();
     },
 
     scroll_to : function () {
@@ -385,14 +398,14 @@
 
           }
 
-          if (!methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < 1) {
+          if (!methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < settings.tipSettings.tipLocationPattern.length) {
 
             $nub.removeClass('bottom')
               .removeClass('top')
               .removeClass('right')
               .removeClass('left');
 
-            settings.tipSettings.tipLocation = methods.invert_pos();
+            settings.tipSettings.tipLocation = settings.tipSettings.tipLocationPattern[settings.attempts];
 
             settings.attempts++;
 
@@ -500,18 +513,6 @@
       return true;
     },
 
-    invert_pos : function (pos) {
-      if (pos === 'right') {
-        return 'bottom';
-      } else if (pos === 'top') {
-        return 'bottom';
-      } else if (pos === 'bottom') {
-        return 'top';
-      } else {
-        return 'bottom';
-      }
-    },
-
     nub_position : function (nub, pos, def) {
       if (pos === 'auto') {
         nub.addClass(def);
@@ -547,19 +548,19 @@
     jquery_check : function () {
       // define on() and off() for older jQuery
       if (!$.isFunction($.fn.on)) {
-      	
+        
         $.fn.on = function(types, sel, fn) {
-        	
+          
           return this.delegate(sel, types, fn);
           
-	};
-	
-	$.fn.off = function(types, sel, fn) {
-	  
-	  return this.undelegate(sel, types, fn);
-	  
-	};
-	
+        };
+        
+        $.fn.off = function(types, sel, fn) {
+          
+          return this.undelegate(sel, types, fn);
+          
+        };
+  
         return false;
       }
       

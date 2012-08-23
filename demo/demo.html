@@ -39,11 +39,11 @@
 
     <div class="row">
       <div class="six columns">
-        <h2 id="numero1">Point Out Those New Features!</h2>
+        <h2 id="numero1" class="so-awesome">Point Out Those New Features!</h2>
         <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum. Cras mattis consectetur purus sit amet fermentum.</p>
       </div>
       <div class="six columns">
-        <img id="numero5" src="http://placehold.it/430x200">
+        <img id="numero5" src="430x200.gif">
       </div>
     </div>
 
@@ -60,7 +60,7 @@
 
    <div class="row">
      <div class="four columns">
-        <img src="http://placehold.it/280x120">
+        <img src="280x120.gif">
       </div>
       <div class="eight columns">
         <h3 id="numero2">Customize Each Stop Along the Way</h3>
@@ -76,7 +76,7 @@
         <p>Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Curabitur blandit tempus porttitor. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Aenean lacinia bibendum nulla sed consectetur. Cras mattis consectetur purus sit amet fermentum. Cras mattis consectetur purus sit amet fermentum.</p>
       </div>
       <div class="six columns">
-        <img src="http://placehold.it/430x200">
+        <img src="430x200.gif">
       </div>
     </div>
 
@@ -85,7 +85,7 @@
   </div>
       <!-- Tip Content -->
     <ol id="joyRideTipContent">
-      <li data-id="numero1" data-text="Next" class="custom">
+      <li data-class="so-awesome" data-text="Next" class="custom">
         <h2>Stop #1</h2>
         <p>You can control all the details for you tour stop. Any valid HTML will work inside of Joyride.</p>
       </li>
@@ -114,14 +114,7 @@
     <script type="text/javascript" src="../jquery.joyride-2.0.js"></script>
     <script>
       $(window).load(function() {
-        $('#joyRideTipContent').joyride({
-          pauseAfter : [1],
-          postStepCallback : function () {
-            if ($(this).joyride('paused')) {
-              console.log('Hey there, you\'ve paused the tour.');
-            }
-          }
-        });
+        $('#joyRideTipContent').joyride();
       });
     </script>
 

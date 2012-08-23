@@ -12,7 +12,7 @@ VERSION 2.0 IS A WORK IN PROGRESS, BUT IS QUITE STABLE
 New in 2.0
 * remove counters in favor of jQuery's in-built .next() method
 * button text is now defined with a data-button attribute, data-text will be deprecated in 3.0
-* edge-aware tooltips that reposition based on proximity to edge of screen
+* edge-aware tooltips that reposition based on proximity to edge of screen (thanks to Jason from Hugo4GL for help with this)
 * support for pause, resume, restart, and destroy; ex. https://gist.github.com/3430584
 * support for jQuery 1.8, and 1.4.2+
 * modal style tooltips (li elements without data-ids)
