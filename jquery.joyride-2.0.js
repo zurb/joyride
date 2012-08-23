@@ -545,13 +545,19 @@
     },
 
     jquery_check : function () {
-    	
+      // define on() and off() for older jQuery
       if (!$.isFunction($.fn.on)) {
       	
         $.fn.on = function(types, sel, fn) {
         	
           return this.delegate(sel, types, fn);
           
+	};
+	
+	$.fn.off = function(types, sel, fn) {
+	  
+	  return this.undelegate(sel, types, fn);
+	  
 	};
 	
         return false;
