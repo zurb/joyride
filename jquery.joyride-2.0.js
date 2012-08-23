@@ -545,12 +545,18 @@
     },
 
     jquery_check : function () {
+    	
       if (!$.isFunction($.fn.on)) {
-        $.fn.on = function(types, sel, data, fn) {
-          return this.delegate(sel, types, data, fn);
-	      };
+      	
+        $.fn.on = function(types, sel, fn) {
+        	
+          return this.delegate(sel, types, fn);
+          
+	};
+	
         return false;
       }
+      
       return true;
     },
 
