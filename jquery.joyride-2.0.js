@@ -8,7 +8,7 @@
 
 /*jslint unparam: true, browser: true, indent: 2 */
 
-// TODO: test IE 8
+// TODO: test IE 8, hook up jQuery 1.7 detection, class targeting, skip functionality
 
 ;(function ($) {
   'use strict';
@@ -367,7 +367,7 @@
 
             settings.$next_tip.css({
               top: settings.$target.offset().top,
-              left: (settings.$target.outerWidth() + settings.$next_tip.outerWidth())});
+              left: (settings.$target.outerWidth() + settings.$target.offset().left)});
 
             methods.nub_position($nub, settings.tipSettings.nubPosition, 'left');
 
