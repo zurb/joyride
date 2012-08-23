@@ -321,7 +321,7 @@
       if (methods.visible(methods.corners(settings.$target))) {
 
         window_half = $(window).height() / 2,
-        tipOffset = Math.ceil(settings.$target.offset().top - window_half);
+        tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
 
         $("html, body").animate({
           scrollTop: tipOffset
@@ -412,19 +412,8 @@
           }
 
       } else {
-        // pos tooltip as modal
-        methods.center();
-        $nub.hide();
-
-        if ($('.joyride-modal-bg').length < 1) {
-          $('body').append('<div class="joyride-modal-bg">');
-        }
-
-        if (settings.tipAnimation === "pop") {
-          $('.joyride-modal-bg').show();
-        } else {
-          $('.joyride-modal-bg').fadeIn(settings.tipAnimationFadeSpeed);
-        }
+        
+        methods.modal_pos($nub);
 
       }
 
@@ -435,29 +424,62 @@
 
     },
 
-    pos_phone : function () {
+    pos_phone : function (init) {
       var tip_height = settings.$next_tip.outerHeight(),
           tip_offset = settings.$next_tip.offset(),
           target_height = settings.$target.outerHeight(),
           $nub = $('.joyride-nub', settings.$next_tip),
-          nub_height = Math.ceil($nub.outerHeight() / 2);
+          nub_height = Math.ceil($nub.outerHeight() / 2),
+          toggle = init || false;
 
       $nub.removeClass('bottom')
         .removeClass('top')
         .removeClass('right')
         .removeClass('left');
 
-      if (methods.top()) {
+      if (toggle) {
+        settings.$next_tip.css('visibility', 'hidden');
+        settings.$next_tip.show();
+      }
 
-          settings.$next_tip.offset({top: settings.$target.offset().top - tip_height - (nub_height*2) + target_height});
-          $nub.addClass('bottom');
+      if (settings.$target.selector !== 'body') {
+
+        if (methods.top()) {
+
+            settings.$next_tip.offset({top: settings.$target.offset().top - tip_height - (nub_height*2)});
+            $nub.addClass('bottom');
+
+        } else {
+
+          settings.$next_tip.offset({top: settings.$target.offset().top + target_height + nub_height});
+          $nub.addClass('top');
+
+        }
 
       } else {
 
-        // Default is bottom alignment.
-        settings.$next_tip.offset({top: settings.$target.offset().top + target_height + nub_height});
-        $nub.addClass('top');
+        methods.modal($nub);
 
+      }
+
+      if (toggle) {
+        settings.$next_tip.hide();
+        settings.$next_tip.css('visibility', 'visible');
+      }
+    },
+
+    modal_pos : function ($nub) {
+      methods.center();
+      $nub.hide();
+
+      if ($('.joyride-modal-bg').length < 1) {
+        $('body').append('<div class="joyride-modal-bg">');
+      }
+
+      if (settings.tipAnimation === "pop") {
+        $('.joyride-modal-bg').show();
+      } else {
+        $('.joyride-modal-bg').fadeIn(settings.tipAnimationFadeSpeed);
       }
     },
 
