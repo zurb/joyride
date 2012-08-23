@@ -143,6 +143,7 @@
 
     timer_instance : function (index) {
       var txt;
+
       if (index === 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer === 0) {
         txt = '';
       } else {
@@ -206,8 +207,10 @@
 
           settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
 
-          // scroll and position tooltip
-          methods.scroll_to();
+          // scroll if not modal
+          if (settings.$target.selector !== 'body') {
+            methods.scroll_to();
+          }
 
           if (methods.is_phone()) {
             methods.pos_phone(true);
@@ -315,11 +318,19 @@
     },
 
     scroll_to : function () {
-      var window_half, tipOffset;
+      var window_half, tipOffset,
+          visible = function () {
+            var v = methods.visible(methods.corners(settings.$target));
+
+            if (methods.is_phone()) {
+              return !v;
+            } else {
+              return v;
+            }
+          }
 
       // only scroll if target if off screen
-      if (methods.visible(methods.corners(settings.$target))) {
-
+      if (visible()) {
         window_half = $(window).height() / 2,
         tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
 
@@ -514,8 +525,7 @@
       var w = $(window),
           right = w.outerWidth() + w.scrollLeft(),
           bottom = w.outerWidth() + w.scrollTop();
-      // alert('right: ' + right);
-      // alert('page: ' + el.offset().left);
+
       return [
         el.offset().top <= w.scrollTop(),
         right <= el.offset().left + el.outerWidth(),
