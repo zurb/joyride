@@ -8,7 +8,7 @@
 
 /*jslint unparam: true, browser: true, indent: 2 */
 
-// TODO: test IE 8, hook up jQuery 1.7 detection, class targeting, skip functionality, more mobile testing
+// TODO: skip functionality, mobile testing
 
 ;(function ($, window, document, undefined) {
   'use strict';
@@ -31,10 +31,10 @@
     'postStepCallback'     : $.noop,    // A method to call after each step
     'template' : { // HTML segments for tip layout
       'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
-      'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator">',
-      'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub">',
-      'wrapper' : '<div class="joyride-content-wrapper">',
-      'button'  : '<a href="#" class="joyride-next-tip small nice radius yellow button">'
+      'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
+      'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
+      'wrapper' : '<div class="joyride-content-wrapper"></div>',
+      'button'  : '<a href="#" class="joyride-next-tip small nice radius yellow button"></a>'
     }
   },
 
@@ -143,7 +143,6 @@
 
     timer_instance : function (index) {
       var txt;
-
       if (index === 0 && settings.startTimerOnClick && settings.timer > 0 || settings.timer === 0) {
         txt = '';
       } else {
@@ -414,7 +413,7 @@
           }
 
       } else {
-        // show tooltip as modal
+        // pos tooltip as modal
         methods.center();
         $nub.hide();
 
