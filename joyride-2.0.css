@@ -11,7 +11,6 @@ body {
   background: #000;
   background: rgba(0,0,0,0.8);
   display: none;
-
   color: #fff;
   width: 300px;
   z-index: 101;
@@ -23,8 +22,8 @@ body {
   -webkit-border-radius: 4px;
           border-radius: 4px;
 }
-.joyride-content-wrapper
-{
+
+.joyride-content-wrapper {
   padding: 10px 10px 15px 15px;
 }
 
@@ -55,6 +54,7 @@ width: 100%;
   border: solid 14px;
   border: solid 14px;
 }
+
 .joyride-tip-guide span.joyride-nub.top {
   /*
   IE7/IE8 Don't support rgba so we set the fallback
@@ -165,6 +165,7 @@ width: 100%;
      -moz-box-shadow: 0px 1px 0px rgba(255,255,255,0.3) inset;
           box-shadow: 0px 1px 0px rgba(255,255,255,0.3) inset;
 }
+
 .joyride-next-tip:hover {
   color: rgb(255,255,255) !important;
   border: solid 1px rgb(0,60,180) !important;
@@ -204,6 +205,7 @@ width: 100%;
   font-weight: bold;
   border-bottom: none !important;
 }
+
 .joyride-close-tip:hover {
   color: rgba(255,255,255,0.9) !important;
 }

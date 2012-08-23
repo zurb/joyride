@@ -8,7 +8,7 @@
 
 /*jslint unparam: true, browser: true, indent: 2 */
 
-// TODO: test IE 8, hook up jQuery 1.7 detection, class targeting, skip functionality
+// TODO: test IE 8, hook up jQuery 1.7 detection, class targeting, skip functionality, more mobile testing
 
 ;(function ($) {
   'use strict';
@@ -259,9 +259,9 @@
     is_phone : function () {
       if (Modernizr) {
         return Modernizr.mq('only screen and (max-width: 768px)');
-      } else {
-        return ($(window).width() < 769) ? true : false;
       }
+      
+      return ($(window).width() < 769) ? true : false;
     },
 
     hide : function () {
@@ -288,6 +288,7 @@
     },
 
     set_target : function () {
+      // TODO: add support for classes
       var id = settings.$li.data('id');
 
       if (id) {
@@ -316,9 +317,9 @@
     paused : function () {
       if (($.inArray((settings.$li.index() + 1), settings.pauseAfter) === -1)) {
         return true;
-      } else {
-        return false;
       }
+      
+      return false;
     },
 
     destroy : function () {
@@ -547,7 +548,7 @@
 
     outerHTML : function (el) {
       // support FireFox < 11
-      return el.outerHTML || new XMLSerializer().serializeToString(node);
+      return el.outerHTML || new XMLSerializer().serializeToString(el);
     }
 
   };

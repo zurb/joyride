@@ -22,7 +22,8 @@ New in 2.0
 * override nub position on a per tooltip bases
 * deprecate inline positioning of tooltips
 * WIP: support for class based targeting
-* WIP: skip functionality for missing targeting elements 
+* WIP: skip functionality for missing targeting elements
+* more functionality, same size compressed (~12kb)
 
 Documentation
 ==============
