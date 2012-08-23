@@ -51,6 +51,9 @@
         settings.$tip_content = $('li', settings.$content_el);
         settings.paused = false;
         settings.attempts = 0;
+        
+        // are we using jQuery 1.7+
+        methods.jquery_check();
 
         if (settings.timer > 0) window.interval_id = null;
 
@@ -541,9 +544,14 @@
       settings.postRideCallback();
     },
 
-    new_jquery : function () {
-      // are we using jQuery 1.7+? (tentative)
-      return $.isFunction($.fn.on);
+    jquery_check : function () {
+      if (!$.isFunction($.fn.on)) {
+        $.fn.on = function(types, sel, data, fn) {
+          return this.delegate(sel, types, data, fn);
+	      };
+        return false;
+      }
+      return true;
     },
 
     outerHTML : function (el) {
