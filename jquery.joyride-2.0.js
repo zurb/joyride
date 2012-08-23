@@ -8,7 +8,7 @@
 
 /*jslint unparam: true, browser: true, indent: 2 */
 
-// TODO: skip functionality, mobile testing
+// TODO: skip functionality, modal bg issues, top mobile positioning issues
 
 ;(function ($, window, document, undefined) {
   'use strict';
@@ -327,7 +327,7 @@
             } else {
               return v;
             }
-          }
+          };
 
       // only scroll if target if off screen
       if (visible()) {
@@ -483,6 +483,7 @@
       methods.center();
       $nub.hide();
 
+      // TODO: bg not working on mobile
       if ($('.joyride-modal-bg').length < 1) {
         $('body').append('<div class="joyride-modal-bg">');
       }
