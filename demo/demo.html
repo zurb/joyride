@@ -112,9 +112,16 @@
     <script type="text/javascript" src="../jquery.cookie.js"></script>
     <script type="text/javascript" src="../modernizr.mq.js"></script>
     <script type="text/javascript" src="../jquery.joyride-2.0.js"></script>
-    <script type="text/javascript">
+    <script>
       $(window).load(function() {
-        $('#joyRideTipContent').joyride();
+        $('#joyRideTipContent').joyride({
+          pauseAfter : [1],
+          postStepCallback : function () {
+            if ($(this).joyride('paused')) {
+              console.log('Hey there, you\'ve paused the tour.');
+            }
+          }
+        });
       });
     </script>
 

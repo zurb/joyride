@@ -21,7 +21,8 @@ New in 2.0
 * better support for right and left aligned tooltips
 * override nub position on a per tooltip bases
 * deprecate inline positioning of tooltips
-* SOON: support for class based targeting
+* WIP: support for class based targeting
+* WIP: skip functionality for missing targeting elements 
 
 Documentation
 ==============
