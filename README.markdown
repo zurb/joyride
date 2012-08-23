@@ -7,7 +7,7 @@ Installation Guide:      http://www.zurb.com/playground/jquery-joyride-feature-t
 
 Joyride is MIT-licensed and absolutely free to use.
 
-VERSION 2.0 IS A WORK IN PROGRESS AND IS NOT YET STABLE
+VERSION 2.0 IS A WORK IN PROGRESS, BUT IS QUITE STABLE
 
 New in 2.0
 * remove counters in favor of jQuery's in-built .next() method
