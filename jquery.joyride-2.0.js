@@ -269,10 +269,10 @@
     // detect phones with media queries if supported.
     is_phone : function () {
       if (Modernizr) {
-        return Modernizr.mq('only screen and (max-width: 768px)');
+        return Modernizr.mq('only screen and (max-width: 767px)');
       }
       
-      return ($(window).width() < 769) ? true : false;
+      return ($(window).width() < 767) ? true : false;
     },
 
     hide : function () {
@@ -364,7 +364,6 @@
       if (settings.$target.selector !== 'body') {
 
           if (methods.bottom()) {
-
             settings.$next_tip.css({
               top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
               left: settings.$target.offset().left});
@@ -474,26 +473,27 @@
     },
 
     bottom : function () {
-      return (settings.tipSettings.tipLocation === "bottom");
+      return (settings.tipSettings.tipLocation === 'bottom');
     },
 
     top : function () {
-      return (settings.tipSettings.tipLocation === "top");
+      return (settings.tipSettings.tipLocation === 'top');
     },
 
     right : function () {
-      return (settings.tipSettings.tipLocation === "right");
+      return (settings.tipSettings.tipLocation === 'right');
     },
 
     left : function () {
-      return (settings.tipSettings.tipLocation === "left");
+      return (settings.tipSettings.tipLocation === 'left');
     },
 
     corners : function (el) {
       var w = $(window),
           right = w.outerWidth() + w.scrollLeft(),
           bottom = w.outerWidth() + w.scrollTop();
-      
+      // alert('right: ' + right);
+      // alert('page: ' + el.offset().left);
       return [
         el.offset().top <= w.scrollTop(),
         right <= el.offset().left + el.outerWidth(),
