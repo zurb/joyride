@@ -17,7 +17,7 @@
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases 
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
-      'timer'                : 3000,         // 0 = no timer , all other numbers = timer in milliseconds
+      'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
       'nextButton'           : true,      // true or false to control whether a next button is used
       'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
