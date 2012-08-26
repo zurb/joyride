@@ -34,7 +34,7 @@
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
         'wrapper' : '<div class="joyride-content-wrapper"></div>',
-        'button'  : '<a href="#" class="joyride-next-tip small nice radius yellow button"></a>'
+        'button'  : '<a href="#" class="joyride-next-tip"></a>'
       }
     },
 
