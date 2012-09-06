@@ -13,7 +13,7 @@
 ;(function ($, window, undefined) {
   'use strict';
 
-  var settings = {
+  var defaults = {
       'version'              : '2.0',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases 
@@ -39,18 +39,21 @@
       }
     },
 
+    settings = {},
+
     methods = {
 
       init : function (opts) {
         return this.each(function () {
 
-          settings = $.extend(settings, opts);
+          settings = $.extend(defaults, opts);
 
           // non configureable settings
           settings.document = window.document;
           settings.$document = $(settings.document);
           settings.$window = $(window);
           settings.$content_el = $(this);
+          console.log(settings.$content_el);
           settings.body_offset = $(settings.tipContainer).position();
           settings.$tip_content = $('li', settings.$content_el);
           settings.paused = false;
@@ -307,6 +310,7 @@
       },
 
       set_next_tip : function () {
+        console.log(settings.$li.index());
         settings.$next_tip = $('.joyride-tip-guide[data-index=' + settings.$li.index() + ']');
       },
 
@@ -333,9 +337,9 @@
 
               if (methods.is_phone()) {
                 return !v;
-              } else {
-                return v;
               }
+              
+              return v;
             };
 
         // only scroll if target if off screen
@@ -343,7 +347,7 @@
           window_half = settings.$window.height() / 2;
           tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
 
-          $("html, body").animate({
+          $("html, body").stop().animate({
             scrollTop: tipOffset
           }, settings.scrollSpeed);
         }
@@ -358,8 +362,11 @@
       },
 
       destroy : function () {
-        settings.$window.off('joyride');
-        $('.joyride-tip-guide').remove();
+        settings.$document.off('.joyride');
+        $(window).off('.joyride');
+        $('.joyride-close-tip, .joyride-next-tip, .joyride-modal-bg').off('.joyride');
+        $('.joyride-tip-guide, .joyride-modal-bg').remove();
+        settings = {};
       },
 
       restart : function () {
