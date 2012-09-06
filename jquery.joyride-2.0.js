@@ -47,6 +47,9 @@
           settings = $.extend(settings, opts);
 
           // non configureable settings
+          settings.document = window.document;
+          settings.$document = $(settings.document);
+          settings.$window = $(window);
           settings.$content_el = $(this);
           settings.body_offset = $(settings.tipContainer).position();
           settings.$tip_content = $('li', settings.$content_el);
@@ -84,7 +87,7 @@
 
           }
 
-          $(document).on('click.joyride', '.joyride-next-tip, .joyride-modal-bg', function (e) {
+          settings.$document.on('click.joyride', '.joyride-next-tip, .joyride-modal-bg', function (e) {
             e.preventDefault();
 
             if (settings.$li.next().length < 1) {
@@ -106,7 +109,7 @@
             methods.end();
           });
 
-          $(window).on('resize.joyride', function (e) {
+          settings.$window.on('resize.joyride', function (e) {
             if (methods.is_phone()) {
               methods.pos_phone();
             } else {
@@ -177,7 +180,8 @@
       },
 
       show : function (init) {
-        var opts = {};
+        var opts = {}, ii, opts_arr = [], opts_len = 0,
+            $timer = null;
 
         // are we paused?
         if (settings.$li === undefined || ($.inArray(settings.$li.index(), settings.pauseAfter) === -1)) {
@@ -192,15 +196,17 @@
           settings.attempts = 0;
 
           if (settings.$li.length) {
+            opts_arr = (settings.$li.data('options') || ':').split(';');
+            opts_len = opts_arr.length;
 
             // parse options
-            $.each((settings.$li.data('options') || ':').split(';'), function (i, s) {
-              var p = s.split(':');
+            for (ii = opts_len - 1; ii >= 0; ii--) {
+              var p = opts_arr[ii].split(':');
 
               if (p.length === 2) {
                 opts[$.trim(p[0])] = $.trim(p[1]);
               }
-            });
+            }
 
             settings.tipSettings = $.extend({}, settings, opts);
 
@@ -217,16 +223,18 @@
               methods.pos_default(true);
             }
 
+            $timer = $('.joyride-timer-indicator', settings.$next_tip);
+
             if (settings.tipAnimation === "pop") {
 
-              $('.joyride-timer-indicator').outerWidth(0);
+              $timer.outerWidth(0);
 
               if (settings.timer > 0) {
 
-                settings.$next_tip.show()
-                    .find('.joyride-timer-indicator')
-                    .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
-                    .outerWidth()}, settings.timer);
+                settings.$next_tip.show();
+                $timer.animate({
+                  width: $('.joyride-timer-indicator-wrap', settings.$next_tip).outerWidth()
+                }, settings.timer);
 
               } else {
 
@@ -237,14 +245,16 @@
 
             } else if (settings.tipAnimation === "fade") {
 
-              $('.joyride-timer-indicator').outerWidth(0);
+              $timer.outerWidth(0);
 
               if (settings.timer > 0) {
 
-                settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed)
-                  .find('.joyride-timer-indicator')
-                  .animate({width: $('.joyride-timer-indicator-wrap', settings.$next_tip)
-                  .outerWidth()}, settings.timer);
+                settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
+
+                settings.$next_tip.show();
+                $timer.animate({
+                  width: $('.joyride-timer-indicator-wrap', settings.$next_tip).outerWidth()
+                }, settings.timer);
 
               } else {
 
@@ -274,7 +284,7 @@
           return Modernizr.mq('only screen and (max-width: 767px)');
         }
         
-        return ($(window).width() < 767) ? true : false;
+        return (settings.$window.width() < 767) ? true : false;
       },
 
       hide : function () {
@@ -305,7 +315,7 @@
             id = settings.$li.attr('data-id'),
             $sel = function () {
               if (id) {
-                return $('#' + id);
+                return $(settings.document.getElementById(id));
               } else if (cl) {
                 return $('.' + cl);
               } else {
@@ -330,7 +340,7 @@
 
         // only scroll if target if off screen
         if (visible()) {
-          window_half = $(window).height() / 2;
+          window_half = settings.$window.height() / 2;
           tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
 
           $("html, body").animate({
@@ -348,7 +358,7 @@
       },
 
       destroy : function () {
-        $(window).off('joyride');
+        settings.$window.off('joyride');
         $('.joyride-tip-guide').remove();
       },
 
@@ -359,7 +369,7 @@
       },
 
       pos_default : function (init) {
-        var half_fold = Math.ceil($(window).height() / 2),
+        var half_fold = Math.ceil(settings.$window.height() / 2),
             tip_position = settings.$next_tip.offset(),
             $nub = $('.joyride-nub', settings.$next_tip),
             nub_height = Math.ceil($nub.outerHeight() / 2),
@@ -495,7 +505,7 @@
       },
 
       center : function () {
-        var $w = $(window);
+        var $w = settings.$window;
 
         settings.$next_tip.css({
           top : ((($w.height() - settings.$next_tip.outerHeight()) / 2) + $w.scrollTop()),
@@ -522,7 +532,7 @@
       },
 
       corners : function (el) {
-        var w = $(window),
+        var w = settings.$window,
             right = w.outerWidth() + w.scrollLeft(),
             bottom = w.outerWidth() + w.scrollTop();
 
