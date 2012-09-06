@@ -28,18 +28,16 @@ body {
 }
 
 /* Mobile */
-@media only screen and (max-width: 767px)
-{
-    .joyride-tip-guide
-    {
-        width: 100%;
+@media only screen and (max-width: 767px) {
+  .joyride-tip-guide {
+    width: 95% !important;
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
-    }
-  .joyride-tip-guide-wrapper
-  {
-width: 100%;
+    left: 2.5% !important;
+  }
+  .joyride-tip-guide-wrapper {
+    width: 100%;
   }
 }
 
