@@ -14,7 +14,7 @@ New in 2.0
 * button text is now defined with a data-button attribute, data-text will be deprecated in 3.0
 * edge-aware tooltips that reposition based on proximity to edge of screen (thanks to Jason from Hugo4GL for help with this)
 * support for pause, resume, restart, and destroy; ex. https://gist.github.com/3430584
-* support for jQuery 1.8, and 1.4.2+
+* support for jQuery 1.8.1, and 1.4.2+
 * modal style tooltips (li elements without data-ids)
 * move tooltip templating to settings
 * make cookie support an option
@@ -36,10 +36,10 @@ Repo Contents
 * README
 * DEMO - Demo specific files, not necessary to use the plugin
 * joyride-2.0.css - Default Joyride styles, required
-* jquery-1.8.min.js - A version of jQuery, required, 1.4.2+ is required
+* jquery-1.8.1.js - A version of jQuery, required, 1.4.2+ is required
 * jquery.joyride-2.0.js - The heart of Joyride, required
 * modernizr.mq.js - A custom build of Modernizr with just mediaqueries
-* jquery.cookie.js - required
+* jquery.cookie.js - required for cookie support.
 * .gitignore - Those pesky DS_Store files...this is not part of the plugin
 
 ZURB

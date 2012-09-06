@@ -14,6 +14,7 @@
   'use strict';
 
   var settings = {
+      'version'              : '2.0',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases 
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
@@ -34,7 +35,7 @@
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
         'wrapper' : '<div class="joyride-content-wrapper"></div>',
-        'button'  : '<a href="#" class="joyride-next-tip small nice radius yellow button"></a>'
+        'button'  : '<a href="#" class="joyride-next-tip"></a>'
       }
     },
 
@@ -47,7 +48,7 @@
 
           // non configureable settings
           settings.$content_el = $(this);
-          settings.body_offset = $(settings.tipContainer).children('*').first().position();
+          settings.body_offset = $(settings.tipContainer).position();
           settings.$tip_content = $('li', settings.$content_el);
           settings.paused = false;
           settings.attempts = 0;
@@ -599,6 +600,10 @@
       outerHTML : function (el) {
         // support FireFox < 11
         return el.outerHTML || new XMLSerializer().serializeToString(el);
+      },
+
+      version : function () {
+        return settings.version;
       }
 
     };
