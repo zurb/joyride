@@ -52,12 +52,13 @@
           settings.document = window.document;
           settings.$document = $(settings.document);
           settings.$window = $(window);
+          window.Modernizr = Modernizr;
           settings.$content_el = $(this);
-          console.log(settings.$content_el);
           settings.body_offset = $(settings.tipContainer).position();
           settings.$tip_content = $('li', settings.$content_el);
           settings.paused = false;
           settings.attempts = 0;
+
           settings.tipLocationPatterns = {
             top: ['bottom', 'right', 'left'],
             bottom: ['top', 'right', 'left'],
@@ -216,7 +217,7 @@
             settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
 
             // scroll if not modal
-            if (settings.$target.selector !== 'body') {
+            if (!/body/i.test(settings.$target.selector)) {
               methods.scroll_to();
             }
 
@@ -228,7 +229,7 @@
 
             $timer = $('.joyride-timer-indicator', settings.$next_tip);
 
-            if (settings.tipAnimation === "pop") {
+            if (/pop/i.test(settings.tipAnimation)) {
 
               $timer.outerWidth(0);
 
@@ -246,7 +247,7 @@
               }
 
 
-            } else if (settings.tipAnimation === "fade") {
+            } else if (/fade/i.test(settings.tipAnimation)) {
 
               $timer.outerWidth(0);
 
@@ -310,7 +311,6 @@
       },
 
       set_next_tip : function () {
-        console.log(settings.$li.index());
         settings.$next_tip = $('.joyride-tip-guide[data-index=' + settings.$li.index() + ']');
       },
 
@@ -388,7 +388,7 @@
           settings.$next_tip.show();
         }
 
-        if (settings.$target.selector !== 'body') {
+        if (!/body/i.test(settings.$target.selector)) {
 
             if (methods.bottom()) {
               settings.$next_tip.css({
@@ -469,7 +469,7 @@
           settings.$next_tip.show();
         }
 
-        if (settings.$target.selector !== 'body') {
+        if (!/body/i.test(settings.$target.selector)) {
 
           if (methods.top()) {
 
@@ -504,7 +504,7 @@
           $('body').append('<div class="joyride-modal-bg">').show();
         }
 
-        if (settings.tipAnimation === "pop") {
+        if (/pop/i.test(settings.tipAnimation)) {
           $('.joyride-modal-bg').show();
         } else {
           $('.joyride-modal-bg').fadeIn(settings.tipAnimationFadeSpeed);
@@ -523,19 +523,19 @@
       },
 
       bottom : function () {
-        return (settings.tipSettings.tipLocation === 'bottom');
+        return /bottom/i.test(settings.tipSettings.tipLocation);
       },
 
       top : function () {
-        return (settings.tipSettings.tipLocation === 'top');
+        return /top/i.test(settings.tipSettings.tipLocation);
       },
 
       right : function () {
-        return (settings.tipSettings.tipLocation === 'right');
+        return /right/i.test(settings.tipSettings.tipLocation);
       },
 
       left : function () {
-        return (settings.tipSettings.tipLocation === 'left');
+        return /left/i.test(settings.tipSettings.tipLocation);
       },
 
       corners : function (el) {
