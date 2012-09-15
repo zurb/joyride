@@ -20,6 +20,7 @@ New in 2.0
 * override nub position on a per tooltip bases
 * deprecate inline positioning of tooltips
 * support for class based targeting with `data-class`
+* both `postStepCallback` and `postRideCallback` now return a reference the the last tip index and jquery object
 * WIP: skip functionality for missing targeting elements
 * more functionality, same size compressed (~12kb)
 
