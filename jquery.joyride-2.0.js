@@ -292,7 +292,7 @@
       },
 
       hide : function () {
-        settings.postStepCallback();
+        settings.postStepCallback(settings.$li.index(), settings.$current_tip);
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
       },
@@ -588,8 +588,8 @@
 
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
-
-        settings.postRideCallback();
+        settings.postStepCallback(settings.$li.index(), settings.$current_tip);
+        settings.postRideCallback(settings.$li.index(), settings.$current_tip);
       },
 
       jquery_check : function () {
