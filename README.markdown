@@ -35,7 +35,7 @@ Repo Contents
 * README
 * DEMO - Demo specific files, not necessary to use the plugin
 * joyride-2.0.css - Default Joyride styles, required
-* jquery-1.8.1.js - A version of jQuery, required, 1.4.2+ is required
+* jquery-1.8.2.js - A version of jQuery, required, 1.4.2+ is required
 * jquery.joyride-2.0.js - The heart of Joyride, required
 * modernizr.mq.js - A custom build of Modernizr with just mediaqueries
 * jquery.cookie.js - required for cookie support.

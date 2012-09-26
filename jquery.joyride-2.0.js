@@ -135,7 +135,7 @@
 
         opts.tip_class = opts.tip_class || '';
 
-        $blank = $(settings.template.tip);
+        $blank = $(settings.template.tip).addClass(opts.tip_class);
         content = $.trim($(opts.li).html()) +
           methods.button_text(opts.button_text) +
           settings.template.link +
@@ -321,7 +321,7 @@
               if (id) {
                 return $(settings.document.getElementById(id));
               } else if (cl) {
-                return $('.' + cl);
+                return $('.' + cl).first();
               } else {
                 return $('body');
               }
