@@ -20,6 +20,7 @@
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
       'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
+      'startOffset'          : 0,         // the index of the tooltip you want to start on (index of the li)
       'nextButton'           : true,      // true or false to control whether a next button is used
       'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
       'pauseAfter'           : [],        // array of indexes where to pause the tour after
@@ -299,7 +300,7 @@
 
       set_li : function (init) {
         if (init) {
-          settings.$li = settings.$tip_content.first();
+          settings.$li = settings.$tip_content.eq(settings.startOffset);
           methods.set_next_tip();
           settings.$current_tip = settings.$next_tip;
         } else {

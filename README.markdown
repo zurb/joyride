@@ -16,6 +16,7 @@ New in 2.0
 * modal style tooltips (li elements without data-ids)
 * move tooltip templating to settings
 * make cookie support an option
+* you can now specify a `startOffset` for the index of the tooltip you want the tour to start on
 * better support for right and left aligned tooltips
 * override nub position on a per tooltip bases
 * deprecate inline positioning of tooltips
