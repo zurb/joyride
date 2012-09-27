@@ -13,7 +13,7 @@ New in 2.0
 * edge-aware tooltips that reposition based on proximity to edge of screen (thanks to Jason from Hugo4GL for help with this)
 * support for pause, resume, restart, and destroy; ex. https://gist.github.com/3430584
 * support for jQuery 1.8.2, and 1.4.2+
-* modal style tooltips (li elements without data-ids)
+* modal style tooltips (li elements without data-id or data-class)
 * move tooltip templating to settings
 * make cookie support an option
 * you can now specify a `startOffset` for the index of the tooltip you want the tour to start on
@@ -21,8 +21,7 @@ New in 2.0
 * override nub position on a per tooltip bases
 * deprecate inline positioning of tooltips
 * support for class based targeting with `data-class`
-* both `postStepCallback` and `postRideCallback` now return a reference the the last tip index and jquery object
-* WIP: skip functionality for missing targeting elements
+* both `postStepCallback` and `postRideCallback` now return a reference to the last tip index and jquery object
 * more functionality, same size compressed (~12kb)
 
 Documentation
