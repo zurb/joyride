@@ -8,8 +8,6 @@
 
 /*jslint unparam: true, browser: true, indent: 2 */
 
-// TODO: skip functionality, modal bg issues, top mobile positioning issues
-
 ;(function ($, window, undefined) {
   'use strict';
 
@@ -186,7 +184,7 @@
       },
 
       show : function (init) {
-        var opts = {}, ii, opts_arr = [], opts_len = 0,
+        var opts = {}, ii, opts_arr = [], opts_len = 0, p,
             $timer = null;
 
         // are we paused?
@@ -207,7 +205,7 @@
 
             // parse options
             for (ii = opts_len - 1; ii >= 0; ii--) {
-              var p = opts_arr[ii].split(':');
+              p = opts_arr[ii].split(':');
 
               if (p.length === 2) {
                 opts[$.trim(p[0])] = $.trim(p[1]);
@@ -289,7 +287,7 @@
         if (Modernizr) {
           return Modernizr.mq('only screen and (max-width: 767px)');
         }
-        
+
         return (settings.$window.width() < 767) ? true : false;
       },
 
@@ -340,7 +338,7 @@
             //   if (methods.is_phone()) {
             //     return !v;
             //   }
-              
+
             //   return v;
             // };
 
@@ -359,7 +357,7 @@
         if (($.inArray((settings.$li.index() + 1), settings.pauseAfter) === -1)) {
           return true;
         }
-        
+
         return false;
       },
 
@@ -501,7 +499,7 @@
         methods.center();
         $nub.hide();
 
-        // TODO: bg not working on mobile
+        // bg issues on some mobile devices
         if ($('.joyride-modal-bg').length < 1) {
           $('body').append('<div class="joyride-modal-bg">').show();
         }
