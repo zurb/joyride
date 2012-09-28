@@ -40,6 +40,8 @@
       }
     },
 
+    Modernizr = Modernizr || false,
+
     settings = {},
 
     methods = {
@@ -53,7 +55,6 @@
           settings.document = window.document;
           settings.$document = $(settings.document);
           settings.$window = $(window);
-          window.Modernizr = Modernizr;
           settings.$content_el = $(this);
           settings.body_offset = $(settings.tipContainer).position();
           settings.$tip_content = $('li', settings.$content_el);
@@ -332,26 +333,26 @@
       },
 
       scroll_to : function () {
-        var window_half, tipOffset,
-            visible = function () {
-              var v = methods.visible(methods.corners(settings.$target));
+        var window_half, tipOffset;
+            // visible = function () {
+            //   var v = methods.visible(methods.corners(settings.$target));
 
-              if (methods.is_phone()) {
-                return !v;
-              }
+            //   if (methods.is_phone()) {
+            //     return !v;
+            //   }
               
-              return v;
-            };
+            //   return v;
+            // };
 
         // only scroll if target if off screen
-        if (visible()) {
+        // if (visible()) {
           window_half = settings.$window.height() / 2;
           tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
 
           $("html, body").stop().animate({
             scrollTop: tipOffset
           }, settings.scrollSpeed);
-        }
+        // }
       },
 
       paused : function () {
