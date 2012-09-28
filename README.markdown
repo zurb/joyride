@@ -44,7 +44,7 @@ Repo Contents
 ZURB
 ====
 
-Joyride was made by [ZURB](http://www.zurb.com), an interaction design and design strategy firm in Campbell, CA.
+Joyride was made by [ZURB](http://www.zurb.com), a product design company in Campbell, CA.
 
 If Joyride knocks your socks off the way we hope it does and you want more, why not check out [our jobs](http://www.zurb.com/talent/jobs)?
 
