@@ -3,15 +3,26 @@ Welcome to Joyride
 
 Joyride is an easy to configure jQuery site tour wizard.
 
-Homepage:      http://www.zurb.com/playground/jquery-joyride-feature-tour-plugin
+Installation Guide:      http://www.zurb.com/playground/jquery-joyride-feature-tour-plugin
 
 Joyride is MIT-licensed and absolutely free to use.
 
-New in 1.0.5
-* Support for older browsers [IanLewis]
-* Added support for reversing the orientation of the tip when it goes off [IanLewis]
-* Add the ability to align the tip right-justified with the target [IanLewis]
-* Fixed window resize bug
+New in 2.0
+* remove counters in favor of jQuery's in-built .next() method
+* button text is now defined with a data-button attribute, data-text will be deprecated in 3.0
+* edge-aware tooltips that reposition based on proximity to edge of screen (thanks to Jason from Hugo4GL for help with this)
+* support for pause, resume, restart, and destroy; ex. https://gist.github.com/3430584
+* support for jQuery 1.8.2, and 1.4.2+
+* modal style tooltips (li elements without data-id or data-class)
+* move tooltip templating to settings
+* make cookie support an option
+* you can now specify a `startOffset` for the index of the tooltip you want the tour to start on
+* better support for right and left aligned tooltips
+* override nub position on a per tooltip bases
+* deprecate inline positioning of tooltips
+* support for class based targeting with `data-class`
+* both `postStepCallback` and `postRideCallback` now return a reference to the last tip index and jquery object
+* more functionality, same size compressed (~12kb)
 
 Documentation
 ==============
@@ -23,11 +34,11 @@ Repo Contents
 
 * README
 * DEMO - Demo specific files, not necessary to use the plugin
-* joyride-1.0.5.css - Default Joyride styles, required
-* jquery-1.7.2.min.js - A version of jQuery, required, 1.7+ is not required
-* jquery.joyride-1.0.5.js - The heart of Joyride, required
+* joyride-2.0.css - Default Joyride styles, required
+* jquery-1.8.2.js - A version of jQuery, required, 1.4.2+ is required
+* jquery.joyride-2.0.js - The heart of Joyride, required
 * modernizr.mq.js - A custom build of Modernizr with just mediaqueries
-* jquery.cookie.js - required
+* jquery.cookie.js - required for cookie support.
 * .gitignore - Those pesky DS_Store files...this is not part of the plugin
 
 ZURB
