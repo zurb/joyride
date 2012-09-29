@@ -1,5 +1,5 @@
 /*
- * jQuery Foundation Joyride Plugin 2.0
+ * jQuery Foundation Joyride Plugin 2.0.1
  * http://foundation.zurb.com
  * Copyright 2012, ZURB
  * Free to use under the MIT license.
@@ -12,7 +12,7 @@
   'use strict';
 
   var defaults = {
-      'version'              : '2.0',
+      'version'              : '2.0.1',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases 
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
@@ -347,7 +347,7 @@
             //   return v;
             // };
 
-        // only scroll if target if off screen
+        // only scroll if target is off screen
         // if (visible()) {
           window_half = settings.$window.height() / 2;
           tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
