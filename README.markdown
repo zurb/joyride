@@ -7,6 +7,9 @@ Installation Guide:      http://www.zurb.com/playground/jquery-joyride-feature-t
 
 Joyride is MIT-licensed and absolutely free to use.
 
+New in 2.0.1
+* Skip missing tooltip targets
+
 New in 2.0
 * remove counters in favor of jQuery's in-built .next() method
 * button text is now defined with a data-button attribute, data-text will be deprecated in 3.0
