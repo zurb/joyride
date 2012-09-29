@@ -199,7 +199,7 @@
 
           settings.attempts = 0;
 
-          if (settings.$li.length) {
+          if (settings.$li.length && settings.$target.length > 0) {
             opts_arr = (settings.$li.data('options') || ':').split(';');
             opts_len = opts_arr.length;
 
@@ -268,6 +268,11 @@
             }
 
             settings.$current_tip = settings.$next_tip;
+
+          // skip non-existant targets
+          } else if (settings.$li && settings.$target.length < 1) {
+
+            methods.show();
 
           } else {
 
