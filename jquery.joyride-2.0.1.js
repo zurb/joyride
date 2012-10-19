@@ -14,7 +14,7 @@
   var defaults = {
       'version'              : '2.0.1',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
-      'nubPosition'          : 'auto',    // override on a per tooltip bases 
+      'nubPosition'          : 'auto',    // override on a per tooltip bases
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
       'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
@@ -444,7 +444,7 @@
             }
 
         } else if (settings.$li.length) {
-          
+
           methods.pos_modal($nub);
 
         }
@@ -489,7 +489,7 @@
           }
 
         } else if (settings.$li.length) {
-          
+
           methods.pos_modal($nub);
 
         }
@@ -591,6 +591,10 @@
           $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
         }
 
+        if (settings.timer > 0) {
+          clearTimeout(settings.automate);
+        }
+
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
@@ -600,22 +604,22 @@
       jquery_check : function () {
         // define on() and off() for older jQuery
         if (!$.isFunction($.fn.on)) {
-          
+
           $.fn.on = function(types, sel, fn) {
-            
+
             return this.delegate(sel, types, fn);
-            
+
           };
-          
+
           $.fn.off = function(types, sel, fn) {
-            
+
             return this.undelegate(sel, types, fn);
-            
+
           };
-    
+
           return false;
         }
-        
+
         return true;
       },
 
