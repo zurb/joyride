@@ -371,6 +371,7 @@
         $(window).off('.joyride');
         $('.joyride-close-tip, .joyride-next-tip, .joyride-modal-bg').off('.joyride');
         $('.joyride-tip-guide, .joyride-modal-bg').remove();
+        clearTimeout(settings.automate);
         settings = {};
       },
 
