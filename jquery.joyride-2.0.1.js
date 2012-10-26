@@ -27,6 +27,8 @@
       'cookieName'           : 'joyride', // Name the cookie you'll use
       'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
       'tipContainer'         : 'body',    // Where will the tip be attached
+      'expose'               : false,     // Blurs the page to increase the visibility of the tip
+      'highlightTarget'      : false,	  // Draw a solid box to highlight the target element
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
       'postStepCallback'     : $.noop,    // A method to call after each step
       'template' : { // HTML segments for tip layout
@@ -256,18 +258,43 @@
               $timer.outerWidth(0);
 
               if (settings.timer > 0) {
-
-                settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
-
-                settings.$next_tip.show();
-                $timer.animate({
-                  width: $('.joyride-timer-indicator-wrap', settings.$next_tip).outerWidth()
-                }, settings.timer);
+        
+            		if (settings.expose) {		
+                  
+            			methods.expose(settings.$next_tip, function (){
+            				settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
+            			
+            				settings.$next_tip.show();
+            				$timer.animate({
+            					width: $('.joyride-timer-indicator-wrap', settings.$next_tip).outerWidth()
+            				}, settings.timer);
+            			});
+            		
+            		} else {
+            		
+            			settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
+            		
+            			settings.$next_tip.show();
+            			$timer.animate({
+            				width: $('.joyride-timer-indicator-wrap', settings.$next_tip).outerWidth()
+            			}, settings.timer);
+            		}
 
               } else {
-
-                settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
-
+        
+              	if (settings.expose) {
+                  
+            			methods.expose(settings.$next_tip, function (){
+            				settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
+            			});
+            		} else {
+                  
+            			settings.$next_tip.fadeIn(settings.tipAnimationFadeSpeed);
+            		}
+              }
+              
+              if (settings.highlightTarget && !/body/i.test(settings.$target.selector)) {
+                settings.$target.addClass("joyride-border-highlight");
               }
             }
 
@@ -291,6 +318,20 @@
 
       },
 
+      // expose the tip and the li-referred-div
+      expose : function ($nub, callBackFunc) {
+      	// TODO: bg not working on mobile
+      	if ($('.joyride-modal-bg').length < 1) {
+      		$('body').append('<div class="joyride-modal-bg">').show();
+      	}
+      	
+      	if (/pop/i.test(settings.tipAnimation)) {
+      		$('.joyride-modal-bg').show();
+      	} else {
+      		$('.joyride-modal-bg').fadeIn(settings.tipAnimationFadeSpeed, callBackFunc);
+      	}
+      },
+     
       // detect phones with media queries if supported.
       is_phone : function () {
         if (Modernizr) {
@@ -302,8 +343,9 @@
 
       hide : function () {
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
-        $('.joyride-modal-bg').hide();
+        if (!settings.expose) $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
+        settings.$target.removeClass("joyride-border-highlight");
       },
 
       set_li : function (init) {
@@ -589,6 +631,7 @@
 
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
+        settings.$target.removeClass("joyride-border-highlight");
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
         settings.postRideCallback(settings.$li.index(), settings.$current_tip);
       },

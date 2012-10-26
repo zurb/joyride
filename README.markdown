@@ -7,6 +7,9 @@ Installation Guide:      http://www.zurb.com/playground/jquery-joyride-feature-t
 
 Joyride is MIT-licensed and absolutely free to use.
 
+New in 2.0.2
+* added expose option, to increase visibility of tooltip
+
 New in 2.0.1
 * Skip missing tooltip targets
 

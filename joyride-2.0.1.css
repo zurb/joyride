@@ -223,3 +223,7 @@ body {
   left: 0;
   cursor: pointer;
 }
+
+.joyride-border-highlight {
+  border: solid 2px #cc0033 !important;
+}
