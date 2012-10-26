@@ -47,79 +47,83 @@
       init : function (opts) {
         return this.each(function () {
 
-          settings = $.extend(defaults, opts);
+          if ($.isEmptyObject(settings)) {
+            settings = $.extend(defaults, opts);
 
-          // non configureable settings
-          settings.document = window.document;
-          settings.$document = $(settings.document);
-          settings.$window = $(window);
-          settings.$content_el = $(this);
-          settings.body_offset = $(settings.tipContainer).position();
-          settings.$tip_content = $('li', settings.$content_el);
-          settings.paused = false;
-          settings.attempts = 0;
+            // non configureable settings
+            settings.document = window.document;
+            settings.$document = $(settings.document);
+            settings.$window = $(window);
+            settings.$content_el = $(this);
+            settings.body_offset = $(settings.tipContainer).position();
+            settings.$tip_content = $('li', settings.$content_el);
+            settings.paused = false;
+            settings.attempts = 0;
 
-          settings.tipLocationPatterns = {
-            top: ['bottom'],
-            bottom: [], // bottom should not need to be repositioned
-            left: ['right', 'top', 'bottom'],
-            right: ['left', 'top', 'bottom']
-          };
+            settings.tipLocationPatterns = {
+              top: ['bottom'],
+              bottom: [], // bottom should not need to be repositioned
+              left: ['right', 'top', 'bottom'],
+              right: ['left', 'top', 'bottom']
+            };
 
-          // are we using jQuery 1.7+
-          methods.jquery_check();
+            // are we using jQuery 1.7+
+            methods.jquery_check();
 
-          // can we create cookies?
-          if (!$.isFunction($.cookie)) {
-            settings.cookieMonster = false;
-          }
+            // can we create cookies?
+            if (!$.isFunction($.cookie)) {
+              settings.cookieMonster = false;
+            }
 
-          // generate the tips and insert into dom.
-          if (!settings.cookieMonster || !$.cookie(settings.cookieName)) {
+            // generate the tips and insert into dom.
+            if (!settings.cookieMonster || !$.cookie(settings.cookieName)) {
 
-            settings.$tip_content.each(function (index) {
-              methods.create({$li : $(this), index : index});
+              settings.$tip_content.each(function (index) {
+                methods.create({$li : $(this), index : index});
+              });
+
+              // show first tip
+              if (!settings.startTimerOnClick && settings.timer > 0) {
+                methods.show('init');
+                methods.startTimer();
+              } else {
+                methods.show('init');
+              }
+
+            }
+
+            settings.$document.on('click.joyride', '.joyride-next-tip, .joyride-modal-bg', function (e) {
+              e.preventDefault();
+
+              if (settings.$li.next().length < 1) {
+                methods.end();
+              } else if (settings.timer > 0) {
+                clearTimeout(settings.automate);
+                methods.hide();
+                methods.show();
+                methods.startTimer();
+              } else {
+                methods.hide();
+                methods.show();
+              }
+
             });
 
-            // show first tip
-            if (!settings.startTimerOnClick && settings.timer > 0) {
-              methods.show('init');
-              methods.startTimer();
-            } else {
-              methods.show('init');
-            }
-
-          }
-
-          settings.$document.on('click.joyride', '.joyride-next-tip, .joyride-modal-bg', function (e) {
-            e.preventDefault();
-
-            if (settings.$li.next().length < 1) {
+            $('.joyride-close-tip').on('click.joyride', function (e) {
+              e.preventDefault();
               methods.end();
-            } else if (settings.timer > 0) {
-              clearTimeout(settings.automate);
-              methods.hide();
-              methods.show();
-              methods.startTimer();
-            } else {
-              methods.hide();
-              methods.show();
-            }
+            });
 
-          });
-
-          $('.joyride-close-tip').on('click.joyride', function (e) {
-            e.preventDefault();
-            methods.end();
-          });
-
-          settings.$window.on('resize.joyride', function (e) {
-            if (methods.is_phone()) {
-              methods.pos_phone();
-            } else {
-              methods.pos_default();
-            }
-          });
+            settings.$window.on('resize.joyride', function (e) {
+              if (methods.is_phone()) {
+                methods.pos_phone();
+              } else {
+                methods.pos_default();
+              }
+            });
+          } else {
+            methods.restart();
+          }
 
         });
       },
@@ -337,25 +341,13 @@
 
       scroll_to : function () {
         var window_half, tipOffset;
-            // visible = function () {
-            //   var v = methods.visible(methods.corners(settings.$target));
 
-            //   if (methods.is_phone()) {
-            //     return !v;
-            //   }
+        window_half = settings.$window.height() / 2;
+        tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
 
-            //   return v;
-            // };
-
-        // only scroll if target is off screen
-        // if (visible()) {
-          window_half = settings.$window.height() / 2;
-          tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
-
-          $("html, body").stop().animate({
-            scrollTop: tipOffset
-          }, settings.scrollSpeed);
-        // }
+        $("html, body").stop().animate({
+          scrollTop: tipOffset
+        }, settings.scrollSpeed);
       },
 
       paused : function () {
@@ -505,7 +497,6 @@
         methods.center();
         $nub.hide();
 
-        // bg issues on some mobile devices
         if ($('.joyride-modal-bg').length < 1) {
           $('body').append('<div class="joyride-modal-bg">').show();
         }
