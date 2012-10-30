@@ -56,7 +56,7 @@
             settings.$window = $(window);
             settings.$content_el = $(this);
             settings.body_offset = $(settings.tipContainer).position();
-            settings.$tip_content = $('li', settings.$content_el);
+            settings.$tip_content = $('> li', settings.$content_el);
             settings.paused = false;
             settings.attempts = 0;
 
