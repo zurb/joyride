@@ -109,12 +109,12 @@
 
             });
 
-            $('.joyride-close-tip').on('click.joyride', function (e) {
+            settings.$document.on('click.joyride', '.joyride-close-tip', function (e) {
               e.preventDefault();
               methods.end();
             });
 
-            settings.$window.on('resize.joyride', function (e) {
+            settings.$window.bind('resize.joyride', function (e) {
               if (methods.is_phone()) {
                 methods.pos_phone();
               } else {
@@ -537,8 +537,8 @@
 
       corners : function (el) {
         var w = settings.$window,
-            right = w.outerWidth() + w.scrollLeft(),
-            bottom = w.outerWidth() + w.scrollTop();
+            right = w.width() + w.scrollLeft(),
+            bottom = w.width() + w.scrollTop();
 
         return [
           el.offset().top <= w.scrollTop(),
@@ -597,13 +597,13 @@
         // define on() and off() for older jQuery
         if (!$.isFunction($.fn.on)) {
 
-          $.fn.on = function(types, sel, fn) {
+          $.fn.on = function (types, sel, fn) {
 
             return this.delegate(sel, types, fn);
 
           };
 
-          $.fn.off = function(types, sel, fn) {
+          $.fn.off = function (types, sel, fn) {
 
             return this.undelegate(sel, types, fn);
 
