@@ -7,6 +7,13 @@ Installation Guide:      http://www.zurb.com/playground/jquery-joyride-feature-t
 
 Joyride is MIT-licensed and absolutely free to use.
 
+New in 2.0.2
+* Fix for off-screen detection in auto tooltip positioning
+* Fix for older versions of jQuery back to 1.4.3
+* jQuery 1.4.2 is no longer supported as it has issues with window resize
+* Support lists in tooltip content
+* Fix for reinitialization of plugin.
+
 New in 2.0.1
 * Skip missing tooltip targets
 
