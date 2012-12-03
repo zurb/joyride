@@ -50,7 +50,7 @@
           if ($.isEmptyObject(settings)) {
             settings = $.extend(defaults, opts);
 
-            // non configureable settings
+            // non configurable settings
             settings.document = window.document;
             settings.$document = $(settings.document);
             settings.$window = $(window);
@@ -174,7 +174,7 @@
       },
 
       create : function (opts) {
-        // backwards compatability with data-text attribute
+        // backwards compatibility with data-text attribute
         var buttonText = opts.$li.attr('data-button') || opts.$li.attr('data-text'),
           tipClass = opts.$li.attr('class'),
           $tip_content = $(methods.tip_template({
@@ -273,7 +273,7 @@
 
             settings.$current_tip = settings.$next_tip;
 
-          // skip non-existant targets
+          // skip non-existent targets
           } else if (settings.$li && settings.$target.length < 1) {
 
             methods.show();
