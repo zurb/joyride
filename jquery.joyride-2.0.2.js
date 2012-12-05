@@ -48,7 +48,7 @@
         return this.each(function () {
 
           if ($.isEmptyObject(settings)) {
-            settings = $.extend(defaults, opts);
+            settings = $.extend(true, defaults, opts);
 
             // non configureable settings
             settings.document = window.document;
