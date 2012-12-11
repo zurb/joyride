@@ -35,7 +35,8 @@
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
         'wrapper' : '<div class="joyride-content-wrapper"></div>',
         'button'  : '<a href="#" class="joyride-next-tip"></a>'
-      }
+      },
+      'expose'               : false      //darkes everything except the tooltip element and elements passed (div.topLayer, #topElm)
     },
 
     Modernizr = Modernizr || false,
@@ -230,6 +231,26 @@
             } else {
               methods.pos_default(true);
             }
+            
+            //Expose if enabled
+            if (settings.tipSettings.expose)
+            {
+              $('body').append('<div class="joyride-expose-bg"></div>');
+             
+              $('.joyride-expose-bg').css({
+                width: settings.$window.outerWidth(),
+                height: settings.$document.outerWidth()
+              }).fadeTo('slow', .8);
+              
+              $(settings.tipSettings.expose).each(function(){
+                var el = $(this);
+                  if (!/relative|absolute|fixed/i.test(el.css("position"))) {
+                    el.css("position", "relative");		
+                }	
+                el.addClass('joyride-9999');
+              })
+              settings.$next_tip.addClass('joyride-9999');
+            }
 
             $timer = $('.joyride-timer-indicator', settings.$next_tip);
 
@@ -304,6 +325,17 @@
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
+
+        //Expose Cleanup
+        if( settings.tipSettings.expose )
+        {
+          $('.joyride-expose-bg').fadeTo('slow', 0, function(){
+            $(this).remove();
+          });
+        }
+        $(settings.tipSettings.expose).each(function(){	
+          $(this).removeClass('joyride-9999');
+        })
       },
 
       set_li : function (init) {
@@ -586,7 +618,7 @@
         if (settings.timer > 0) {
           clearTimeout(settings.automate);
         }
-
+        
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
