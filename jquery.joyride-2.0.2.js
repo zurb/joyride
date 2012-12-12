@@ -51,7 +51,7 @@
           if ($.isEmptyObject(settings)) {
             settings = $.extend(true, defaults, opts);
 
-            // non configurable settings
+            // non configureable settings
             settings.document = window.document;
             settings.$document = $(settings.document);
             settings.$window = $(window);
@@ -327,12 +327,15 @@
         settings.$current_tip.hide();
 
         //Expose Cleanup
-        if( settings.tipSettings.expose )
-        {
-          $('.joyride-expose-bg').fadeTo('slow', 0, function(){
-            $(this).remove();
-          });
-        }
+        if( settings.tipSettings.expose ){methods.hide_expose();}
+        
+      },
+      
+      hide_expose: function(){
+        $('.joyride-expose-bg').fadeTo('slow', 0, function(){
+          $(this).remove();
+        });
+        
         $(settings.tipSettings.expose).each(function(){	
           $(this).removeClass('joyride-9999');
         })
@@ -618,6 +621,8 @@
         if (settings.timer > 0) {
           clearTimeout(settings.automate);
         }
+        //Expose Cleanup
+        if( settings.tipSettings.expose ){methods.hide_expose();}
         
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
