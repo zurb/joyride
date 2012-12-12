@@ -622,7 +622,7 @@
           clearTimeout(settings.automate);
         }
         //Expose Cleanup
-        if( settings.tipSettings.expose ){methods.hide_expose();}
+        if( settings.expose ){methods.hide_expose();}
         
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
