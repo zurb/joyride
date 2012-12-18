@@ -113,6 +113,18 @@ body {
   bottom: none;
 }
 
+.joyride-tip-guide span.joyride-nub.top-right {
+  border-color: #000;
+  border-color: rgba(0,0,0,0.8);
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  top: -28px;
+  bottom: none;
+  left: auto;
+  right: 28px;
+}
+
 /* Typography */
 .joyride-tip-guide h1,.joyride-tip-guide h2,.joyride-tip-guide h3,.joyride-tip-guide h4,.joyride-tip-guide h5,.joyride-tip-guide h6 {
   line-height: 1.25;
