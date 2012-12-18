@@ -134,6 +134,20 @@
         methods.show();
       },
 
+      nextTip: function(){
+            if (settings.$li.next().length < 1) {
+            methods.end();
+            } else if (settings.timer > 0) {
+            clearTimeout(settings.automate);
+            methods.hide();
+            methods.show();
+            methods.startTimer();
+            } else {
+            methods.hide();
+            methods.show();
+            }
+      }, 
+
       tip_template : function (opts) {
         var $blank, content;
 
