@@ -30,6 +30,7 @@
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
       'postStepCallback'     : $.noop,    // A method to call after each step
       'preStepCallback'     : $.noop,    // A method to call before each step
+      'tipIsModal'          : false,
       'template' : { // HTML segments for tip layout
         'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
@@ -225,7 +226,7 @@
             settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
 
             // scroll if not modal
-            if (!/body/i.test(settings.$target.selector)) {
+            if (!/body/i.test(settings.$target.selector)  ) {
               methods.scroll_to();
             }
 
@@ -349,9 +350,12 @@
         window_half = settings.$window.height() / 2;
         tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
 
-        $("html, body").stop().animate({
-          scrollTop: tipOffset
-        }, settings.scrollSpeed);
+        if(  settings.tipSettings.tipIsModal!="true")
+        {
+            $("html, body").stop().animate({
+              scrollTop: tipOffset
+            }, settings.scrollSpeed);
+        }
       },
 
       paused : function () {
