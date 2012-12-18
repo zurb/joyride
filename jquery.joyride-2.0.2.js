@@ -12,7 +12,7 @@
   'use strict';
 
   var defaults = {
-      'version'              : '2.0.1',
+      'version'              : '2.0.2',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
@@ -29,6 +29,8 @@
       'tipContainer'         : 'body',    // Where will the tip be attached
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
       'postStepCallback'     : $.noop,    // A method to call after each step
+      'preStepCallback'     : $.noop,    // A method to call before each step
+      'tipIsModal'          : false,
       'template' : { // HTML segments for tip layout
         'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
@@ -188,6 +190,9 @@
       },
 
       show : function (init) {
+        //call pre-step method to allow user to adjsut what is visible on screen.
+        settings.preStepCallback(init=="init"?0:(settings.$li.index()+1));
+
         var opts = {}, ii, opts_arr = [], opts_len = 0, p,
             $timer = null;
 
@@ -221,7 +226,7 @@
             settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
 
             // scroll if not modal
-            if (!/body/i.test(settings.$target.selector)) {
+            if (!/body/i.test(settings.$target.selector)  ) {
               methods.scroll_to();
             }
 
@@ -345,9 +350,12 @@
         window_half = settings.$window.height() / 2;
         tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
 
-        $("html, body").stop().animate({
-          scrollTop: tipOffset
-        }, settings.scrollSpeed);
+        if(  settings.tipSettings.tipIsModal!="true")
+        {
+            $("html, body").stop().animate({
+              scrollTop: tipOffset
+            }, settings.scrollSpeed);
+        }
       },
 
       paused : function () {
