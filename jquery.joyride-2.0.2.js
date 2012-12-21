@@ -29,6 +29,8 @@
       'tipContainer'         : 'body',    // Where will the tip be attached
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
       'postStepCallback'     : $.noop,    // A method to call after each step
+      'postCancelCallback'   : $.noop,    // A method to call when cancel is pressed
+      'showStepCounter'      : true,      // To show step counter like 1 of 5 on each step
       'template' : { // HTML segments for tip layout
         'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
@@ -112,6 +114,7 @@
             settings.$document.on('click.joyride', '.joyride-close-tip', function (e) {
               e.preventDefault();
               methods.end();
+              settings.postCancelCallback(settings.$li.index(), settings.$current_tip);
             });
 
             settings.$window.bind('resize.joyride', function (e) {
@@ -133,7 +136,12 @@
         methods.set_li();
         methods.show();
       },
-
+      steps_html : function (opts) {
+        if (settings.showStepCounter) {
+          return '<div class="joyride-counter">' + (opts.index+1) + ' of '+ $($(opts.li).parent()).children('li').size() +'</div>';
+        }
+        return '';
+      },
       tip_template : function (opts) {
         var $blank, content;
 
@@ -142,6 +150,7 @@
         $blank = $(settings.template.tip).addClass(opts.tip_class);
         content = $.trim($(opts.li).html()) +
           methods.button_text(opts.button_text) +
+          methods.steps_html(opts) +
           settings.template.link +
           methods.timer_instance(opts.index);
 
@@ -180,7 +189,7 @@
           $tip_content = $(methods.tip_template({
             tip_class : tipClass,
             index : opts.index,
-            button_text : buttonText,
+            button_text : buttonText ,
             li : opts.$li
           }));
 
