@@ -114,6 +114,12 @@
               methods.end();
             });
 
+			$(document).keyup(function(e) {
+			  if (e.keyCode == 27) { // esc
+			  	methods.end(); 
+			  }  
+			});
+			
             settings.$window.bind('resize.joyride', function (e) {
               if (methods.is_phone()) {
                 methods.pos_phone();
@@ -326,11 +332,14 @@
       set_target : function () {
         var cl = settings.$li.attr('data-class'),
             id = settings.$li.attr('data-id'),
+            jq = settings.$li.attr('data-jqueryexpression'),
             $sel = function () {
               if (id) {
                 return $(settings.document.getElementById(id));
               } else if (cl) {
                 return $('.' + cl).first();
+              } else if (jq) {
+                return $(jq).first();
               } else {
                 return $('body');
               }
@@ -420,6 +429,16 @@
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'right');
 
             }
+            
+            if (methods.centerTip()) {
+              settings.$next_tip.css({
+                left: settings.$target.offset().left+(settings.$target.outerWidth()/2)-(settings.$next_tip.outerWidth()/2)
+              });
+              $nub.css({
+                left: (settings.$next_tip.outerWidth()/2)-($nub.outerWidth()/2)
+              });
+            }
+
 
             if (!methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < settings.tipSettings.tipLocationPattern.length) {
 
@@ -517,6 +536,10 @@
         });
 
         return true;
+      },
+
+      centerTip : function () {
+        return /center/i.test(settings.tipSettings.tipLocation);
       },
 
       bottom : function () {
