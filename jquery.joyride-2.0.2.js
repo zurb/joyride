@@ -231,23 +231,26 @@
             } else {
               methods.pos_default(true);
             }
-            
+
             //Expose if enabled
             if (settings.tipSettings.expose)
             {
               $('body').append('<div class="joyride-expose-bg"></div>');
-             
+
               $('.joyride-expose-bg').css({
                 width: settings.$window.outerWidth(),
                 height: settings.$document.outerWidth()
               }).fadeTo('slow', .8);
-              
+
               $(settings.tipSettings.expose).each(function(){
                 var el = $(this);
                   if (!/relative|absolute|fixed/i.test(el.css("position"))) {
-                    el.css("position", "relative");		
-                }	
+                    el.css("position", "relative");
+                }
                 el.addClass('joyride-9999');
+                if (settings.tipSettings.exposeClass) {
+                    el.addClass(settings.tipSettings.exposeClass);
+                }
               })
               settings.$next_tip.addClass('joyride-9999');
             }
@@ -328,16 +331,19 @@
 
         //Expose Cleanup
         if( settings.tipSettings.expose ){methods.hide_expose();}
-        
+
       },
-      
+
       hide_expose: function(){
         $('.joyride-expose-bg').fadeTo('slow', 0, function(){
           $(this).remove();
         });
-        
-        $(settings.tipSettings.expose).each(function(){	
-          $(this).removeClass('joyride-9999');
+
+        $(settings.tipSettings.expose).each(function(){
+            $(this).removeClass('joyride-9999');
+            if (settings.tipSettings.exposeClass) {
+              $(this).removeClass(settings.tipSettings.exposeClass);
+            }
         })
       },
 
@@ -623,8 +629,9 @@
         }
         //Expose Cleanup
         if( settings.expose ){methods.hide_expose();}
-        
+
         $('.joyride-modal-bg').hide();
+        methods.hide_expose();
         settings.$current_tip.hide();
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
         settings.postRideCallback(settings.$li.index(), settings.$current_tip);
