@@ -224,3 +224,16 @@ body {
   left: 0;
   cursor: pointer;
 }
+
+.joyride-expose-bg{
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 9998;
+  background-color: hsl(0, 0%, 13%);
+}
+
+.joyride-9999{
+  z-index: 9999;
+}

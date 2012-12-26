@@ -35,7 +35,8 @@
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
         'wrapper' : '<div class="joyride-content-wrapper"></div>',
         'button'  : '<a href="#" class="joyride-next-tip"></a>'
-      }
+      },
+      'expose': false                   // set to 'auto' to expose the target element by default, unless specified otherwise in data-options
     },
 
     Modernizr = Modernizr || false,
@@ -50,7 +51,7 @@
           if ($.isEmptyObject(settings)) {
             settings = $.extend(true, defaults, opts);
 
-            // non configurable settings
+            // non configureable settings
             settings.document = window.document;
             settings.$document = $(settings.document);
             settings.$window = $(window);
@@ -231,6 +232,29 @@
               methods.pos_default(true);
             }
 
+            //Expose if enabled
+            if (settings.tipSettings.expose)
+            {
+              $('body').append('<div class="joyride-expose-bg"></div>');
+
+              $('.joyride-expose-bg').css({
+                width: settings.$window.outerWidth(),
+                height: settings.$document.outerWidth()
+              }).fadeTo('slow', .8);
+
+              methods.expose_target().each(function(){
+                var el = $(this);
+                  if (!/relative|absolute|fixed/i.test(el.css("position"))) {
+                    el.css("position", "relative");
+                }
+                el.addClass('joyride-9999');
+                if (settings.tipSettings.exposeClass) {
+                    el.addClass(settings.tipSettings.exposeClass);
+                }
+              })
+              settings.$next_tip.addClass('joyride-9999');
+            }
+
             $timer = $('.joyride-timer-indicator', settings.$next_tip);
 
             if (/pop/i.test(settings.tipAnimation)) {
@@ -304,6 +328,28 @@
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
+
+        //Expose Cleanup
+        methods.hide_expose();
+
+      },
+
+      hide_expose: function(){
+        $('.joyride-expose-bg').fadeTo('slow', 0, function(){
+          $(this).remove();
+        });
+
+
+        $(methods.expose_target()).each(function(){
+            $(this).removeClass('joyride-9999');
+            if (settings.tipSettings.exposeClass) {
+              $(this).removeClass(settings.tipSettings.exposeClass);
+            }
+        })
+      },
+
+      expose_target: function () {
+        return settings.tipSettings.expose == 'auto' ? settings.$target : $(settings.tipSettings.expose);
       },
 
       set_li : function (init) {
@@ -586,6 +632,8 @@
         if (settings.timer > 0) {
           clearTimeout(settings.automate);
         }
+        //Expose Cleanup
+        methods.hide_expose();
 
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
