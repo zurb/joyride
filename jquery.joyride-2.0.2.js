@@ -36,7 +36,7 @@
         'wrapper' : '<div class="joyride-content-wrapper"></div>',
         'button'  : '<a href="#" class="joyride-next-tip"></a>'
       },
-      'expose'               : false      //darkes everything except the tooltip element and elements passed (div.topLayer, #topElm)
+      'expose': false                   // set to 'auto' to expose the target element by default, unless specified otherwise in data-options
     },
 
     Modernizr = Modernizr || false,
@@ -242,7 +242,7 @@
                 height: settings.$document.outerWidth()
               }).fadeTo('slow', .8);
 
-              $(settings.tipSettings.expose).each(function(){
+              methods.expose_target().each(function(){
                 var el = $(this);
                   if (!/relative|absolute|fixed/i.test(el.css("position"))) {
                     el.css("position", "relative");
@@ -330,7 +330,7 @@
         settings.$current_tip.hide();
 
         //Expose Cleanup
-        if( settings.tipSettings.expose ){methods.hide_expose();}
+        methods.hide_expose();
 
       },
 
@@ -339,12 +339,17 @@
           $(this).remove();
         });
 
-        $(settings.tipSettings.expose).each(function(){
+
+        $(methods.expose_target()).each(function(){
             $(this).removeClass('joyride-9999');
             if (settings.tipSettings.exposeClass) {
               $(this).removeClass(settings.tipSettings.exposeClass);
             }
         })
+      },
+
+      expose_target: function () {
+        return settings.tipSettings.expose == 'auto' ? settings.$target : $(settings.tipSettings.expose);
       },
 
       set_li : function (init) {
@@ -628,10 +633,9 @@
           clearTimeout(settings.automate);
         }
         //Expose Cleanup
-        if( settings.expose ){methods.hide_expose();}
+        methods.hide_expose();
 
         $('.joyride-modal-bg').hide();
-        methods.hide_expose();
         settings.$current_tip.hide();
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
         settings.postRideCallback(settings.$li.index(), settings.$current_tip);
