@@ -7,6 +7,10 @@ Installation Guide:      http://www.zurb.com/playground/jquery-joyride-feature-t
 
 Joyride is MIT-licensed and absolutely free to use.
 
+New in 2.0.3
+* Better screen edge detection
+* Source documentation updates
+
 New in 2.0.2
 * Fix for off-screen detection in auto tooltip positioning
 * Fix for older versions of jQuery back to 1.4.3

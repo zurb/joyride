@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
  <!--
- * Markup for jQuery Joyride Plugin 2.0
+ * Markup for jQuery Joyride Plugin 2.0.2
  * www.ZURB.com/playground
  * Copyright 2011, ZURB
  * Free to use under the MIT license.
@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Attach our CSS -->
-    <link rel="stylesheet" href="../joyride-2.0.2.css">
+    <link rel="stylesheet" href="../joyride-2.0.3.css">
     <link rel="stylesheet" href="demo-style.css">
     <link rel="stylesheet" href="mobile.css">
 
@@ -104,13 +104,17 @@
     </ol>
 
     <!-- Run the plugin -->
-    <script type="text/javascript" src="../jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="../jquery-1.8.3.js"></script>
     <script type="text/javascript" src="../jquery.cookie.js"></script>
     <script type="text/javascript" src="../modernizr.mq.js"></script>
-    <script type="text/javascript" src="../jquery.joyride-2.0.2.js"></script>
+    <script type="text/javascript" src="../jquery.joyride-2.0.3.js"></script>
     <script>
       $(window).load(function() {
-        $('#joyRideTipContent').joyride();
+        $('#joyRideTipContent').joyride({postStepCallback : function (index, tip) {
+          if (index == 2) {
+            $(this).joyride('set_li', false, 1);
+          }
+        }});
       });
     </script>
 
