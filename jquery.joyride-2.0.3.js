@@ -1,5 +1,5 @@
 /*
- * jQuery Foundation Joyride Plugin 2.0.2
+ * jQuery Foundation Joyride Plugin 2.0.3
  * http://foundation.zurb.com
  * Copyright 2012, ZURB
  * Free to use under the MIT license.
@@ -12,7 +12,7 @@
   'use strict';
 
   var defaults = {
-      'version'              : '2.0.1',
+      'version'              : '2.0.3',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds

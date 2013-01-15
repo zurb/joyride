@@ -7,6 +7,10 @@ Installation Guide:      http://www.zurb.com/playground/jquery-joyride-feature-t
 
 Joyride is MIT-licensed and absolutely free to use.
 
+New in 2.0.3
+* Better screen edge detection
+* Source documentation updates
+
 New in 2.0.2
 * Fix for off-screen detection in auto tooltip positioning
 * Fix for older versions of jQuery back to 1.4.3
@@ -44,9 +48,9 @@ Repo Contents
 
 * README
 * DEMO - Demo specific files, not necessary to use the plugin
-* joyride-2.0.2.css - Default Joyride styles, required
-* jquery-1.8.2.js - A version of jQuery, required, 1.4.3+ is required
-* jquery.joyride-2.0.2.js - The heart of Joyride, required
+* joyride-2.0.3.css - Default Joyride styles, required
+* jquery-1.8.3.js - A version of jQuery, required, 1.4.3+ is required
+* jquery.joyride-2.0.3.js - The heart of Joyride, required
 * modernizr.mq.js - A custom build of Modernizr with just mediaqueries
 * jquery.cookie.js - required for cookie support.
 * .gitignore - Those pesky DS_Store files...this is not part of the plugin
