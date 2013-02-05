@@ -5,6 +5,8 @@ body {
 
 #joyRideTipContent { display: none; }
 
+.joyRideTipContent { display: none; }
+
 /* Default styles for the container */
 .joyride-tip-guide {
   position: absolute;
@@ -109,6 +111,18 @@ body {
   left: -28px;
   right: auto;
   bottom: none;
+}
+
+.joyride-tip-guide span.joyride-nub.top-right {
+  border-color: #000;
+  border-color: rgba(0,0,0,0.8);
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+  top: -28px;
+  bottom: none;
+  left: auto;
+  right: 28px;
 }
 
 /* Typography */
