@@ -17,6 +17,7 @@
       'nubPosition'          : 'auto',    // override on a per tooltip bases
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
       'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
+      'autoStart'            : false,     // true or false - false tour starts when restart called
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
       'startOffset'          : 0,         // the index of the tooltip you want to start on (index of the li)
       'nextButton'           : true,      // true or false to control whether a next button is used
@@ -83,11 +84,14 @@
               });
 
               // show first tip
-              if (!settings.startTimerOnClick && settings.timer > 0) {
-                methods.show('init');
-                methods.startTimer();
-              } else {
-                methods.show('init');
+              if(settings.autoStart)
+              {
+                if (!settings.startTimerOnClick && settings.timer > 0) {
+                  methods.show('init');
+                  methods.startTimer();
+                } else {
+                  methods.show('init');
+                }
               }
 
             }
@@ -382,9 +386,22 @@
       },
 
       restart : function () {
-        methods.hide();
-        settings.$li = undefined;
-        methods.show('init');
+        if(!settings.autoStart)
+        {
+          if (!settings.startTimerOnClick && settings.timer > 0) {
+            methods.show('init');
+            methods.startTimer();
+          } else {
+            methods.show('init');
+          }
+          settings.autoStart = true;
+        }
+        else
+        {
+          methods.hide();
+          settings.$li = undefined;
+          methods.show('init');
+        }
       },
 
       pos_default : function (init) {
