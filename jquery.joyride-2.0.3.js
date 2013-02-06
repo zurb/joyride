@@ -33,7 +33,7 @@
         'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
-        'wrapper' : '<div class="joyride-content-wrapper"></div>',
+        'wrapper' : '<div class="joyride-content-wrapper" role="dialog"></div>',
         'button'  : '<a href="#" class="joyride-next-tip"></a>'
       }
     },
@@ -286,7 +286,8 @@
             }
 
             settings.$current_tip = settings.$next_tip;
-
+            // Focus next button for keyboard users.
+            $('.joyride-next-tip', settings.$current_tip).focus();
           // skip non-existent targets
           } else if (settings.$li && settings.$target.length < 1) {
 
