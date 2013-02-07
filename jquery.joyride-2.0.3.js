@@ -288,6 +288,7 @@
             settings.$current_tip = settings.$next_tip;
             // Focus next button for keyboard users.
             $('.joyride-next-tip', settings.$current_tip).focus();
+            methods.tabbable(settings.$current_tip);
           // skip non-existent targets
           } else if (settings.$li && settings.$target.length < 1) {
 
@@ -637,6 +638,33 @@
 
       version : function () {
         return settings.version;
+      },
+
+      tabbable : function (el) {
+        $(el).on('keydown', function( event ) {
+          if (!event.isDefaultPrevented() && event.keyCode &&
+              // Escape key.
+              event.keyCode === 27 ) {
+            event.preventDefault();
+            methods.end();
+            return;
+          }
+
+          // Prevent tabbing out of tour items.
+          if ( event.keyCode !== 9 ) {
+            return;
+          }
+          var tabbables = $(el).find(":tabbable"),
+            first = tabbables.filter(":first"),
+            last  = tabbables.filter(":last");
+          if ( event.target === last[0] && !event.shiftKey ) {
+            first.focus( 1 );
+            event.preventDefault();
+          } else if ( event.target === first[0] && event.shiftKey ) {
+            last.focus( 1 );
+            event.preventDefault();
+          }
+        });
       }
 
     };
