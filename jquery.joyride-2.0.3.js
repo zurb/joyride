@@ -149,7 +149,7 @@
       }, 
 
       tip_template : function (opts) {
-        var $blank, content;
+        var $blank, content, $wrapper;
 
         opts.tip_class = opts.tip_class || '';
 
@@ -159,7 +159,14 @@
           settings.template.link +
           methods.timer_instance(opts.index);
 
-        $blank.append($(settings.template.wrapper));
+        $wrapper = $(settings.template.wrapper);
+        if (opts.li.attr('data-aria-labelledby')) {
+          $wrapper.attr('aria-labelledby', opts.li.attr('data-aria-labelledby'))
+        }
+        if (opts.li.attr('data-aria-describedby')) {
+          $wrapper.attr('aria-describedby', opts.li.attr('data-aria-describedby'))
+        }
+        $blank.append($wrapper);
         $blank.first().attr('data-index', opts.index);
         $('.joyride-content-wrapper', $blank).append(content);
 
