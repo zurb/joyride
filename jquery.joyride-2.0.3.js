@@ -29,6 +29,7 @@
       'tipContainer'         : 'body',    // Where will the tip be attached
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
       'postStepCallback'     : $.noop,    // A method to call after each step
+      'afterShowCallback'    : $.noop,    // A method to call before each step
       'template' : { // HTML segments for tip layout
         'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
@@ -297,6 +298,9 @@
             methods.end();
 
           }
+
+          settings.afterShowCallback(settings.$li.index(), settings.$current_tip);
+
         } else {
 
           settings.paused = true;
