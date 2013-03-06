@@ -15,6 +15,7 @@
       'version'              : '2.0.3',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases
+      'scroll'               : true,      // whether to scroll to tips
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
       'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
       'autoStart'            : false,     // true or false - false tour starts when restart called
@@ -246,7 +247,7 @@
             settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
 
             // scroll if not modal
-            if (!/body/i.test(settings.$target.selector)) {
+            if (!/body/i.test(settings.$target.selector) && settings.scroll) {
               methods.scroll_to();
             }
 
