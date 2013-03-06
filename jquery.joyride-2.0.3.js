@@ -373,7 +373,10 @@
       },
 
       destroy : function () {
-        settings.$document.off('.joyride');
+        if(!$.isEmptyObject(settings)){
+          settings.$document.off('.joyride');
+        }
+        
         $(window).off('.joyride');
         $('.joyride-close-tip, .joyride-next-tip, .joyride-modal-bg').off('.joyride');
         $('.joyride-tip-guide, .joyride-modal-bg').remove();
