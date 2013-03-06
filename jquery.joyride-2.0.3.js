@@ -33,7 +33,7 @@
         'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
-        'wrapper' : '<div class="joyride-content-wrapper"></div>',
+        'wrapper' : '<div class="joyride-content-wrapper" role="dialog"></div>',
         'button'  : '<a href="#" class="joyride-next-tip"></a>'
       }
     },
@@ -149,7 +149,7 @@
       }, 
 
       tip_template : function (opts) {
-        var $blank, content;
+        var $blank, content, $wrapper;
 
         opts.tip_class = opts.tip_class || '';
 
@@ -159,7 +159,14 @@
           settings.template.link +
           methods.timer_instance(opts.index);
 
-        $blank.append($(settings.template.wrapper));
+        $wrapper = $(settings.template.wrapper);
+        if (opts.li.attr('data-aria-labelledby')) {
+          $wrapper.attr('aria-labelledby', opts.li.attr('data-aria-labelledby'))
+        }
+        if (opts.li.attr('data-aria-describedby')) {
+          $wrapper.attr('aria-describedby', opts.li.attr('data-aria-describedby'))
+        }
+        $blank.append($wrapper);
         $blank.first().attr('data-index', opts.index);
         $('.joyride-content-wrapper', $blank).append(content);
 
@@ -286,7 +293,9 @@
             }
 
             settings.$current_tip = settings.$next_tip;
-
+            // Focus next button for keyboard users.
+            $('.joyride-next-tip', settings.$current_tip).focus();
+            methods.tabbable(settings.$current_tip);
           // skip non-existent targets
           } else if (settings.$li && settings.$target.length < 1) {
 
@@ -639,6 +648,33 @@
 
       version : function () {
         return settings.version;
+      },
+
+      tabbable : function (el) {
+        $(el).on('keydown', function( event ) {
+          if (!event.isDefaultPrevented() && event.keyCode &&
+              // Escape key.
+              event.keyCode === 27 ) {
+            event.preventDefault();
+            methods.end();
+            return;
+          }
+
+          // Prevent tabbing out of tour items.
+          if ( event.keyCode !== 9 ) {
+            return;
+          }
+          var tabbables = $(el).find(":tabbable"),
+            first = tabbables.filter(":first"),
+            last  = tabbables.filter(":last");
+          if ( event.target === last[0] && !event.shiftKey ) {
+            first.focus( 1 );
+            event.preventDefault();
+          } else if ( event.target === first[0] && event.shiftKey ) {
+            last.focus( 1 );
+            event.preventDefault();
+          }
+        });
       }
 
     };
