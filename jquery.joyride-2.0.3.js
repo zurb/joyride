@@ -18,7 +18,7 @@
       'scroll'               : true,      // whether to scroll to tips
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
       'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
-      'autoStart'            : false,     // true or false - false tour starts when restart called
+      'autoStart'            : true,     // true or false - false tour starts when restart called
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
       'startOffset'          : 0,         // the index of the tooltip you want to start on (index of the li)
       'nextButton'           : true,      // true or false to control whether a next button is used
