@@ -21,6 +21,7 @@
       'autoStart'            : false,     // true or false - false tour starts when restart called
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
       'startOffset'          : 0,         // the index of the tooltip you want to start on (index of the li)
+      'prevButton'           : true,      // true or false to control whether a prev button is used
       'nextButton'           : true,      // true or false to control whether a next button is used
       'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
       'pauseAfter'           : [],        // array of indexes where to pause the tour after
@@ -36,7 +37,8 @@
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
         'wrapper' : '<div class="joyride-content-wrapper" role="dialog"></div>',
-        'button'  : '<a href="#" class="joyride-next-tip"></a>'
+        'prevButton'  : '<a href="#" class="joyride-prev-tip"></a>',
+        'nextButton'  : '<a href="#" class="joyride-next-tip"></a>'
       }
     },
 
@@ -114,6 +116,23 @@
 
             });
 
+            settings.$document.on('click.joyride', '.joyride-prev-tip', function (e) {
+              e.preventDefault();
+
+              if (settings.$li.prev().length < 1) {
+                methods.end();
+              } else if (settings.timer > 0) {
+                clearTimeout(settings.automate);
+                methods.hide();
+                methods.show();
+                methods.startTimer();
+              } else {
+                methods.hide();
+                methods.show(false, true);
+              }
+
+            });
+
             settings.$document.on('click.joyride', '.joyride-close-tip', function (e) {
               e.preventDefault();
               methods.end();
@@ -160,7 +179,8 @@
 
         $blank = $(settings.template.tip).addClass(opts.tip_class);
         content = $.trim($(opts.li).html()) +
-          methods.button_text(opts.button_text) +
+          methods.prev_button_text(opts.next_button_text, opts.index) +
+          methods.next_button_text(opts.prev_button_text) +
           settings.template.link +
           methods.timer_instance(opts.index);
 
@@ -189,10 +209,20 @@
         return txt;
       },
 
-      button_text : function (txt) {
+      next_button_text : function (txt) {
         if (settings.nextButton) {
           txt = $.trim(txt) || 'Next';
-          txt = methods.outerHTML($(settings.template.button).append(txt)[0]);
+          txt = methods.outerHTML($(settings.template.nextButton).append(txt)[0]);
+        } else {
+          txt = '';
+        }
+        return txt;
+      },
+
+      prev_button_text : function (txt, index) {
+        if (settings.prevButton && index > 0) {
+          txt = $.trim(txt) || 'Previous';
+          txt = methods.outerHTML($(settings.template.prevButton).append(txt)[0]);
         } else {
           txt = '';
         }
@@ -201,19 +231,21 @@
 
       create : function (opts) {
         // backwards compatibility with data-text attribute
-        var buttonText = opts.$li.attr('data-button') || opts.$li.attr('data-text'),
-          tipClass = opts.$li.attr('class'),
-          $tip_content = $(methods.tip_template({
-            tip_class : tipClass,
-            index : opts.index,
-            button_text : buttonText,
-            li : opts.$li
-          }));
+        var nextButtonText = opts.$li.attr('data-next-button') || opts.$li.attr('data-button') || opts.$li.attr('data-text');
+        var prevButtonText = opts.$li.attr('data-prev-button');
+        var tipClass = opts.$li.attr('class');
+        var $tip_content = $(methods.tip_template({
+          tip_class : tipClass,
+          index : opts.index,
+          next_button_text : nextButtonText,
+          prev_button_text : prevButtonText,
+          li : opts.$li
+        }));
 
         $(settings.tipContainer).append($tip_content);
       },
 
-      show : function (init) {
+      show : function (init, prev) {
         var opts = {}, ii, opts_arr = [], opts_len = 0, p,
             $timer = null;
 
@@ -224,7 +256,7 @@
           if (settings.paused) {
             settings.paused = false;
           } else {
-            methods.set_li(init);
+            methods.set_li(init, prev);
           }
 
           settings.attempts = 0;
@@ -334,13 +366,18 @@
         settings.$current_tip.hide();
       },
 
-      set_li : function (init) {
+      set_li : function (init, prev) {
         if (init) {
           settings.$li = settings.$tip_content.eq(settings.startOffset);
           methods.set_next_tip();
           settings.$current_tip = settings.$next_tip;
         } else {
-          settings.$li = settings.$li.next();
+          if (prev) {
+            settings.$li = settings.$li.prev();
+          }
+          else {
+            settings.$li = settings.$li.next();
+          }
           methods.set_next_tip();
         }
 
