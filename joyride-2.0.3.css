@@ -154,7 +154,8 @@ body {
 }
 
 /* Button Style */
-.joyride-tip-guide .joyride-next-tip {
+.joyride-tip-guide .joyride-next-tip,
+.joyride-tip-guide .joyride-prev-tip {
   width: auto;
   padding: 6px 18px 4px;
   font-size: 13px;
@@ -176,6 +177,10 @@ body {
   -webkit-box-shadow: 0px 1px 0px rgba(255,255,255,0.3) inset;
      -moz-box-shadow: 0px 1px 0px rgba(255,255,255,0.3) inset;
           box-shadow: 0px 1px 0px rgba(255,255,255,0.3) inset;
+}
+
+.joyride-tip-guide .joyride-prev-tip {
+  margin-right: 5px;
 }
 
 .joyride-next-tip:hover {
