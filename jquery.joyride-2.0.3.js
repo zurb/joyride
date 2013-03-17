@@ -77,24 +77,14 @@
               settings.cookieMonster = false;
             }
 
-            // generate the tips and insert into dom.
-            if (!settings.cookieMonster || !$.cookie(settings.cookieName)) {
-
-              settings.$tip_content.each(function (index) {
-                methods.create({$li : $(this), index : index});
-              });
-
-              // show first tip
-              if(settings.autoStart)
-              {
-                if (!settings.startTimerOnClick && settings.timer > 0) {
-                  methods.show('init');
-                  methods.startTimer();
-                } else {
-                  methods.show('init');
-                }
+            if(settings.autoStart)
+            {
+              settings.autoStart = false;
+              
+              // generate the tips and insert into dom.
+              if (!settings.cookieMonster || !$.cookie(settings.cookieName)) {
+                methods.restart();
               }
-
             }
 
             settings.$document.on('click.joyride', '.joyride-next-tip, .joyride-modal-bg', function (e) {
@@ -117,14 +107,6 @@
             settings.$document.on('click.joyride', '.joyride-close-tip', function (e) {
               e.preventDefault();
               methods.end();
-            });
-
-            settings.$window.bind('resize.joyride', function (e) {
-              if (methods.is_phone()) {
-                methods.pos_phone();
-              } else {
-                methods.pos_default();
-              }
             });
           } else {
             methods.restart();
@@ -401,13 +383,27 @@
       restart : function () {
         if(!settings.autoStart)
         {
+          settings.autoStart = true;
+
+          settings.$tip_content.each(function (index) {
+            methods.create({$li : $(this), index : index});
+          });
+
+          // show first tip
           if (!settings.startTimerOnClick && settings.timer > 0) {
             methods.show('init');
             methods.startTimer();
           } else {
             methods.show('init');
           }
-          settings.autoStart = true;
+
+          settings.$window.bind('resize.joyride', function (e) {
+            if (methods.is_phone()) {
+              methods.pos_phone();
+            } else {
+              methods.pos_default();
+            }
+          });
         }
         else
         {
