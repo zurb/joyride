@@ -110,11 +110,14 @@
     <script type="text/javascript" src="../jquery.joyride-2.0.3.js"></script>
     <script>
       $(window).load(function() {
-        $('#joyRideTipContent').joyride({postStepCallback : function (index, tip) {
-          if (index == 2) {
-            $(this).joyride('set_li', false, 1);
-          }
-        }});
+        $('#joyRideTipContent').joyride({
+            autoStart : true,
+            postStepCallback : function (index, tip) {
+              if (index == 2) {
+                $(this).joyride('set_li', false, 1);
+              }
+            }
+          });
       });
     </script>
 
