@@ -29,14 +29,22 @@
       'cookieName'           : 'joyride', // Name the cookie you'll use
       'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
       'tipContainer'         : 'body',    // Where will the tip be attached
+      'modal'                : false,     // Whether to cover page with modal during the tour
+      'expose'               : false,     // Whether to expose the elements at each step in the tour (requires modal:true)
+      'postExposeCallback'   : $.noop,    // A method to call after an element has been exposed
+      'preRideCallback'      : $.noop,    // A method to call before the tour starts (passed index, tip, and cloned exposed element)
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
+      'preStepCallback'      : $.noop,    // A method to call before each step
       'postStepCallback'     : $.noop,    // A method to call after each step
       'template' : { // HTML segments for tip layout
         'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
         'wrapper' : '<div class="joyride-content-wrapper" role="dialog"></div>',
-        'button'  : '<a href="#" class="joyride-next-tip"></a>'
+        'button'  : '<a href="#" class="joyride-next-tip"></a>',
+        'modal'   : '<div class="joyride-modal-bg"></div>',
+        'expose'  : '<div class="joyride-expose-wrapper"></div>',
+        'exposeCover': '<div class="joyride-expose-cover"></div>'
       }
     },
 
@@ -57,6 +65,7 @@
             settings.$document = $(settings.document);
             settings.$window = $(window);
             settings.$content_el = $(this);
+            settings.$body = $(settings.tipContainer);
             settings.body_offset = $(settings.tipContainer).position();
             settings.$tip_content = $('> li', settings.$content_el);
             settings.paused = false;
@@ -87,12 +96,12 @@
               // show first tip
               if(settings.autoStart)
               {
-                if (!settings.startTimerOnClick && settings.timer > 0) {
-                  methods.show('init');
-                  methods.startTimer();
-                } else {
-                  methods.show('init');
-                }
+              if (!settings.startTimerOnClick && settings.timer > 0) {
+                methods.show('init');
+                methods.startTimer();
+              } else {
+                methods.show('init');
+              }
               }
 
             }
@@ -121,11 +130,19 @@
 
             settings.$window.bind('resize.joyride', function (e) {
               if(settings.$li){
-                if (methods.is_phone()) {
-                  methods.pos_phone();
-                } else {
-                  methods.pos_default();
-                }
+              if(settings.exposed && settings.exposed.length>0){
+                var $els = $(settings.exposed);
+                $els.each(function(){
+                  var $this = $(this);
+                  methods.un_expose($this);
+                  methods.expose($this);
+                });
+              }
+              if (methods.is_phone()) {
+                methods.pos_phone();
+              } else {
+                methods.pos_default();
+              }
               }
             });
           } else {
@@ -232,6 +249,17 @@
           settings.attempts = 0;
 
           if (settings.$li.length && settings.$target.length > 0) {
+            if(init){ //run when we first start
+                settings.preRideCallback(settings.$li.index(), settings.$next_tip );
+                if(settings.modal){
+                    methods.show_modal();
+                }
+            }
+            settings.preStepCallback(settings.$li.index(), settings.$next_tip );
+            if(settings.modal && settings.expose){
+              methods.expose();
+            }
+
             opts_arr = (settings.$li.data('options') || ':').split(';');
             opts_len = opts_arr.length;
 
@@ -331,9 +359,14 @@
       },
 
       hide : function () {
-        settings.postStepCallback(settings.$li.index(), settings.$current_tip);
+        if(settings.modal && settings.expose){
+          methods.un_expose();
+        }
+        if(!settings.modal){
         $('.joyride-modal-bg').hide();
+        }
         settings.$current_tip.hide();
+        settings.postStepCallback(settings.$li.index(), settings.$current_tip);
       },
 
       set_li : function (init) {
@@ -390,7 +423,7 @@
 
       destroy : function () {
         if(!$.isEmptyObject(settings)){
-          settings.$document.off('.joyride');
+        settings.$document.off('.joyride');
         }
         
         $(window).off('.joyride');
@@ -413,9 +446,9 @@
         }
         else
         {
-          methods.hide();
-          settings.$li = undefined;
-          methods.show('init');
+        methods.hide();
+        settings.$li = undefined;
+        methods.show('init');
         }
       },
 
@@ -423,6 +456,7 @@
         var half_fold = Math.ceil(settings.$window.height() / 2),
             tip_position = settings.$next_tip.offset(),
             $nub = $('.joyride-nub', settings.$next_tip),
+            nub_width = Math.ceil($nub.outerWidth() / 2),
             nub_height = Math.ceil($nub.outerHeight() / 2),
             toggle = init || false;
 
@@ -453,7 +487,7 @@
 
               settings.$next_tip.css({
                 top: settings.$target.offset().top,
-                left: (settings.$target.outerWidth() + settings.$target.offset().left)});
+                left: (settings.$target.outerWidth() + settings.$target.offset().left + nub_width)});
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'left');
 
@@ -461,7 +495,7 @@
 
               settings.$next_tip.css({
                 top: settings.$target.offset().top,
-                left: (settings.$target.offset().left - settings.$next_tip.outerWidth() - nub_height)});
+                left: (settings.$target.offset().left - settings.$next_tip.outerWidth() - nub_width)});
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'right');
 
@@ -543,14 +577,142 @@
         methods.center();
         $nub.hide();
 
+        methods.show_modal();
+
+      },
+
+      show_modal : function() {
         if ($('.joyride-modal-bg').length < 1) {
-          $('body').append('<div class="joyride-modal-bg">').show();
+            $('body').append(settings.template.modal).show();
         }
 
         if (/pop/i.test(settings.tipAnimation)) {
           $('.joyride-modal-bg').show();
         } else {
           $('.joyride-modal-bg').fadeIn(settings.tipAnimationFadeSpeed);
+        }
+      },
+
+      expose: function(){
+        var expose,
+          exposeCover,
+          el,
+          origCSS,
+          randId = 'expose-'+Math.floor(Math.random()*10000);
+        if (arguments.length>0 && arguments[0] instanceof $){
+          el = arguments[0];
+        } else if(settings.$target && !/body/i.test(settings.$target.selector)){
+          el = settings.$target;
+        }  else {
+          return false;
+        }
+        if(el.length < 1){
+          if(window.console){
+            console.error('element not valid', el);
+          }
+          return false;
+        }
+        expose = $(settings.template.expose);
+        settings.$body.append(expose);
+        expose.css({
+          top: el.offset().top,
+          left: el.offset().left,
+          width: el.outerWidth(true),
+          height: el.outerHeight(true)
+        });
+        exposeCover = $(settings.template.exposeCover);
+        origCSS = {
+                  zIndex: el.css('z-index'),
+                  position: el.css('position')
+                  };
+        el.css('z-index',expose.css('z-index')*1+1);
+        if(origCSS.position == 'static'){
+          el.css('position','relative');
+        }
+        el.data('expose-css',origCSS);
+        exposeCover.css({
+          top: el.offset().top,
+          left: el.offset().left,
+          width: el.outerWidth(true),
+          height: el.outerHeight(true)
+        });
+        settings.$body.append(exposeCover);
+        expose.addClass(randId);
+        exposeCover.addClass(randId);
+        el.data('expose', randId);
+        settings.postExposeCallback(settings.$li.index(), settings.$next_tip, el);
+        methods.add_exposed(el);
+      },
+
+      un_expose: function(){
+        var exposeId,
+          el,
+          expose ,
+          origCSS,
+          clearAll = false;
+        if (arguments.length>0 && arguments[0] instanceof $){
+          el = arguments[0];
+        } else if(settings.$target && !/body/i.test(settings.$target.selector)){
+          el = settings.$target;
+        }  else {
+          return false;
+        }
+        if(el.length < 1){
+          if(window.console){
+            console.error('element not valid', el);
+          }
+          return false;
+        }
+        exposeId = el.data('expose');
+        expose = $('.'+exposeId);
+        if(arguments.length>1){
+          clearAll = arguments[1];
+        }
+        if(clearAll === true){
+          $('.joyride-expose-wrapper,.joyride-expose-cover').remove();
+        } else {
+          expose.remove();
+        }
+        origCSS = el.data('expose-css');
+        if(origCSS.zIndex == 'auto'){
+          el.css('z-index', '');
+        } else {
+          el.css('z-index',origCSS.zIndex);
+        }
+        if(origCSS.position != el.css('position')){
+          if(origCSS.position == 'static'){// this is default, no need to set it.
+            el.css('position', '');
+          } else {
+            el.css('position',origCSS.position);
+          }
+        }
+        el.removeData('expose');
+        el.removeData('expose-z-index');
+        methods.remove_exposed(el);
+      },
+
+      add_exposed: function(el){
+        settings.exposed = settings.exposed || [];
+        if(el instanceof $){
+          settings.exposed.push(el[0]);
+        } else if(typeof el == 'string'){
+          settings.exposed.push(el);
+        }
+      },
+
+      remove_exposed: function(el){
+        var search;
+        if(el instanceof $){
+          search = el[0]
+        } else if (typeof el == 'string'){
+          search = el;
+        }
+        settings.exposed = settings.exposed || [];
+        for(var i=0; i<settings.exposed.length; i++){
+          if(settings.exposed[i] == search){
+            settings.exposed.splice(i,1);
+            return;
+          }
         }
       },
 
@@ -583,14 +745,30 @@
 
       corners : function (el) {
         var w = settings.$window,
+            window_half = w.height() / 2,
+            tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight()),//using this to calculate since scroll may not have finished yet.
             right = w.width() + w.scrollLeft(),
-            bottom = w.width() + w.scrollTop();
+            offsetBottom =  w.height() + tipOffset,
+            bottom = w.height() + w.scrollTop(),
+            top = w.scrollTop();
+
+            if(tipOffset < top){
+              if (tipOffset <0 ){
+                top = 0;
+              } else {
+                top = tipOffset;
+              }
+            }
+
+            if(offsetBottom > bottom){
+              bottom = offsetBottom;
+            }
 
         return [
-          el.offset().top <= w.scrollTop(),
-          right <= el.offset().left + el.outerWidth(),
-          bottom <= el.offset().top + el.outerHeight(),
-          w.scrollLeft() >= el.offset().left
+          el.offset().top < top,
+          right < el.offset().left + el.outerWidth(),
+          bottom < el.offset().top + el.outerHeight(),
+          w.scrollLeft() > el.offset().left
         ];
       },
 
@@ -632,7 +810,9 @@
         if (settings.timer > 0) {
           clearTimeout(settings.automate);
         }
-
+        if(settings.modal && settings.expose){
+          methods.un_expose();
+        }
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
