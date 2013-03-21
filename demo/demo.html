@@ -114,7 +114,8 @@
             autoStart : true,
             postStepCallback : function (index, tip) {
               if (index == 2) {
-                $(this).joyride('set_li', false, 1);
+                //You can call functions after each step
+                alert("This is an example of a method being called via the postStepCallback option.\nThis should happen between step 3 and step 4.");
               }
             }
           });
