@@ -120,10 +120,12 @@
             });
 
             settings.$window.bind('resize.joyride', function (e) {
-              if (methods.is_phone()) {
-                methods.pos_phone();
-              } else {
-                methods.pos_default();
+              if(settings.$li){
+                if (methods.is_phone()) {
+                  methods.pos_phone();
+                } else {
+                  methods.pos_default();
+                }
               }
             });
           } else {
