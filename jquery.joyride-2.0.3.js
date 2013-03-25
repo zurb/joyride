@@ -28,6 +28,8 @@
       'cookieMonster'        : false,     // true or false to control whether cookies are used
       'cookieName'           : 'joyride', // Name the cookie you'll use
       'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
+      'localStorage'         : false,     // true or false to control whether localstorage is used
+      'localStorageKey'      : 'joyride', // Keyname in localstorage
       'tipContainer'         : 'body',    // Where will the tip be attached
       'modal'                : false,     // Whether to cover page with modal during the tour
       'expose'               : false,     // Whether to expose the elements at each step in the tour (requires modal:true)
@@ -86,8 +88,10 @@
               settings.cookieMonster = false;
             }
 
+
             // generate the tips and insert into dom.
-            if (!settings.cookieMonster || !$.cookie(settings.cookieName)) {
+            if ( (!settings.cookieMonster || !$.cookie(settings.cookieName) ) &&
+              (!settings.localStorage || !methods.support_localstorage() || !localStorage.getItem(settings.localStorageKey) ) ) {
 
               settings.$tip_content.each(function (index) {
                 methods.create({$li : $(this), index : index});
@@ -96,12 +100,12 @@
               // show first tip
               if(settings.autoStart)
               {
-              if (!settings.startTimerOnClick && settings.timer > 0) {
-                methods.show('init');
-                methods.startTimer();
-              } else {
-                methods.show('init');
-              }
+                if (!settings.startTimerOnClick && settings.timer > 0) {
+                  methods.show('init');
+                  methods.startTimer();
+                } else {
+                  methods.show('init');
+                }
               }
 
             }
@@ -356,6 +360,14 @@
         }
 
         return (settings.$window.width() < 767) ? true : false;
+      },
+
+      support_localstorage : function () {
+        if (Modernizr) {
+          return Modernizr.localstorage;
+        } else {
+          return !!window.localStorage;
+        }
       },
 
       hide : function () {
@@ -805,6 +817,10 @@
       end : function () {
         if (settings.cookieMonster) {
           $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
+        }
+
+        if (settings.localStorage) {
+          localStorage.setItem(settings.localStorageKey, true);
         }
 
         if (settings.timer > 0) {
