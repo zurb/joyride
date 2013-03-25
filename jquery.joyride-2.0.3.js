@@ -170,7 +170,7 @@
             methods.hide();
             methods.show();
             }
-      }, 
+      },
 
       tip_template : function (opts) {
         var $blank, content, $wrapper;
@@ -425,7 +425,7 @@
         if(!$.isEmptyObject(settings)){
         settings.$document.off('.joyride');
         }
-        
+
         $(window).off('.joyride');
         $('.joyride-close-tip, .joyride-next-tip, .joyride-modal-bg').off('.joyride');
         $('.joyride-tip-guide, .joyride-modal-bg').remove();
