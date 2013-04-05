@@ -28,6 +28,7 @@
       'cookieMonster'        : false,     // true or false to control whether cookies are used
       'cookieName'           : 'joyride', // Name the cookie you'll use
       'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
+      'cookiePath'           : false,     // Set to '/' if you want the cookie for the whole website
       'tipContainer'         : 'body',    // Where will the tip be attached
       'modal'                : false,     // Whether to cover page with modal during the tour
       'expose'               : false,     // Whether to expose the elements at each step in the tour (requires modal:true)
@@ -804,7 +805,7 @@
 
       end : function () {
         if (settings.cookieMonster) {
-          $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
+          $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain, path: settings.cookiePath });
         }
 
         if (settings.timer > 0) {
