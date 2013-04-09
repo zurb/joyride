@@ -36,7 +36,8 @@
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
         'wrapper' : '<div class="joyride-content-wrapper"></div>',
-        'button'  : '<a href="#" class="joyride-next-tip"></a>'
+        'button'  : '<a href="#" class="joyride-next-tip"></a>',
+        'step_counter' : '<div class="joyride-counter"></div>'
       }
     },
 
@@ -137,8 +138,11 @@
         methods.show();
       },
       steps_html : function (opts) {
+        var step_counter;
         if (settings.showStepCounter) {
-          return '<div class="joyride-counter">' + (opts.index+1) + ' of '+ $($(opts.li).parent()).children('li').size() +'</div>';
+          step_counter = $(settings.template.step_counter);
+          step_counter.append((opts.index+1) + ' of '+ $($(opts.li).parent()).children('li').size()) ;
+          return methods.outerHTML(step_counter[0]);
         }
         return '';
       },
