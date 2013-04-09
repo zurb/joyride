@@ -36,6 +36,7 @@
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
       'preStepCallback'      : $.noop,    // A method to call before each step
       'postStepCallback'     : $.noop,    // A method to call after each step
+      'postCancelCallback'   : $.noop,    // A method to call after joyride is cancelled
       'showStepCounter'      : true,      // To show step counter like 1 of 5 on each step
       'template' : { // HTML segments for tip layout
         'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
@@ -128,6 +129,7 @@
             settings.$document.on('click.joyride', '.joyride-close-tip', function (e) {
               e.preventDefault();
               methods.end();
+              settings.postCancelCallback(settings.$li.index(), settings.$current_tip);
             });
 
             settings.$window.bind('resize.joyride', function (e) {
