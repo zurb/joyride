@@ -1,4 +1,4 @@
-/*
+  /*
  * jQuery Foundation Joyride Plugin 2.0.3
  * http://foundation.zurb.com
  * Copyright 2012, ZURB
@@ -472,6 +472,10 @@
               settings.$next_tip.css({
                 top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
                 left: settings.$target.offset().left});
+
+              if (/right/i.test(settings.tipSettings.nubPosition)) {
+                settings.$next_tip.css('left', settings.$target.offset().left - settings.$next_tip.outerWidth() + settings.$target.outerWidth());
+              }
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'top');
 
