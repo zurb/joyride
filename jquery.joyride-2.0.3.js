@@ -256,14 +256,10 @@
                 }
             }
             settings.preStepCallback(settings.$li.index(), settings.$next_tip );
-            if(settings.modal && settings.expose){
-              methods.expose();
-            }
-
+            
+            // parse options
             opts_arr = (settings.$li.data('options') || ':').split(';');
             opts_len = opts_arr.length;
-
-            // parse options
             for (ii = opts_len - 1; ii >= 0; ii--) {
               p = opts_arr[ii].split(':');
 
@@ -271,10 +267,12 @@
                 opts[$.trim(p[0])] = $.trim(p[1]);
               }
             }
-
             settings.tipSettings = $.extend({}, settings, opts);
-
             settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
+            
+            if(settings.modal && settings.expose){
+              methods.expose();
+            }
 
             // scroll if not modal
             if (!/body/i.test(settings.$target.selector) && settings.scroll) {
@@ -639,6 +637,10 @@
         settings.$body.append(exposeCover);
         expose.addClass(randId);
         exposeCover.addClass(randId);
+        if(settings.tipSettings['exposeClass']){
+          expose.addClass(settings.tipSettings['exposeClass']);
+          exposeCover.addClass(settings.tipSettings['exposeClass']);
+        }
         el.data('expose', randId);
         settings.postExposeCallback(settings.$li.index(), settings.$next_tip, el);
         methods.add_exposed(el);
