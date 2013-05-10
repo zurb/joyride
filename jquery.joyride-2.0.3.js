@@ -805,7 +805,9 @@
       },
 
       end : function (completed) {
+        // completed: true if user has completed all ride, otherwise false. default: true
         var completed = (typeof completed === "undefined") ? true : completed;
+
         if (settings.cookieMonster) {
           $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
         }
