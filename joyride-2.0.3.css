@@ -255,3 +255,9 @@ body {
     top: 0px;
     left: 0px;
 }
+
+.joyride-counter {
+    color: #BBBBBB;
+    float: right;
+    font-size: 14px;
+}

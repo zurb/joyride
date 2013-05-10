@@ -36,6 +36,8 @@
       'postRideCallback'     : $.noop,    // A method to call once the tour closes (canceled or complete)
       'preStepCallback'      : $.noop,    // A method to call before each step
       'postStepCallback'     : $.noop,    // A method to call after each step
+      'postCancelCallback'   : $.noop,    // A method to call after joyride is cancelled
+      'showStepCounter'      : true,      // To show step counter like 1 of 5 on each step
       'template' : { // HTML segments for tip layout
         'link'    : '<a href="#close" class="joyride-close-tip">X</a>',
         'timer'   : '<div class="joyride-timer-indicator-wrap"><span class="joyride-timer-indicator"></span></div>',
@@ -44,7 +46,8 @@
         'button'  : '<a href="#" class="joyride-next-tip"></a>',
         'modal'   : '<div class="joyride-modal-bg"></div>',
         'expose'  : '<div class="joyride-expose-wrapper"></div>',
-        'exposeCover': '<div class="joyride-expose-cover"></div>'
+        'exposeCover': '<div class="joyride-expose-cover"></div>',
+        'step_counter' : '<div class="joyride-counter"></div>'
       }
     },
 
@@ -126,6 +129,7 @@
             settings.$document.on('click.joyride', '.joyride-close-tip', function (e) {
               e.preventDefault();
               methods.end();
+              settings.postCancelCallback(settings.$li.index(), settings.$current_tip);
             });
 
             settings.$window.bind('resize.joyride', function (e) {
@@ -170,7 +174,17 @@
             methods.hide();
             methods.show();
             }
-      }, 
+      },
+
+      steps_html : function (opts) {
+        var step_counter;
+        if (settings.showStepCounter) {
+          step_counter = $(settings.template.step_counter);
+          step_counter.append((opts.index+1) + ' of '+ $($(opts.li).parent()).children('li').size()) ;
+          return methods.outerHTML(step_counter[0]);
+        }
+        return '';
+      },
 
       tip_template : function (opts) {
         var $blank, content, $wrapper;
@@ -180,6 +194,7 @@
         $blank = $(settings.template.tip).addClass(opts.tip_class);
         content = $.trim($(opts.li).html()) +
           methods.button_text(opts.button_text) +
+          methods.steps_html(opts) +
           settings.template.link +
           methods.timer_instance(opts.index);
 
