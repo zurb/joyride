@@ -53,6 +53,9 @@
 		.row .pull-two-phone { right: 52.2% }
 		.row .pull-three-phone { right: 78.3%; }
 		
+		#hidden{
+			display: block;
+		}
 		
 	}
 	

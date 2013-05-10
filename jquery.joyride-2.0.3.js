@@ -403,7 +403,7 @@
               if (id) {
                 return $(settings.document.getElementById(id));
               } else if (cl) {
-                return $('.' + cl).first();
+                return $('.' + cl).filter(":visible").first();
               } else {
                 return $('body');
               }

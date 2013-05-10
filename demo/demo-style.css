@@ -111,5 +111,9 @@ our demo gets from this sheet) */
 	  border: solid 1px #ccc;
 	  border-width: 1px 0 0 0;
 	}
+
+	#hidden{
+		display: none;
+	}
 	
  
