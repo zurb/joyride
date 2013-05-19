@@ -1,4 +1,4 @@
-/*
+  /*
  * jQuery Foundation Joyride Plugin 2.0.3
  * http://foundation.zurb.com
  * Copyright 2012, ZURB
@@ -29,6 +29,8 @@
       'cookieName'           : 'joyride', // Name the cookie you'll use
       'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
       'cookiePath'           : false,     // Set to '/' if you want the cookie for the whole website
+      'localStorage'         : false,     // true or false to control whether localstorage is used
+      'localStorageKey'      : 'joyride', // Keyname in localstorage
       'tipContainer'         : 'body',    // Where will the tip be attached
       'modal'                : false,     // Whether to cover page with modal during the tour
       'expose'               : false,     // Whether to expose the elements at each step in the tour (requires modal:true)
@@ -87,8 +89,10 @@
               settings.cookieMonster = false;
             }
 
+
             // generate the tips and insert into dom.
-            if (!settings.cookieMonster || !$.cookie(settings.cookieName)) {
+            if ( (!settings.cookieMonster || !$.cookie(settings.cookieName) ) &&
+              (!settings.localStorage || !methods.support_localstorage() || !localStorage.getItem(settings.localStorageKey) ) ) {
 
               settings.$tip_content.each(function (index) {
                 methods.create({$li : $(this), index : index});
@@ -97,12 +101,12 @@
               // show first tip
               if(settings.autoStart)
               {
-              if (!settings.startTimerOnClick && settings.timer > 0) {
-                methods.show('init');
-                methods.startTimer();
-              } else {
-                methods.show('init');
-              }
+                if (!settings.startTimerOnClick && settings.timer > 0) {
+                  methods.show('init');
+                  methods.startTimer();
+                } else {
+                  methods.show('init');
+                }
               }
 
             }
@@ -171,7 +175,7 @@
             methods.hide();
             methods.show();
             }
-      }, 
+      },
 
       tip_template : function (opts) {
         var $blank, content, $wrapper;
@@ -257,14 +261,10 @@
                 }
             }
             settings.preStepCallback(settings.$li.index(), settings.$next_tip );
-            if(settings.modal && settings.expose){
-              methods.expose();
-            }
-
+            
+            // parse options
             opts_arr = (settings.$li.data('options') || ':').split(';');
             opts_len = opts_arr.length;
-
-            // parse options
             for (ii = opts_len - 1; ii >= 0; ii--) {
               p = opts_arr[ii].split(':');
 
@@ -272,10 +272,12 @@
                 opts[$.trim(p[0])] = $.trim(p[1]);
               }
             }
-
             settings.tipSettings = $.extend({}, settings, opts);
-
             settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
+            
+            if(settings.modal && settings.expose){
+              methods.expose();
+            }
 
             // scroll if not modal
             if (!/body/i.test(settings.$target.selector) && settings.scroll) {
@@ -359,6 +361,14 @@
         return (settings.$window.width() < 767) ? true : false;
       },
 
+      support_localstorage : function () {
+        if (Modernizr) {
+          return Modernizr.localstorage;
+        } else {
+          return !!window.localStorage;
+        }
+      },
+
       hide : function () {
         if(settings.modal && settings.expose){
           methods.un_expose();
@@ -394,7 +404,7 @@
               if (id) {
                 return $(settings.document.getElementById(id));
               } else if (cl) {
-                return $('.' + cl).first();
+                return $('.' + cl).filter(":visible").first();
               } else {
                 return $('body');
               }
@@ -426,7 +436,7 @@
         if(!$.isEmptyObject(settings)){
         settings.$document.off('.joyride');
         }
-        
+
         $(window).off('.joyride');
         $('.joyride-close-tip, .joyride-next-tip, .joyride-modal-bg').off('.joyride');
         $('.joyride-tip-guide, .joyride-modal-bg').remove();
@@ -473,6 +483,10 @@
               settings.$next_tip.css({
                 top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
                 left: settings.$target.offset().left});
+
+              if (/right/i.test(settings.tipSettings.nubPosition)) {
+                settings.$next_tip.css('left', settings.$target.offset().left - settings.$next_tip.outerWidth() + settings.$target.outerWidth());
+              }
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'top');
 
@@ -640,6 +654,10 @@
         settings.$body.append(exposeCover);
         expose.addClass(randId);
         exposeCover.addClass(randId);
+        if(settings.tipSettings['exposeClass']){
+          expose.addClass(settings.tipSettings['exposeClass']);
+          exposeCover.addClass(settings.tipSettings['exposeClass']);
+        }
         el.data('expose', randId);
         settings.postExposeCallback(settings.$li.index(), settings.$next_tip, el);
         methods.add_exposed(el);
@@ -806,6 +824,10 @@
       end : function () {
         if (settings.cookieMonster) {
           $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain, path: settings.cookiePath });
+        }
+
+        if (settings.localStorage) {
+          localStorage.setItem(settings.localStorageKey, true);
         }
 
         if (settings.timer > 0) {
