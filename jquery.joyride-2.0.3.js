@@ -47,7 +47,9 @@
         'modal'   : '<div class="joyride-modal-bg"></div>',
         'expose'  : '<div class="joyride-expose-wrapper"></div>',
         'exposeCover': '<div class="joyride-expose-cover"></div>'
-      }
+      },
+      'topOffset' : 0,
+      'leftOffset' : 0
     },
 
     Modernizr = Modernizr || false,
@@ -466,8 +468,8 @@
         var half_fold = Math.ceil(settings.$window.height() / 2),
             tip_position = settings.$next_tip.offset(),
             $nub = $('.joyride-nub', settings.$next_tip),
-            nub_width = Math.ceil($nub.outerWidth() / 2),
-            nub_height = Math.ceil($nub.outerHeight() / 2),
+            nub_width = Math.ceil($nub.outerWidth() / 2), leftOffset = parseInt(settings.tipSettings.leftOffset),
+            nub_height = Math.ceil($nub.outerHeight() / 2), topOffset = parseInt(settings.tipSettings.topOffset),
             toggle = init || false;
 
         // tip must not be "display: none" to calculate position
@@ -480,11 +482,11 @@
 
             if (methods.bottom()) {
               settings.$next_tip.css({
-                top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()),
-                left: settings.$target.offset().left});
+                top: (settings.$target.offset().top + nub_height + settings.$target.outerHeight()) + topOffset,
+                left: settings.$target.offset().left + leftOffset});
 
               if (/right/i.test(settings.tipSettings.nubPosition)) {
-                settings.$next_tip.css('left', settings.$target.offset().left - settings.$next_tip.outerWidth() + settings.$target.outerWidth());
+                settings.$next_tip.css('left', settings.$target.offset().left - settings.$next_tip.outerWidth() + settings.$target.outerWidth() + leftOffset);
               }
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'top');
@@ -492,24 +494,24 @@
             } else if (methods.top()) {
 
               settings.$next_tip.css({
-                top: (settings.$target.offset().top - settings.$next_tip.outerHeight() - nub_height),
-                left: settings.$target.offset().left});
+                top: (settings.$target.offset().top - settings.$next_tip.outerHeight() - nub_height) + topOffset,
+                left: settings.$target.offset().left + leftOffset});
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'bottom');
 
             } else if (methods.right()) {
 
               settings.$next_tip.css({
-                top: settings.$target.offset().top,
-                left: (settings.$target.outerWidth() + settings.$target.offset().left + nub_width)});
+                top: settings.$target.offset().top + topOffset,
+                left: (settings.$target.outerWidth() + settings.$target.offset().left + nub_width) + leftOffset});
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'left');
 
             } else if (methods.left()) {
 
               settings.$next_tip.css({
-                top: settings.$target.offset().top,
-                left: (settings.$target.offset().left - settings.$next_tip.outerWidth() - nub_width)});
+                top: settings.$target.offset().top + topOffset,
+                left: (settings.$target.offset().left - settings.$next_tip.outerWidth() - nub_width) + leftOffset});
 
               methods.nub_position($nub, settings.tipSettings.nubPosition, 'right');
 
@@ -549,7 +551,8 @@
             target_height = settings.$target.outerHeight(),
             $nub = $('.joyride-nub', settings.$next_tip),
             nub_height = Math.ceil($nub.outerHeight() / 2),
-            toggle = init || false;
+            toggle = init || false,
+            topOffset = parseInt(settings.tipSettings.topOffset);
 
         $nub.removeClass('bottom')
           .removeClass('top')
@@ -565,12 +568,12 @@
 
           if (methods.top()) {
 
-              settings.$next_tip.offset({top: settings.$target.offset().top - tip_height - nub_height});
+              settings.$next_tip.offset({top: settings.$target.offset().top - tip_height - nub_height + topOffset});
               $nub.addClass('bottom');
 
           } else {
 
-            settings.$next_tip.offset({top: settings.$target.offset().top + target_height + nub_height});
+            settings.$next_tip.offset({top: settings.$target.offset().top + target_height + nub_height + topOffset});
             $nub.addClass('top');
 
           }
@@ -805,6 +808,12 @@
           nub.addClass(def);
         } else {
           nub.addClass(pos);
+        }
+        
+        if (pos === 'none') {
+        	nub.hide();
+        } else {
+        	nub.show();
         }
       },
 
