@@ -873,7 +873,7 @@
       },
 
       tabbable : function (el) {
-        $(el).on('keydown', function( event ) {
+        $(el).on('keydown', null, function( event ) {
           if (!event.isDefaultPrevented() && event.keyCode &&
               // Escape key.
               event.keyCode === 27 ) {
