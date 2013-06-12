@@ -28,6 +28,7 @@
       'cookieMonster'        : false,     // true or false to control whether cookies are used
       'cookieName'           : 'joyride', // Name the cookie you'll use
       'cookieDomain'         : false,     // Will this cookie be attached to a domain, ie. '.notableapp.com'
+      'cookiePath'           : false,     // Set to '/' if you want the cookie for the whole website
       'localStorage'         : false,     // true or false to control whether localstorage is used
       'localStorageKey'      : 'joyride', // Keyname in localstorage
       'tipContainer'         : 'body',    // Where will the tip be attached
@@ -822,7 +823,7 @@
 
       end : function () {
         if (settings.cookieMonster) {
-          $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain });
+          $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain, path: settings.cookiePath });
         }
 
         if (settings.localStorage) {
