@@ -130,7 +130,7 @@
 
             settings.$document.on('click.joyride', '.joyride-close-tip', function (e) {
               e.preventDefault();
-              methods.end();
+              methods.end(false);
             });
 
             settings.$window.bind('resize.joyride', function (e) {
@@ -821,7 +821,10 @@
         }
       },
 
-      end : function () {
+      end : function (completed) {
+        // completed: true if user has completed all ride, otherwise false. default: true
+        var completed = (typeof completed === "undefined") ? true : completed;
+
         if (settings.cookieMonster) {
           $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain, path: settings.cookiePath });
         }
@@ -839,7 +842,7 @@
         $('.joyride-modal-bg').hide();
         settings.$current_tip.hide();
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
-        settings.postRideCallback(settings.$li.index(), settings.$current_tip);
+        settings.postRideCallback(settings.$li.index(), settings.$current_tip, completed);
       },
 
       jquery_check : function () {
@@ -879,7 +882,7 @@
               // Escape key.
               event.keyCode === 27 ) {
             event.preventDefault();
-            methods.end();
+            methods.end(false);
             return;
           }
 
