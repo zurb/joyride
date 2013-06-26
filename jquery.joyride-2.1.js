@@ -1,7 +1,7 @@
   /*
- * jQuery Foundation Joyride Plugin 2.0.3
+ * jQuery Foundation Joyride Plugin 2.1
  * http://foundation.zurb.com
- * Copyright 2012, ZURB
+ * Copyright 2013, ZURB
  * Free to use under the MIT license.
  * http://www.opensource.org/licenses/mit-license.php
 */
