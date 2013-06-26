@@ -12,7 +12,7 @@
   'use strict';
 
   var defaults = {
-      'version'              : '2.0.3',
+      'version'              : '2.1',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases
       'scroll'               : true,      // whether to scroll to tips
