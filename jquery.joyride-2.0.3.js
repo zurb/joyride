@@ -89,7 +89,6 @@
               settings.cookieMonster = false;
             }
 
-
             // generate the tips and insert into dom.
             if ( (!settings.cookieMonster || !$.cookie(settings.cookieName) ) &&
               (!settings.localStorage || !methods.support_localstorage() || !localStorage.getItem(settings.localStorageKey) ) ) {
@@ -261,7 +260,7 @@
                 }
             }
             settings.preStepCallback(settings.$li.index(), settings.$next_tip );
-            
+
             // parse options
             opts_arr = (settings.$li.data('options') || ':').split(';');
             opts_len = opts_arr.length;
@@ -274,7 +273,7 @@
             }
             settings.tipSettings = $.extend({}, settings, opts);
             settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
-            
+
             if(settings.modal && settings.expose){
               methods.expose();
             }
@@ -836,10 +835,14 @@
         if(settings.modal && settings.expose){
           methods.un_expose();
         }
+        if (settings.$current_tip) {
+          settings.$current_tip.hide();
+        }
+        if (settings.$li) {
+          settings.postStepCallback(settings.$li.index(), settings.$current_tip);
+          settings.postRideCallback(settings.$li.index(), settings.$current_tip);
+        }
         $('.joyride-modal-bg').hide();
-        settings.$current_tip.hide();
-        settings.postStepCallback(settings.$li.index(), settings.$current_tip);
-        settings.postRideCallback(settings.$li.index(), settings.$current_tip);
       },
 
       jquery_check : function () {
