@@ -7,7 +7,7 @@ Installation Guide:      http://www.zurb.com/playground/jquery-joyride-feature-t
 
 Joyride is MIT-licensed and absolutely free to use.
 
-Joyride 3.0 - In Progress
+Joyride 3.0 - In Progress (v3 branch)
 
 New in 2.1 - June 26, 2013
 * New `scroll` option.
