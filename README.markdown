@@ -7,21 +7,36 @@ Installation Guide:      http://www.zurb.com/playground/jquery-joyride-feature-t
 
 Joyride is MIT-licensed and absolutely free to use.
 
-New in 2.0.3
+Joyride 3.0 - In Progress
+
+New in 2.1 - June 26, 2013
+* New `scroll` option.
+* New `autoStart` option.
+* Set tab focus to modal.
+* Add ARIA support
+* Patch for `destroy` method to check for joyride initialization.
+* Add expose support; background darkens and target highlights.
+* Localstorage support as alternative to cookies.
+* Add option to set cookie path.
+* Better tooltip alignment.
+* Add top adjustment options on a per-tip basis.
+* Other minor bug fixes.
+
+New in 2.0.3 - January 4, 2013
 * Better screen edge detection
 * Source documentation updates
 
-New in 2.0.2
+New in 2.0.2 - Novmeber 7, 2012
 * Fix for off-screen detection in auto tooltip positioning
 * Fix for older versions of jQuery back to 1.4.3
 * jQuery 1.4.2 is no longer supported as it has issues with window resize
 * Support lists in tooltip content
 * Fix for reinitialization of plugin.
 
-New in 2.0.1
+New in 2.0.1 - September 28, 2012
 * Skip missing tooltip targets
 
-New in 2.0
+New in 2.0 - September 28, 2012
 * remove counters in favor of jQuery's in-built .next() method
 * button text is now defined with a data-button attribute, data-text will be deprecated in 3.0
 * edge-aware tooltips that reposition based on proximity to edge of screen (thanks to Jason from Hugo4GL for help with this)
@@ -48,9 +63,9 @@ Repo Contents
 
 * README
 * DEMO - Demo specific files, not necessary to use the plugin
-* joyride-2.0.3.css - Default Joyride styles, required
-* jquery-1.8.3.js - A version of jQuery, required, 1.4.3+ is required
-* jquery.joyride-2.0.3.js - The heart of Joyride, required
+* joyride-2.1.css - Default Joyride styles, required
+* jquery-1.10.1.js - A version of jQuery, required, 1.4.3+ is required
+* jquery.joyride-2.1.js - The heart of Joyride, required
 * modernizr.mq.js - A custom build of Modernizr with just mediaqueries
 * jquery.cookie.js - required for cookie support.
 * .gitignore - Those pesky DS_Store files...this is not part of the plugin
