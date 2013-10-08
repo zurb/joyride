@@ -886,7 +886,7 @@
               // Escape key.
               event.keyCode === 27 ) {
             event.preventDefault();
-            methods.end();
+            methods.end(true /* isAborted */);
             return;
           }
 
