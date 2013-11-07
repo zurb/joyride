@@ -17,6 +17,7 @@
       'nubPosition'          : 'auto',    // override on a per tooltip bases
       'scroll'               : true,      // whether to scroll to tips
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
+      'breakpoint'           : 768,       // Sets the point in px at which the tips will switch to a full-width layout
       'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
       'autoStart'            : false,     // true or false - false tour starts when restart called
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
@@ -354,10 +355,10 @@
       // detect phones with media queries if supported.
       is_phone : function () {
         if (Modernizr) {
-          return Modernizr.mq('only screen and (max-width: 767px)');
+          return Modernizr.mq('only screen and (max-width: ' + settings.breakpoint + 'px)');
         }
 
-        return (settings.$window.width() < 767) ? true : false;
+        return (settings.$window.width() < settings.breakpoint) ? true : false;
       },
 
       support_localstorage : function () {
