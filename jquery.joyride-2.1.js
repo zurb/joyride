@@ -373,10 +373,12 @@
           methods.un_expose();
         }
         if(!settings.modal){
-        $('.joyride-modal-bg').hide();
+          $('.joyride-modal-bg').hide();
         }
-        settings.$current_tip.hide();
-        settings.postStepCallback(settings.$li.index(), settings.$current_tip);
+        if (settings.$current_tip) {
+          settings.$current_tip.hide();
+          settings.postStepCallback(settings.$li.index(), settings.$current_tip);
+        }
       },
 
       set_li : function (init) {
@@ -458,6 +460,11 @@
         {
         methods.hide();
         settings.$li = undefined;
+        if (!$('.joyride-tip-guide').length) {
+          settings.$tip_content.each(function (index) {
+            methods.create({$li : $(this), index : index});
+          });
+        }
         methods.show('init');
         }
       },
@@ -518,7 +525,7 @@
 
             }
 
-            if (!methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < settings.tipSettings.tipLocationPattern.length) {
+            if (settings.$next_tip && !methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < settings.tipSettings.tipLocationPattern.length) {
 
               $nub.removeClass('bottom')
                 .removeClass('top')
