@@ -1,5 +1,5 @@
-  /*
- * jQuery Foundation Joyride Plugin 2.1
+/*
+ * jQuery Foundation Joyride Plugin 2.0.3
  * http://foundation.zurb.com
  * Copyright 2013, ZURB
  * Free to use under the MIT license.
@@ -12,7 +12,7 @@
   'use strict';
 
   var defaults = {
-      'version'              : '2.1',
+      'version'              : '2.1.0',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases
       'scroll'               : true,      // whether to scroll to tips
@@ -279,7 +279,7 @@
             }
 
             // scroll if not modal
-            if (!/body/i.test(settings.$target.selector) && settings.scroll) {
+            if (!/body/i.test(settings.$target.selector) && (settings.scroll || settings.tipSettings.scroll)) {
               methods.scroll_to();
             }
 
@@ -480,6 +480,12 @@
             var
               topAdjustment = settings.tipSettings.tipAdjustmentY ? parseInt(settings.tipSettings.tipAdjustmentY) : 0,
               leftAdjustment = settings.tipSettings.tipAdjustmentX ? parseInt(settings.tipSettings.tipAdjustmentX) : 0;
+
+            // adjust the tip position if it is position:fixed
+            if (settings.$next_tip.css('position') == 'fixed') {
+              topAdjustment -= $('body').scrollTop();
+              leftAdjustment -= $('body').scrollLeft();
+            }
 
             if (methods.bottom()) {
               settings.$next_tip.css({
