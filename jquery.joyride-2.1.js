@@ -33,6 +33,7 @@
       'localStorageKey'      : 'joyride', // Keyname in localstorage
       'tipContainer'         : 'body',    // Where will the tip be attached
       'modal'                : false,     // Whether to cover page with modal during the tour
+      'modalClick'           : true,      // Whether the cover page is clickable
       'expose'               : false,     // Whether to expose the elements at each step in the tour (requires modal:true)
       'postExposeCallback'   : $.noop,    // A method to call after an element has been exposed
       'preRideCallback'      : $.noop,    // A method to call before the tour starts (passed index, tip, and cloned exposed element)
@@ -61,6 +62,7 @@
         return this.each(function () {
 
           if ($.isEmptyObject(settings)) {
+            var nextTipClickableClassSelector = '.joyride-next-tip';
             settings = $.extend(true, defaults, opts);
 
             // non configurable settings
@@ -110,7 +112,10 @@
 
             }
 
-            settings.$document.on('click.joyride', '.joyride-next-tip, .joyride-modal-bg', function (e) {
+            if(settings.modalClick){
+                nextTipClickableClassSelector += ', .joyride-modal-bg';
+            }
+            settings.$document.on('click.joyride', nextTipClickableClassSelector, function (e) {
               e.preventDefault();
 
               if (settings.$li.next().length < 1) {
@@ -600,7 +605,11 @@
 
       show_modal : function() {
         if ($('.joyride-modal-bg').length < 1) {
-            $('body').append(settings.template.modal).show();
+          var $modal = $('body').append(settings.template.modal);
+          $modal.show();
+          if(settings.modalClick){
+            $modal.addClass('joyride-clickable');
+          }
         }
 
         if (/pop/i.test(settings.tipAnimation)) {

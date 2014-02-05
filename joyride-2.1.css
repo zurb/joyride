@@ -241,6 +241,9 @@ body {
   display: none;
   top: 0;
   left: 0;
+}
+
+.joyride-clickable{
   cursor: pointer;
 }
 
