@@ -832,7 +832,7 @@
         }
 
         if (settings.cookieMonster) {
-          $.cookie(settings.cookieName, 'ridden', { expires: 365, domain: settings.cookieDomain, path: settings.cookiePath });
+          $.cookie(settings.cookieName, Math.round(+new Date()/1000), { expires: 365, domain: settings.cookieDomain, path: settings.cookiePath });
         }
 
         if (settings.localStorage) {
