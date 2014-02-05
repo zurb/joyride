@@ -17,6 +17,7 @@
       'nubPosition'          : 'auto',    // override on a per tooltip bases
       'scroll'               : true,      // whether to scroll to tips
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
+      'scrollOffset'         : 0,         // Scrolling offset for fixed headers
       'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
       'autoStart'            : false,     // true or false - false tour starts when restart called
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
@@ -419,7 +420,7 @@
         tipOffset = Math.ceil(settings.$target.offset().top - window_half + settings.$next_tip.outerHeight());
 
         $("html, body").stop().animate({
-          scrollTop: tipOffset
+          scrollTop: tipOffset - settings.scrollOffset
         }, settings.scrollSpeed);
       },
 
