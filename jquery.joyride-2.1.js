@@ -274,6 +274,13 @@
             settings.tipSettings = $.extend({}, settings, opts);
             settings.tipSettings.tipLocationPattern = settings.tipLocationPatterns[settings.tipSettings.tipLocation];
 
+            // pre callback function of this step
+            if (typeof settings.tipSettings.preStepCallback === "string")
+            {
+              var fn = eval(settings.tipSettings.preStepCallback);
+              fn.apply();
+            }
+
             if(settings.modal && settings.expose){
               methods.expose();
             }
@@ -376,6 +383,12 @@
         $('.joyride-modal-bg').hide();
         }
         settings.$current_tip.hide();
+        // post callback function of this step
+        if (typeof settings.tipSettings.postStepCallback === "string")
+        {
+	  var fn = eval(settings.tipSettings.postStepCallback); 
+          fn.apply();
+        }
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
       },
 
