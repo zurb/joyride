@@ -24,7 +24,7 @@
   <div class="container">
     <div class="row">
       <div class="twelve columns">
-        <h1>ZURB's Joyride Feature Tour Plugin</h1>
+        <h1>ZURB's Joyride Plugin Feature Tour</h1>
         <a href="http://www.zurb.com/playground/jquery_joyride_feature_tour_plugin" id="start">View Docs + Playground for Joyride</a>
 
         <hr>
@@ -135,6 +135,16 @@
     <script>
       $(window).load(function() {
         $('#joyRideTipContent').joyride({
+<<<<<<< HEAD
+            autoStart : true,
+            postStepCallback : function (index, tip) {
+              if (index == 2) {
+                //You can call functions after each step
+                alert("This is an example of a method being called via the postStepCallback option.\nThis should happen between step 3 and step 4.");
+              }
+            }
+          });
+=======
           autoStart : true,
           postStepCallback : function (index, tip) {
           if (index == 2) {
@@ -144,6 +154,7 @@
         modal:true,
         expose: true
         });
+>>>>>>> 50bce9ac2f1fa6b666ba540d0c1746882f4d68b2
       });
     </script>
 
