@@ -399,11 +399,14 @@
       set_target : function () {
         var cl = settings.$li.attr('data-class'),
             id = settings.$li.attr('data-id'),
+			na = settings.$li.attr('data-name'),
             $sel = function () {
               if (id) {
                 return $(settings.document.getElementById(id));
               } else if (cl) {
                 return $('.' + cl).filter(":visible").first();
+			  } else if (na) {
+                return $(settings.document.getElementsByName(na));
               } else {
                 return $('body');
               }
