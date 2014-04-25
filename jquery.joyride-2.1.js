@@ -483,8 +483,8 @@
 
             // adjust the tip position if it is position:fixed
             if (settings.$next_tip.css('position') == 'fixed') {
-              topAdjustment -= $('body').scrollTop();
-              leftAdjustment -= $('body').scrollLeft();
+              topAdjustment -= $(window).scrollTop();
+              leftAdjustment -= $(window).scrollLeft();
             }
 
             if (methods.bottom()) {
