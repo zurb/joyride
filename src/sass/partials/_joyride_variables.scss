@@ -1,0 +1,40 @@
+/* =============================================================================
+Base
+========================================================================== */
+$joyrideTooltipMaxWidth: 50%;
+$joyrideTooltipBackground: black;
+$joyrideTooltipBorderColour: fade-out($joyrideTooltipBackground, 0.2);
+$joyrideTooltipZIndex: 103;
+
+/* =============================================================================
+Type
+========================================================================== */
+$joyrideFontSize: 1em;
+$joyrideTooltipFontFamily: "HelveticaNeue", "Helvetica Neue", "Helvetica", Helvetica, Arial, Lucida, sans-serif;
+$joyrideTooltipFontWeight: normal;
+$joyrideTextColour: invert($joyrideTooltipBackground);
+
+/* Headers */
+$joyrideTooltipHeadingLineHeight: 1.25;
+$joyrideTooltipHeadingColour: invert($joyrideTooltipBackground);
+/* =============================================================================
+Appearance
+========================================================================== */
+/* Allow rounded corners? */
+$joyrideTooltipRounded: true;
+/* If so, how large? */
+$joyrideTooltipBorderRadius: 0.4em;
+
+$joyrideTooltipPadding: 1em;
+$joyrideTooltipOffset: 1.5em;
+$joyrideTooltipCalloutSize: 1em;
+
+/* Close tip */
+$joyrideCloseSize: $joyrideFontSize * 0.7;
+
+/* Indicator */
+$joyrideIndicatorSize: 4em;
+
+$joyrideNextButtonColour:#0063FF;
+$joyrideNextButtonBorderColour: $joyrideNextButtonColour - 20;
+

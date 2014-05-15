@@ -9,6 +9,12 @@ Joyride is MIT-licensed and absolutely free to use.
 
 Joyride 3.0 - In Progress (v3 branch)
 
+New in 2.2 - May 15, 2014
+* Customizable and configurable SASS styles
+* Added ``bower.json`` and [bower](http://bower.io) support
+* Added [gulp](http://gulpjs.com/) gulpfile for building with [autoprefixer](https://github.com/ai/autoprefixer)
+* Add better directory structure for build system
+
 New in 2.1 - June 26, 2013
 * New `scroll` option.
 * New `autoStart` option.
@@ -34,9 +40,11 @@ New in 2.0.2 - Novmeber 7, 2012
 * Fix for reinitialization of plugin.
 
 New in 2.0.1 - September 28, 2012
+
 * Skip missing tooltip targets
 
 New in 2.0 - September 28, 2012
+
 * remove counters in favor of jQuery's in-built .next() method
 * button text is now defined with a data-button attribute, data-text will be deprecated in 3.0
 * edge-aware tooltips that reposition based on proximity to edge of screen (thanks to Jason from Hugo4GL for help with this)
@@ -58,17 +66,33 @@ Documentation
 
 Comprehensive documentation is available on the Joyride homepage listed above.
 
-Repo Contents
+Building
 =============
+In order to build, first install node dependencies:
 
-* README
-* DEMO - Demo specific files, not necessary to use the plugin
-* joyride-2.1.css - Default Joyride styles, required
-* jquery-1.10.1.js - A version of jQuery, required, 1.4.3+ is required
-* jquery.joyride-2.1.js - The heart of Joyride, required
-* modernizr.mq.js - A custom build of Modernizr with just mediaqueries
-* jquery.cookie.js - required for cookie support.
-* .gitignore - Those pesky DS_Store files...this is not part of the plugin
+```
+npm install
+```
+
+Then, to start compiling and watching, use the gulp task:
+
+```
+gulp server
+```
+
+To compile SASS files, use:
+
+```
+gulp sass
+```
+
+This will compile all styles using autoprefixer.
+
+To build javascript, use:
+
+```
+
+```
 
 ZURB
 ====
