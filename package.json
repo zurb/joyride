@@ -1,6 +1,6 @@
 {
   "name": "jquery-joyride",
-  "version": "0.0.1",
+  "version": "2.3.0",
   "description": "Interactive tours with Zurb foundation",
   "main": "jquery.joyride.js",
   "scripts": {
