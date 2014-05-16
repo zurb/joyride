@@ -1,0 +1,30 @@
+{
+  "name": "jquery-joyride",
+  "version": "2.3.0",
+  "homepage": "https://github.com/srsgores/joyride",
+  "authors": [
+    "Sean <seangores@gmail.com>"
+  ],
+  "description": "jQuery tours with Foundation",
+  "main": "jquery.joyride.js",
+  "keywords": [
+    "jquery",
+    "tour",
+    "zurb",
+    "foundation",
+    "tutorial"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "modernizr": "~2.8.1",
+    "jquery-cookie": "~1.4.1"
+  }
+}

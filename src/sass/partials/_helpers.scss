@@ -1,0 +1,14 @@
+%hidden {
+	display: none;
+}
+
+%borderFix {
+	border-color: $joyrideTooltipBorderColour;
+}
+
+%joyrideHeading {
+	line-height: $joyrideTooltipHeadingLineHeight;
+	margin: 0;
+	font-weight: bold;
+	color: $joyrideTooltipHeadingColour;
+}

@@ -1,0 +1,35 @@
+{
+  "name": "jquery-joyride",
+  "version": "2.3.0",
+  "description": "Interactive tours with Zurb foundation",
+  "main": "jquery.joyride.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://srsgores@github.com/srsgores/joyride.git"
+  },
+  "keywords": [
+    "jquery",
+    "tour",
+    "interactive",
+    "tutorial",
+    "zurb",
+    "foundation"
+  ],
+  "author": "Sean Goresht",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/srsgores/joyride/issues"
+  },
+  "homepage": "https://github.com/srsgores/joyride",
+  "devDependencies": {
+    "gulp": "~3.6.2",
+    "gulp-concat": "~2.2.0",
+    "gulp-livereload": "~1.5.0",
+    "gulp-watch": "~0.6.4",
+    "gulp-sass": "~0.7.1",
+    "gulp-autoprefixer": "0.0.7"
+  }
+}
