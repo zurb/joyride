@@ -158,7 +158,7 @@
 
       // call this method when you want to resume the tour
       resume : function () {
-        methods.set_li();
+        settings.paused = false;
         methods.show();
       },
 
@@ -240,15 +240,13 @@
         var opts = {}, ii, opts_arr = [], opts_len = 0, p,
             $timer = null;
 
-        // are we paused?
-        if (settings.$li === undefined || ($.inArray(settings.$li.index(), settings.pauseAfter) === -1)) {
 
-          // don't go to the next li if the tour was paused
           if (settings.paused) {
-            settings.paused = false;
-          } else {
-            methods.set_li(init);
+            return;
           }
+
+          methods.set_li(init);
+          
 
           settings.attempts = 0;
 
@@ -343,11 +341,6 @@
             methods.end();
 
           }
-        } else {
-
-          settings.paused = true;
-
-        }
 
       },
 
@@ -377,6 +370,11 @@
         }
         settings.$current_tip.hide();
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
+
+        // do we need to pause?
+        if (!(settings.$li === undefined || ($.inArray(settings.$li.index(), settings.pauseAfter) === -1))) {
+          settings.paused = true;
+        }
       },
 
       set_li : function (init) {
