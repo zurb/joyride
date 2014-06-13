@@ -15,6 +15,7 @@
       'version'              : '2.1',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases
+      'nubOffset'            : false,     // specify exact offset to control exact nub position (false = get position from stylesheet (22px))
       'scroll'               : true,      // whether to scroll to tips
       'scrollSpeed'          : 300,       // Page scrolling speed in milliseconds
       'timer'                : 0,         // 0 = no timer , all other numbers = timer in milliseconds
@@ -544,6 +545,12 @@
           settings.$next_tip.css('visibility', 'visible');
         }
 
+        if (settings.tipSettings.tipLocation === 'top' || settings.tipSettings.tipLocation === 'bottom') {
+          methods.nub_offset($nub, settings.tipSettings.nubOffset, 'left');
+        } else {
+          methods.nub_offset($nub, settings.tipSettings.nubOffset, 'top');
+        }
+
       },
 
       pos_phone : function (init) {
@@ -808,6 +815,12 @@
           nub.addClass(def);
         } else {
           nub.addClass(pos);
+        }
+      },
+
+      nub_offset : function (nub, offset, pos) {
+        if (offset) {
+          nub.css(pos, offset);
         }
       },
 
