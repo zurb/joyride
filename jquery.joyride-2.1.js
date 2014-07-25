@@ -22,6 +22,7 @@
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
       'startOffset'          : 0,         // the index of the tooltip you want to start on (index of the li)
       'nextButton'           : true,      // true or false to control whether a next button is used
+      'prev_button'          : true,      // true or false to control whether a prev button is used
       'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
       'pauseAfter'           : [],        // array of indexes where to pause the tour after
       'tipAnimationFadeSpeed': 300,       // when tipAnimation = 'fade' this is speed in milliseconds for the transition
@@ -45,6 +46,7 @@
         'tip'     : '<div class="joyride-tip-guide"><span class="joyride-nub"></span></div>',
         'wrapper' : '<div class="joyride-content-wrapper" role="dialog"></div>',
         'button'  : '<a href="#" class="joyride-next-tip"></a>',
+        'prev_button': '<a href="#" class="small button joyride-prev-tip"></a>',
         'modal'   : '<div class="joyride-modal-bg"></div>',
         'expose'  : '<div class="joyride-expose-wrapper"></div>',
         'exposeCover': '<div class="joyride-expose-cover"></div>'
@@ -124,7 +126,20 @@
                 methods.hide();
                 methods.show();
               }
+            }).on('click.joyride', '.joyride-prev-tip', function (e) {
+              e.preventDefault();
 
+              if (settings.$li.prev().length < 1) {
+                // Do nothing if there are no prev element
+              } else if (settings.timer > 0) {
+                clearTimeout(settings.automate);
+                methods.hide();
+                methods.show(null, true);
+                methods.startTimer();
+              } else {
+                methods.hide();
+                methods.show(null, true);
+              }
             });
 
             settings.$document.on('click.joyride', '.joyride-close-tip', function (e) {
@@ -183,6 +198,7 @@
 
         $blank = $(settings.template.tip).addClass(opts.tip_class);
         content = $.trim($(opts.li).html()) +
+          methods.prev_button_text(opts.prev_button_text, opts.index) +
           methods.button_text(opts.button_text) +
           settings.template.link +
           methods.timer_instance(opts.index);
@@ -222,21 +238,39 @@
         return txt;
       },
 
+      prev_button_text : function (txt, idx) {
+        if (settings.prev_button) {
+          txt = $.trim(txt) || 'Previous';
+
+          // Don't show the button if it's the first element
+          if (idx == 0) {
+              txt = '';
+          }
+          else
+              txt = $(settings.template.prev_button).append(txt)[0].outerHTML;
+        } else {
+            txt = '';
+        }
+        return txt;
+      },
+
       create : function (opts) {
         // backwards compatibility with data-text attribute
         var buttonText = opts.$li.attr('data-button') || opts.$li.attr('data-text'),
+          prevButtonText = opts.$li.attr('data-button-prev') || opts.$li.attr('data-prev-text'),
           tipClass = opts.$li.attr('class'),
           $tip_content = $(methods.tip_template({
             tip_class : tipClass,
             index : opts.index,
             button_text : buttonText,
+            prev_button_text : prevButtonText,
             li : opts.$li
           }));
 
         $(settings.tipContainer).append($tip_content);
       },
 
-      show : function (init) {
+      show : function (init, is_prev) {
         var opts = {}, ii, opts_arr = [], opts_len = 0, p,
             $timer = null;
 
@@ -247,7 +281,7 @@
           if (settings.paused) {
             settings.paused = false;
           } else {
-            methods.set_li(init);
+            methods.set_li(init, is_prev);
           }
 
           settings.attempts = 0;
@@ -379,13 +413,16 @@
         settings.postStepCallback(settings.$li.index(), settings.$current_tip);
       },
 
-      set_li : function (init) {
+      set_li : function (init, is_prev) {
         if (init) {
           settings.$li = settings.$tip_content.eq(settings.startOffset);
           methods.set_next_tip();
           settings.$current_tip = settings.$next_tip;
         } else {
-          settings.$li = settings.$li.next();
+          if (is_prev)
+              settings.$li = settings.$li.prev();
+          else
+              settings.$li = settings.$li.next();
           methods.set_next_tip();
         }
 
