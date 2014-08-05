@@ -100,11 +100,9 @@
               // show first tip
               if(settings.autoStart)
               {
+                methods.show('init');
                 if (!settings.startTimerOnClick && settings.timer > 0) {
-                  methods.show('init');
                   methods.startTimer();
-                } else {
-                  methods.show('init');
                 }
               }
 
@@ -446,19 +444,17 @@
       restart : function () {
         if(!settings.autoStart)
         {
+          methods.show('init');
           if (!settings.startTimerOnClick && settings.timer > 0) {
-            methods.show('init');
             methods.startTimer();
-          } else {
-            methods.show('init');
           }
           settings.autoStart = true;
         }
         else
         {
-        methods.hide();
-        settings.$li = undefined;
-        methods.show('init');
+          methods.hide();
+          settings.$li = undefined;
+          methods.show('init');
         }
       },
 
