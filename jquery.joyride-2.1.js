@@ -925,4 +925,11 @@
     }
   };
 
+  // reset settings if turbolinks
+  if (typeof Turbolinks !== 'undefined') {
+    $(document).on('page:before-change', function(){
+      $.fn.joyride('destroy');
+    });
+  }
+
 }(jQuery, this));
