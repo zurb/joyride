@@ -1,6 +1,6 @@
 /* Artfully masterminded by ZURB */
 body {
-  /*position: relative;*/
+  position: relative;
 }
 
 #joyRideTipContent { display: none; }
