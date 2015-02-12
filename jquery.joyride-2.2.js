@@ -20,7 +20,7 @@
   'use strict';
 
   var defaults = {
-      'version'              : '2.1',
+      'version'              : '2.2',
       'tipLocation'          : 'bottom',  // 'top' or 'bottom' in relation to parent
       'nubPosition'          : 'auto',    // override on a per tooltip bases
       'scroll'               : true,      // whether to scroll to tips
@@ -29,7 +29,7 @@
       'autoStart'            : false,     // true or false - false tour starts when restart called
       'startTimerOnClick'    : true,      // true or false - true requires clicking the first button start the timer
       'startOffset'          : 0,         // the index of the tooltip you want to start on (index of the li)
-      'prevButton'			 : false,	  // true or false to control whether a prev button is used
+      'prevButton'	     : false,	  // true or false to control whether a prev button is used
       'nextButton'           : true,      // true or false to control whether a next button is used
       'tipAnimation'         : 'fade',    // 'pop' or 'fade' in each tip
       'pauseAfter'           : [],        // array of indexes where to pause the tour after
