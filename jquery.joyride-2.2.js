@@ -262,7 +262,7 @@
       create : function (opts) {
         // backwards compatibility with data-text attribute
         var buttonText = opts.$li.attr('data-button') || opts.$li.attr('data-text'),
-          prevButtonText = opts.$li.attr('data-prev-button'),
+          prevButtonText = opts.$li.attr('data-prev-button') || opts.$li.attr('data-prev-text'),
           tipClass = opts.$li.attr('class'),
           $tip_content = $(methods.tip_template({
             tip_class : tipClass,
