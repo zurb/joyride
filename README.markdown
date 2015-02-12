@@ -9,6 +9,10 @@ Joyride is MIT-licensed and absolutely free to use.
 
 Joyride 3.0 - In Progress (v3 branch)
 
+New in 2.2 - February 12, 2015
+* New `prevButton` option
+  * functions exactly as `nextButton`, but replaces all "next"s with "prev"
+
 New in 2.1 - June 26, 2013
 * New `scroll` option.
 * New `autoStart` option.

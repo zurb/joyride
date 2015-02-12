@@ -159,7 +159,8 @@ body {
 }
 
 /* Button Style */
-.joyride-tip-guide .joyride-next-tip {
+.joyride-tip-guide .joyride-next-tip,
+.joyride-tip-guide .joyride-prev-tip {
   width: auto;
   padding: 6px 18px 4px;
   font-size: 13px;
@@ -183,7 +184,12 @@ body {
           box-shadow: 0px 1px 0px rgba(255,255,255,0.3) inset;
 }
 
-.joyride-next-tip:hover {
+.joyride-tip-guide .joyride-prev-tip {
+  margin-right: 5px;
+}
+
+.joyride-next-tip:hover,
+.joyride-prev-tip:hover {
   color: rgb(255,255,255) !important;
   border: solid 1px rgb(0,60,180) !important;
   background: rgb(43,128,255);
