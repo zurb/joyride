@@ -3110,7 +3110,11 @@ function _classCallCheck(instance, Constructor) {
       key: 'destroy',
       value: function destroy() {
         this.$element.hide();
-        this.$items.destroy();
+
+        for (var s in this.structure) {
+          this.structure[s].item.destroy();
+        }
+
         /**
          * Fires when the plugin has been destroyed.
          * @event Joyride#destroyed
@@ -3123,19 +3127,89 @@ function _classCallCheck(instance, Constructor) {
   }();
 
   Joyride.defaults = {
+    /**
+     * Autostart the joyride on page load.
+     * @option
+     * @example false
+     */
     autostart: false,
+    /**
+     * Speed with which the page scrolls to the next stop.
+     * @option
+     * @example 1000
+     */
     scrollSpeed: 1000,
+    /**
+     * Enable navigation via keyboard.
+     * @option
+     * @example true
+     */
     keyboardAccess: true,
+    /**
+     * If the joyride elements should be closable.
+     * @option
+     * @example true
+     */
     closable: true,
+    /**
+     * Text for the next button.
+     * @option
+     * @example 'Next'
+     */
     nextText: 'Next',
+    /**
+     * Text for the previous button.
+     * @option
+     * @example 'Previous'
+     */
     prevText: 'Previous',
+    /**
+     * Text for the close button (for accessibility purposes).
+     * @option
+     * @example 'Close'
+     */
     closeText: 'Close',
+    /**
+     * Whether to show next button.
+     * @option
+     * @example true
+     */
     showNext: true,
+    /**
+     * Whether to show previous button.
+     * @option
+     * @example true
+     */
     showPrev: true,
+    /**
+     * Vertical offset for tooltips (see tooltip plugin configuration).
+     * @option
+     * @example true
+     */
     vOffset: 10,
+    /**
+     * Horizontal offset for tooltips (see tooltip plugin configuration).
+     * @option
+     * @example true
+     */
     hOffset: 12,
+    /**
+     * Offset while scrolling the window.
+     * @option
+     * @example 50
+     */
     scrollOffset: 50,
+    /**
+     * Position of the tooltips (see tooltip plugin configuration).
+     * @option
+     * @example true
+     */
     position: 'top center',
+    /**
+     * Templates for the buttons.
+     * @option
+     * @example
+     */
     templates: { // HTML templates
       closeButton: '<a href="#close" class="close" data-joyride-close><span aria-hidden="true">&times</span><span class="show-for-sr"></span></a>',
       nextButton: '<button class="button" data-joyride-next></button>',

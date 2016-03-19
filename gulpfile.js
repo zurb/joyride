@@ -1,10 +1,11 @@
 var gulp = require('gulp'),
   runSequence = require('run-sequence'),
   rimraf = require('rimraf').sync,
-  scss = require('./gulp/scss'),
-  css = require('./gulp/css'),
-  js = require('./gulp/javascript'),
+  requireDir = require('require-dir'),
   config = require('./gulp/config');
+
+requireDir('./gulp');
+
 
 
 /**
