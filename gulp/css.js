@@ -13,7 +13,7 @@ var gulp = require('gulp'),
 
 gulp.task('css:foundation', ['scss:foundation'], function () {
   // minified CSS
-  gulp.src([config.buildPath + '/' + config.name + '.css'])
+  gulp.src([config.buildPath + config.name + '.css'])
   .pipe(autoprefixer({
     browsers: config.css.compatibility
   }))
@@ -22,7 +22,7 @@ gulp.task('css:foundation', ['scss:foundation'], function () {
   .pipe(gulp.dest(config.destPath));
 
   // unminified CSS
-  gulp.src([config.buildPath + '/' + config.name + '.css'])
+  gulp.src([config.buildPath + config.name + '.css'])
   .pipe(autoprefixer({
     browsers: config.css.compatibility
   }))
@@ -32,7 +32,7 @@ gulp.task('css:foundation', ['scss:foundation'], function () {
 
 gulp.task('css:standalone', ['scss:standalone'], function () {
   // minified CSS
-  gulp.src([config.buildPath + '/*.css', config.pluginPath + 'dist/css/contextMenu.css'])
+  gulp.src([config.buildPath + '*.css', config.pluginPath + 'dist/css/contextMenu.css'])
   .pipe(autoprefixer({
     browsers: config.css.compatibility
   }))
@@ -41,7 +41,7 @@ gulp.task('css:standalone', ['scss:standalone'], function () {
   .pipe(gulp.dest(config.destPath));
 
   // unminified CSS
-  gulp.src([config.buildPath + '/*.css', config.pluginPath + 'dist/css/contextMenu.css'])
+  gulp.src([config.buildPath + '*.css', config.pluginPath + 'dist/css/contextMenu.css'])
   .pipe(concat('solo.' + config.name + '.css'))
   .pipe(autoprefixer({
     browsers: config.css.compatibility

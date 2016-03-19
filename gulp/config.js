@@ -6,10 +6,10 @@
  */
 module.exports = {
   name: 'joyride',
-  srcPath: 'src',
-  destPath: 'dist',
-  buildPath: 'build',
-  pluginPath: 'build',
+  srcPath: '',
+  destPath: 'dist/',
+  buildPath: '_build/',
+  pluginPath: '_build/',
   foundationPath: 'node_modules/foundation-sites',
   css: {
     compatibility: ['last 2 versions', 'ie 10', 'Android >= 4.1'], // compatibility for auto prefixer

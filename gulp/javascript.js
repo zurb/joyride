@@ -3,8 +3,8 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'),
   babel = require('gulp-babel'),
   uglify = require('gulp-uglify'),
-  config = require('./config'),
-  gulpUtil = require('gulp-util');
+  gulpUtil = require('gulp-util'),
+  config = require('./config');
 
 /**
  * Gulp task js:*.
@@ -14,14 +14,14 @@ var gulp = require('gulp'),
 
 gulp.task('js:foundation', function () {
   // minified JS
-  gulp.src([config.srcPath + '/js/foundation.' + config.name + '.js'])
+  gulp.src([config.srcPath + 'js/' + config.name + '.js'])
     .pipe(babel())
     .pipe(uglify().on('error', gulpUtil.log))
     .pipe(rename('foundation.' + config.name + '.min.js'))
     .pipe(gulp.dest(config.destPath));
 
   // unminified JS
-  gulp.src([config.srcPath + '/js/foundation.' + config.name + '.js'])
+  gulp.src([config.srcPath + 'js/foundation.' + config.name + '.js'])
     .pipe(babel())
     .pipe(rename('foundation.' + config.name + '.js'))
     .pipe(gulp.dest(config.destPath));
