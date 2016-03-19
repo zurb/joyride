@@ -2943,17 +2943,17 @@ function _classCallCheck(instance, Constructor) {
           if (structure[s].nextText || options.showNext && s < structure.length - 1 || structure[s].prevText || options.showPrev && s > 0) {
             var $buttons = $('<div class="joyride-buttons"/>');
             if (structure[s].prevText || options.showPrev && s > 0) {
-              $buttons.append($(this.options.templates.prevButton).text(options.prevText));
+              $buttons.append($(this.options.prevButton).text(options.prevText));
             }
             if (structure[s].nextText || options.showNext && s < structure.length - 1) {
-              $buttons.append($(this.options.templates.nextButton).text(options.nextText));
+              $buttons.append($(this.options.nextButton).text(options.nextText));
             }
             $item.append($buttons);
           }
 
           // add close button
           if (options.closable) {
-            var $close = $(this.options.templates.closeButton);
+            var $close = $(this.options.closeButton);
             $close.find('.show-for-sr').text(this.options.closeText);
             $item.prepend($close);
           }
@@ -3206,15 +3206,23 @@ function _classCallCheck(instance, Constructor) {
      */
     position: 'top center',
     /**
-     * Templates for the buttons.
+     * Templates for the close button.
      * @option
-     * @example
+     * @example '<a href="#close" class="close" data-joyride-close><span aria-hidden="true">&times</span><span class="show-for-sr"></span></a>'
      */
-    templates: { // HTML templates
-      closeButton: '<a href="#close" class="close" data-joyride-close><span aria-hidden="true">&times</span><span class="show-for-sr"></span></a>',
-      nextButton: '<button class="button" data-joyride-next></button>',
-      prevButton: '<button class="button" data-joyride-prev></button>'
-    }
+    closeButton: '<a href="#close" class="close" data-joyride-close><span aria-hidden="true">&times</span><span class="show-for-sr"></span></a>',
+    /**
+     * Templates for the next button.
+     * @option
+     * @example '<button class="button" data-joyride-next></button>'
+     */
+    nextButton: '<button class="button" data-joyride-next></button>',
+    /**
+     * Templates for the pevious button.
+     * @option
+     * @example '<button class="button" data-joyride-prev></button>'
+     */
+    prevButton: '<button class="button" data-joyride-prev></button>'
   };
 
   // Window exports
