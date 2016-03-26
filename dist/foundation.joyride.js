@@ -11,7 +11,18 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-!function ($) {
+!function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD
+    define(['jquery'], factory);
+  } else if (typeof exports === 'object') {
+    // Node, CommonJS-like
+    module.exports = factory(require('jquery'));
+  } else {
+    // Browser globals (root is window)
+    root.returnExports = factory(root.jQuery);
+  }
+}(this, function ($) {
   /**
    * Joyride module.
    * @module foundation.joyride
@@ -424,4 +435,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
   // Window exports
   Foundation.plugin(Joyride, 'Joyride');
-}(jQuery);
+
+  return Joyride;
+});
