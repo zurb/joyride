@@ -21,7 +21,7 @@ gulp.task('js:foundation', function () {
     .pipe(gulp.dest(config.destPath));
 
   // unminified JS
-  gulp.src([config.srcPath + 'js/foundation.' + config.name + '.js'])
+  gulp.src([config.srcPath + 'js/' + config.name + '.js'])
     .pipe(babel())
     .pipe(rename('foundation.' + config.name + '.js'))
     .pipe(gulp.dest(config.destPath));

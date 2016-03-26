@@ -16,6 +16,8 @@
 
 // Components
 @import '../node_modules/foundation-sites/scss/typography/typography';
+@import '../node_modules/foundation-sites/scss/components/visibility';
+
 
 {{#components}}
   @import '../node_modules/foundation-sites/scss/components/{{.}}';
@@ -24,6 +26,7 @@
 
 // Imports
 @include foundation-typography;
+@include foundation-visibility-classes;
 
 {{#components}}
   @include foundation-{{.}};

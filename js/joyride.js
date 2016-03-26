@@ -101,7 +101,8 @@ class Joyride {
           tooltipClass: 'tooltip joyride',
           triggerClass: '',
           hOffset: this.options.hOffset,
-          vOffset: this.options.vOffset
+          vOffset: this.options.vOffset,
+          showOn: 'all' // to avoid conflicts with standalone version when MQs are not set up properly. Should be somewhat rewritten
         });
         this.structure[s].item = tooltip;
         $item = tooltip.template;
@@ -228,7 +229,6 @@ class Joyride {
   _events() {
     var _this = this;
     $('[data-joyride-start="#'+_this.id+'"]').click(function() {
-      console.log('Starting!');
       _this.start();
     });
 

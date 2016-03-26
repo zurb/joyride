@@ -1,12 +1,15 @@
 describe('Joyride', function() {
   var plugin;
   var $html;
-  var joyrideListHtml = '<ol data-joyride data-autostart="true" id="docs-joyride">'
-      + '<li data-target="#basic-joyride">'
+  var joyrideListHtml = '<div><h2 id="target-1">Target 1</h2><h2 id="target-2">Target 2</h2>'
+    +'<ol data-joyride data-autostart="true">'
+      + '<li data-target="#target-1">'
         + '<h3>First</h3>'
-        + '<p>This is the default one without settings</p>'
       + '</li>'
-    + '</ol>';
+      + '<li data-target="#target-2">'
+        + '<h3>Second</h3>'
+      + '</li>'
+    + '</ol></div>';
 
   afterEach(function() {
     plugin.destroy();
@@ -15,27 +18,65 @@ describe('Joyride', function() {
 
   describe('constructor()', function() {
     it('stores the element and plugin options', function() {
-      $html = $('<h2 id="basic-joyride">Target</h2>' + joyrideListHtml).appendTo('body');
-      plugin = new Foundation.Joyride($html, {});
+      $html = $(joyrideListHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
 
       plugin.$element.should.be.an('object');
       plugin.options.should.be.an('object');
     });
   });
 
-  describe('init()', function() {
+  describe('_init()', function() {
     it('hides the joyride list', function() {
-      $html = $('<h2 id="basic-joyride">Target</h2>' + joyrideListHtml).appendTo('body');
-      plugin = new Foundation.Joyride($html, {});
+      $html = $(joyrideListHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
 
       plugin.$element.should.have.attr('data-joyride');
+      plugin.$element.should.be.hidden;
+    });
+  });
+
+  describe('start()', function() {
+    it('starts joyride automatically', function() {
+      $html = $(joyrideListHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      $(plugin.$items[0]).should.be.visible;
     });
 
-    /*it('automatically starts joyride', function() {
-      $html = $('<h2 id="basic-joyride">Target</h2>' + joyrideListHtml).appendTo('body');
-      plugin = new Foundation.Joyride($html, {});
+    it('starts joyride by clicking', function() {
+      $html = $(joyrideListHtml);
+      $html.find('[data-joyride]').attr({'data-autostart': false, 'id': 'test-joyride'});
 
-      plugin.$items.eq(0).should.have.attr('data-is-active', 'true');
-    });*/
+      var $button = $('<button class="button" data-joyride-start="#test-joyride">Start</button>');
+      $html.append($button);
+      $html.appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      
+      $button.trigger('click');
+
+      $(plugin.$items[0]).should.have.attr('aria-hidden', 'false');
+    });
+  });
+
+  describe('showNext()', function() {
+    it('hides the current element', function() {
+      $html = $(joyrideListHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.showNext();
+      $(plugin.$items[0]).should.have.attr('aria-hidden', 'true');
+    });
+
+    it('shows the next element', function() {
+      $html = $(joyrideListHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.showNext();
+      $(plugin.$items[1]).should.have.attr('aria-hidden', 'false');    
+    });
   });
 });
