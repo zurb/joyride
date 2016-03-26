@@ -18,7 +18,7 @@
     // Browser globals (root is window)
     root.returnExports = factory(root.jQuery);
   }
-}(this, function ($, Foundation) {
+}(this, function ($) {
   /**
    * Joyride module.
    * @module foundation.joyride
