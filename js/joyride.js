@@ -292,6 +292,8 @@
        * @event Joyride#destroyed
        */
       this.$element.trigger('destroyed.zf.joyride');
+
+      Foundation.unregisterPlugin(this);
     }
   }
 

@@ -328,6 +328,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
          * @event Joyride#destroyed
          */
         this.$element.trigger('destroyed.zf.joyride');
+
+        Foundation.unregisterPlugin(this);
       }
     }]);
 
