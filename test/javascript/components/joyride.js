@@ -36,6 +36,24 @@ describe('Joyride', function() {
     });
   });
 
+  describe('_render()', function() {
+    it('creates tooltips for stops with target', function() {
+      $html = $(joyrideListHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+
+      plugin.structure[0].item.$element.should.have.attr('data-tooltip');
+    });
+
+    it('creates reveal modals for stops without target', function() {
+      $html = $(joyrideListHtml);
+      $html.find('li').removeAttr('data-target');
+      $html.appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+
+      plugin.structure[0].item.$element.should.have.attr('data-reveal');
+    });
+  });
+
   describe('start()', function() {
     it('starts joyride automatically', function() {
       $html = $(joyrideListHtml).appendTo('body');
@@ -77,6 +95,28 @@ describe('Joyride', function() {
 
       plugin.showNext();
       $(plugin.$items[1]).should.have.attr('aria-hidden', 'false');    
+    });
+  });
+
+  describe('showPrev()', function() {
+    it('hides the current element', function() {
+      $html = $(joyrideListHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.showNext();
+      plugin.showPrev();
+      $(plugin.$items[1]).should.have.attr('aria-hidden', 'true');
+    });
+
+    it('shows the previous element', function() {
+      $html = $(joyrideListHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.showNext();
+      plugin.showPrev();
+      $(plugin.$items[0]).should.have.attr('aria-hidden', 'false');    
     });
   });
 });
