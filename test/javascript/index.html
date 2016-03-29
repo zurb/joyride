@@ -11,18 +11,17 @@
   </head>
   <body>
     <div id="mocha"></div>
-    <script src="../../node_modules/foundation-sites/node_modules/jquery/dist/jquery.js"></script>
+    <script src="../../node_modules/jquery/dist/jquery.js"></script>
     <script src="../../node_modules/foundation-sites/dist/foundation.js"></script>
     <script src="../../dist/foundation.joyride.js"></script>
     <script src="lib/mocha.js"></script>
     <script src="lib/chai.js"></script>
     <script src="lib/chai-jquery.js"></script>
-    <script src="lib/sinon.js"></script>
     <script>
       mocha.setup('bdd');
       chai.should();
     </script>
-    <script src="components/joyride.js"></script>
+    <script src="joyride.js"></script>
     <script>
       mocha.run();
     </script>

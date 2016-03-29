@@ -20,9 +20,10 @@
   "homepage": "https://github.com/zurb/joyride",
   "scripts": {
     "start": "gulp",
-    "test": "npm run test:sass && npm run test:javascript",
-    "test:sass": "mocha test/sass/test_sass.js",
-    "test:javascript": "gulp build:all && mocha-phantomjs test/javascript/index.html"
+    "test": "npm run test:javascript",
+    "test:javascript": "gulp build:all && mocha-phantomjs test/javascript/index.html",
+    "test:visual": "gulp",
+    "dist": "echo \"Nothing here...\" && exit 0"
   },
   "dependencies": {
     "jquery": "^2.2.0",
@@ -63,6 +64,5 @@
     "require-dir": "^0.3.0",
     "rimraf": "^2.5.2",
     "run-sequence": "^1.1.5",
-    "sinon": "^1.17.3"
   }
 }
