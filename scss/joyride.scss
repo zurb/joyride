@@ -47,6 +47,6 @@ $joyride-button-space: 0.5em;
   }
 }
 
-[data-joyride] {
-  display: none;
+[data-whatinput='mouse'] .joyride {
+  outline: 0;
 }

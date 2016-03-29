@@ -24,6 +24,10 @@
     "test:sass": "mocha test/sass/test_sass.js",
     "test:javascript": "gulp build:all && mocha-phantomjs test/javascript/index.html"
   },
+  "dependencies": {
+    "jquery": "^2.2.0",
+    "what-input": "^2.0.0"
+  },
   "devDependencies": {
     "babel-core": "^6.3.26",
     "babel-eslint": "^5.0.0",

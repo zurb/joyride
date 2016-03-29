@@ -124,7 +124,11 @@
       requirejs.config({
         packages: [{
           name: 'jquery',
-          location: '../node_modules/foundation-sites/node_modules/jquery/dist',
+          location: '../node_modules/jquery/dist',
+          main: 'jquery'
+        },{
+          name: 'what-input',
+          location: '../node_modules/jquery/dist',
           main: 'jquery'
         },{
           name: 'joyride',
@@ -136,7 +140,7 @@
           main: 'foundation'
         }]
       });
-      requirejs(['jquery', 'foundation', 'joyride'], function(Joyride, Foundation, jQuery) {
+      requirejs(['jquery', 'what-input', 'foundation', 'joyride'], function(Joyride, Foundation, jQuery) {
         // initialize Foundation
         $(document).foundation();
       });
