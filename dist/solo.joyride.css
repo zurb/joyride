@@ -579,5 +579,5 @@ body.is-reveal-open {
     .reveal.joyride .joyride-buttons button {
       margin: 0 0.5em; }
 
-[data-joyride] {
-  display: none; }
+[data-whatinput='mouse'] .joyride {
+  outline: 0; }
