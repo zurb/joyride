@@ -10,8 +10,8 @@
      <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="../node_modules/foundation-sites/dist/foundation.css">
-    <link rel="stylesheet" href="../dist/foundation.joyride.css">
+    <link rel="stylesheet" href="assets/foundation-sites/dist/foundation.css">
+    <link rel="stylesheet" href="dist/foundation.joyride.css">
   </head>
   <body>
     <div class="wrapper">
@@ -25,6 +25,17 @@
           </div>
         </div>
       </header>
+      <nav>
+        <div class="row">
+          <div class="small-12">
+            <ul class="menu">
+              <li><a href="/">Foundation version</a></li>
+              <li><a href="standalone.html">Standalone version</a></li>
+              <li><a href="umd.html">UMD based version</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
       <main id="main" class="sections">
         <div class="row">
           <div class="columns small-12">
@@ -118,32 +129,13 @@
     </ol>
 
 
-    <script type="text/javascript" src="http://requirejs.org/docs/release/2.2.0/minified/require.js"></script>
+    <script src="assets/jquery/dist/jquery.js" type="text/javascript"></script>
+    <script src="assets/what-input/what-input.js" type="text/javascript"></script>
+    <script src="assets/foundation-sites/dist/foundation.js" type="text/javascript"></script>
+    <script src="dist/foundation.joyride.js" type="text/javascript"></script>
     <script type="text/javascript">
-      // Configure requireJS paths for the modules
-      requirejs.config({
-        packages: [{
-          name: 'jquery',
-          location: '../node_modules/jquery/dist',
-          main: 'jquery'
-        },{
-          name: 'what-input',
-          location: '../node_modules/jquery/dist',
-          main: 'jquery'
-        },{
-          name: 'joyride',
-          location: '../dist',
-          main: 'foundation.joyride'
-        }, {
-          name: 'foundation',
-          location: '../node_modules/foundation-sites/dist',
-          main: 'foundation'
-        }]
-      });
-      requirejs(['jquery', 'what-input', 'foundation', 'joyride'], function(Joyride, Foundation, jQuery) {
-        // initialize Foundation
-        $(document).foundation();
-      });
+      // initialize Foundation
+      $(document).foundation();
     </script>
   </body>
 </html>
