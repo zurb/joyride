@@ -20,9 +20,7 @@ gulp.task('default', ['serve', 'watch']);
  * Gulp task build:all.
  * Calls build:foundation and build:standalone.
  */
-gulp.task('build:all', function() {
-    runSequence('build:foundation', 'build:standalone');
-});
+gulp.task('build:all', ['build:foundation', 'build:standalone']);
 
 /**
  * Gulp task build:foundation.
@@ -37,6 +35,16 @@ gulp.task('build:foundation', ['js:foundation', 'css:foundation']);
 gulp.task('build:standalone', ['js:standalone', 'css:standalone']);
 
 /**
+ * Gulp task dist.
+ * Copies the built files into the dist folder.
+ */
+gulp.task('dist', ['js:min', 'css:min'], function() {
+  // uninified files
+  gulp.src([config.buildPath + 'assets/*'])
+    .pipe(gulp.dest(config.destPath));
+});
+
+/**
  * Gulp task watch.
  * Watch files for changes and reloads the browser.
  */
@@ -46,21 +54,18 @@ gulp.task('watch', function() {
   gulp.watch('test/visual/*.html', [browser.reload]);
 });
 
-
 /**
  * Gulp task serve.
  * Starts a BrowerSync instance.
  */
-gulp.task('serve', ['build:all'], function(){
+gulp.task('serve', ['build:all'], function() {
   browser.init({server: './test/visual', port: port});
 });
 
-
 /**
  * Gulp task clean.
- * Deletes the build and the dest folder.
+ * Deletes the build folder.
  */
 gulp.task('clean', function () {
   rimraf(config.buildPath);
-  rimraf(config.destPath);
 });

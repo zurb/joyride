@@ -23,7 +23,7 @@
     "test": "npm run test:javascript",
     "test:javascript": "gulp build:all && mocha-phantomjs test/javascript/index.html",
     "test:visual": "gulp",
-    "dist": "echo \"Nothing here...\" && exit 0"
+    "dist": "gulp dist"
   },
   "dependencies": {
     "jquery": "^2.2.0",
