@@ -1,7 +1,7 @@
 describe('Joyride', function() {
   var plugin;
   var $html;
-  var joyrideListHtml = '<div><h2 id="target-1">Target 1</h2><h2 id="target-2">Target 2</h2>'
+  var templateHtml = '<div><h2 id="target-1">Target 1</h2><h2 id="target-2">Target 2</h2>'
     +'<ol data-joyride data-autostart="true">'
       + '<li data-target="#target-1">'
         + '<h3>First</h3>'
@@ -18,7 +18,7 @@ describe('Joyride', function() {
 
   describe('constructor()', function() {
     it('stores the element and plugin options', function() {
-      $html = $(joyrideListHtml).appendTo('body');
+      $html = $(templateHtml).appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
 
       plugin.$element.should.be.an('object');
@@ -28,7 +28,7 @@ describe('Joyride', function() {
 
   describe('_init()', function() {
     it('hides the joyride list', function() {
-      $html = $(joyrideListHtml).appendTo('body');
+      $html = $(templateHtml).appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
 
       plugin.$element.should.have.attr('data-joyride');
@@ -38,14 +38,14 @@ describe('Joyride', function() {
 
   describe('_render()', function() {
     it('creates tooltips for stops with target', function() {
-      $html = $(joyrideListHtml).appendTo('body');
+      $html = $(templateHtml).appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
 
       plugin.structure[0].item.$element.should.have.attr('data-tooltip');
     });
 
     it('creates reveal modals for stops without target', function() {
-      $html = $(joyrideListHtml);
+      $html = $(templateHtml);
       $html.find('li').removeAttr('data-target');
       $html.appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
@@ -56,7 +56,7 @@ describe('Joyride', function() {
 
   describe('start()', function() {
     it('starts joyride automatically', function() {
-      $html = $(joyrideListHtml).appendTo('body');
+      $html = $(templateHtml).appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
       plugin.start();
 
@@ -64,7 +64,7 @@ describe('Joyride', function() {
     });
 
     it('starts joyride by clicking', function() {
-      $html = $(joyrideListHtml);
+      $html = $(templateHtml);
       $html.find('[data-joyride]').attr({'data-autostart': false, 'id': 'test-joyride'});
 
       var $button = $('<button class="button" data-joyride-start="#test-joyride">Start</button>');
@@ -80,7 +80,7 @@ describe('Joyride', function() {
 
   describe('showNext()', function() {
     it('hides the current element', function() {
-      $html = $(joyrideListHtml).appendTo('body');
+      $html = $(templateHtml).appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
       plugin.start();
 
@@ -89,7 +89,7 @@ describe('Joyride', function() {
     });
 
     it('shows the next element', function() {
-      $html = $(joyrideListHtml).appendTo('body');
+      $html = $(templateHtml).appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
       plugin.start();
 
@@ -100,7 +100,7 @@ describe('Joyride', function() {
 
   describe('showPrev()', function() {
     it('hides the current element', function() {
-      $html = $(joyrideListHtml).appendTo('body');
+      $html = $(templateHtml).appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
       plugin.start();
 
@@ -110,7 +110,7 @@ describe('Joyride', function() {
     });
 
     it('shows the previous element', function() {
-      $html = $(joyrideListHtml).appendTo('body');
+      $html = $(templateHtml).appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
       plugin.start();
 
