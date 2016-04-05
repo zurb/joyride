@@ -24,8 +24,9 @@ gulp.task('js:foundation', function () {
  * Outputs to buildPath.
  */
 gulp.task('js:standalone', ['js:foundation'], function () {
-    return gulp.src(config.javascript.dependencies)
-    .pipe(babel())
+  var deps = config.javascript.dependencies;
+  deps.push(config.buildPath + 'assets/' + 'foundation.' + config.name + '.js');
+  return gulp.src(deps)    .pipe(babel())
     .pipe(concat('solo.' + config.name + '.js'))
     .pipe(gulp.dest(config.buildPath + 'assets/'));
 });

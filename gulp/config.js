@@ -23,8 +23,7 @@ module.exports = {
       'node_modules/foundation-sites/js/foundation.core.js',
       'node_modules/foundation-sites/js/foundation.util.*.js',
       'node_modules/foundation-sites/js/foundation.tooltip.js',
-      'node_modules/foundation-sites/js/foundation.reveal.js',
-      'dist/foundation.joyride.js'
+      'node_modules/foundation-sites/js/foundation.reveal.js'
     ]
   }
 };
