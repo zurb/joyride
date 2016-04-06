@@ -23,6 +23,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     root.returnExports = factory(root.jQuery);
   }
 }(this, function ($) {
+  var JOYRIDE_VERSION = '3.0.0';
   /**
    * Joyride module.
    * @module foundation.joyride
@@ -45,6 +46,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       this.$element = element;
       this.options = $.extend({}, Joyride.defaults, this.$element.data(), options);
       this._init();
+      Joyride.version = JOYRIDE_VERSION;
 
       Foundation.registerPlugin(this, 'Joyride');
       Foundation.Keyboard.register('Joyride', {

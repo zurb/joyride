@@ -561,6 +561,12 @@ body.is-reveal-open {
   .reveal.without-overlay {
     position: fixed; }
 
+/**
+ * Joyride Plugin
+ * Version 3.0.1
+ * https://github.com/zurb/joyride
+ * Licensed under MIT Open Source
+ */
 [data-joyride] {
   display: none; }
 
