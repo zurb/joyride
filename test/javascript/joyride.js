@@ -78,6 +78,74 @@ describe('Joyride', function() {
     });
   });
 
+  describe('showItem()', function() {
+    var index = 1;
+
+    it('shows item with given index', function() {
+      $html = $(templateHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.showItem(index);
+
+      $(plugin.$items[index]).should.be.visible;
+    });
+
+    it('adds class to active targets', function() {
+      $html = $(templateHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.showItem(index);
+
+      $(plugin.structure[index].$target).should.have.class('joyride-is-active-target');
+    });
+
+    it('adds class to body', function() {
+      $html = $(templateHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.showItem(index);
+
+      $('body').should.have.class('joyride-is-open');
+    });
+  });
+
+  describe('hideItem()', function() {
+    var index = 1;
+
+    it('hides item with given index', function() {
+      $html = $(templateHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.hideItem(index);
+
+      $(plugin.$items[index]).should.not.be.visible;
+    });
+
+    it('removes class to active targets', function() {
+      $html = $(templateHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.hideItem(index);
+
+      $(plugin.structure[index].$target).should.not.have.class('joyride-is-active-target');
+    });
+
+    it('removes class to body', function() {
+      $html = $(templateHtml).appendTo('body');
+      plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
+      plugin.start();
+
+      plugin.hideItem(index);
+
+      $('body').should.not.have.class('joyride-is-open');
+    });
+  });
+
   describe('showNext()', function() {
     it('hides the current element', function() {
       $html = $(templateHtml).appendTo('body');

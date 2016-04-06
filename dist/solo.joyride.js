@@ -2879,7 +2879,7 @@ function _classCallCheck(instance, Constructor) {
         this._events();
 
         if (this.options.autostart) {
-          this.start();
+          this.start(-1);
         }
       }
 
@@ -2906,7 +2906,8 @@ function _classCallCheck(instance, Constructor) {
       }
 
       /**
-       * Creates the markup for the items
+       * Creates the markup for the items.
+       * Initializes instances of tooltip and reveal.
        * @private
        * @param {Array} structure the joyride's structure from _parseList
        * @return {Object} markup jQuery representation of the generated markup
@@ -2935,6 +2936,9 @@ function _classCallCheck(instance, Constructor) {
             });
             this.structure[s].item = tooltip;
             $item = tooltip.template;
+
+            // add joyride class to target
+            structure[s].$target.addClass(this.options.joyrideTargetClass);
           } else {
             // not target, create modal with Reveal
             var modal = new Foundation.Reveal($('<div class="reveal joyride"/>').appendTo($('body')));
@@ -2973,14 +2977,14 @@ function _classCallCheck(instance, Constructor) {
       }
 
       /**
-       * Shows the item with the given index
-       * @private
+       * Shows the item with the given index.
        * @param {Number} index of the item to be displayed
+       * @fires Joyride#show
        */
 
     }, {
-      key: '_showItem',
-      value: function _showItem(index) {
+      key: 'showItem',
+      value: function showItem(index) {
         if (this.structure[index].isModal) {
           this.structure[index].item.open();
         } else {
@@ -2996,73 +3000,93 @@ function _classCallCheck(instance, Constructor) {
           this.$items.eq(index).focus();
         }
         this.current = index;
+
+        /**
+         * Fires when the item is shown.
+         * @event Joyride#show
+         */
+        this.structure[index].$target.addClass(this.options.joyrideTargetActiveClass).trigger('show.zf.joyride');
+        $('body').addClass(this.options.bodyActiveClass);
       }
 
       /**
-       * Hides the item with the given index
-       * @private
+       * Hides the item with the given index.
        * @param {Number} index of the item to be hidden
+       * @fires Joyride#hide
        */
 
     }, {
-      key: '_hideItem',
-      value: function _hideItem(index) {
+      key: 'hideItem',
+      value: function hideItem(index) {
         if (this.structure[index].isModal) {
           this.structure[index].item.close();
         } else {
           this.structure[index].item.hide();
         }
+
+        /**
+         * Fires when the item is hidden.
+         * @event Joyride#hide
+         */
+        this.structure[index].$target.removeClass(this.options.joyrideTargetActiveClass).trigger('hide.zf.joyride');
+        $('body').removeClass(this.options.bodyActiveClass);
       }
 
       /**
-       * Hides all items
-       * @private
+       * Hides all items.
        */
 
     }, {
-      key: '_hideAll',
-      value: function _hideAll() {
+      key: 'hideAll',
+      value: function hideAll() {
         for (var s in this.structure) {
-          this._hideItem(s);
+          this.hideItem(s);
         }
       }
 
       /**
-       * Shows the next item in the ride
+       * Shows the next item in the ride.
        * @private
        */
 
     }, {
       key: 'showNext',
       value: function showNext() {
-        this._hideItem(this.current);
-        this._showItem(this.current + 1);
+        this.hideItem(this.current);
+        this.showItem(this.current + 1);
       }
 
       /**
-       * Shows the previous item in the ride
+       * Shows the previous item in the ride.
        * @private
        */
 
     }, {
       key: 'showPrev',
       value: function showPrev() {
-        this._hideItem(this.current);
-        this._showItem(this.current - 1);
+        this.hideItem(this.current);
+        this.showItem(this.current - 1);
       }
 
       /**
-       * Starts the ride
+       * Starts the ride.
        * @private
        * @return {Number} index - the index where to start, 0 by default
        */
 
     }, {
       key: 'start',
-      value: function start(index) {
-        var index = index || 0;
-        this._hideAll();
-        this._showItem(index);
+      value: function start() {
+        var index = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+
+        // Only hide all if this is not the initial start call (which calls with index = -1)
+        if (index > -1) {
+          this.hideAll();
+        } else {
+          // reset index to 0 to ensure proper start
+          index = 0;
+        }
+        this.showItem(index);
       }
 
       /**
@@ -3085,7 +3109,7 @@ function _classCallCheck(instance, Constructor) {
         }).on('click.zf.joyride', '[data-joyride-close]', function (e) {
           e.preventDefault();
           if (_this.structure[_this.current].closable) {
-            _this._hideItem(_this.current);
+            _this.hideItem(_this.current);
           }
         }).on('keydown.zf.joyride', function (e) {
           var $element = $(this);
@@ -3102,7 +3126,7 @@ function _classCallCheck(instance, Constructor) {
             },
             close: function () {
               if (_this.structure[_this.current].closable) {
-                _this._hideItem(_this.current);
+                _this.hideItem(_this.current);
               }
             },
             handled: function () {
@@ -3124,6 +3148,7 @@ function _classCallCheck(instance, Constructor) {
 
         for (var s in this.structure) {
           this.structure[s].item.destroy();
+          this.structure[s].$target.removeClass(this.options.joyrideTargetClass + ' ' + this.options.joyrideTargetActiveClass);
         }
 
         /**
@@ -3158,6 +3183,24 @@ function _classCallCheck(instance, Constructor) {
      * @example true
      */
     keyboardAccess: true,
+    /**
+     * Class to be added to the joyride targets.
+     * @option
+     * @example 'joyride-target'
+     */
+    joyrideTargetClass: 'joyride-target',
+    /**
+     * Class to be added to the active joyride target.
+     * @option
+     * @example 'joyride-is-active-target'
+     */
+    joyrideTargetActiveClass: 'joyride-is-active-target',
+    /**
+     * Class to be added to the body if there is an active joyride item.
+     * @option
+     * @example 'joyride-is-active'
+     */
+    bodyActiveClass: 'joyride-is-open',
     /**
      * If the joyride elements should be closable.
      * @option
@@ -3215,7 +3258,7 @@ function _classCallCheck(instance, Constructor) {
     /**
      * Position of the tooltips (see tooltip plugin configuration).
      * @option
-     * @example true
+     * @example 'top center'
      */
     position: 'top center',
     /**
