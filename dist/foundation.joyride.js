@@ -184,28 +184,43 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: 'showItem',
       value: function showItem(index) {
-        if (this.structure[index].isModal) {
-          this.structure[index].item.open();
-        } else {
-          this.structure[index].item.show();
-        }
+        var _this = this,
+            openFn = function () {
+          if (this.structure[index].isModal) {
+            this.structure[index].item.open();
+          } else {
+            this.structure[index].item.show();
+          }
+
+          if (this.options.keyboardAccess) {
+            this.$items.eq(index).focus();
+          }
+          this.current = index;
+
+          /**
+           * Fires when the item is shown.
+           * @event Joyride#show
+           */
+          this.structure[index].$target.addClass(this.options.joyrideTargetActiveClass).trigger('show.zf.joyride');
+          $('body').addClass(this.options.bodyActiveClass);
+        };
         // scroll target into view if target exists
         if (this.structure[index].$target.length) {
-          $('html, body').stop().animate({
-            'scrollTop': Math.max(0, this.$items.eq(index).offset().top - this.options.scrollOffset)
-          }, this.options.scrollSpeed);
-        }
-        if (this.options.keyboardAccess) {
-          this.$items.eq(index).focus();
-        }
-        this.current = index;
+          var scrollTo = Math.max(0, this.structure[index].$target.offset().top - this.options.scrollOffset),
 
-        /**
-         * Fires when the item is shown.
-         * @event Joyride#show
-         */
-        this.structure[index].$target.addClass(this.options.joyrideTargetActiveClass).trigger('show.zf.joyride');
-        $('body').addClass(this.options.bodyActiveClass);
+          // total distance to scroll
+          scrollDistance = Math.abs(scrollTo - $('body').scrollTop()),
+
+          // if target is already near the view port, slow scrolling down (the 4 is randomly chosen because it fits the demo)
+          scrollSpeed = Math.min(this.options.scrollSpeed, Math.abs(scrollDistance / (window.innerHeight * 4)) * this.options.scrollSpeed);
+          $('html, body').stop().animate({
+            'scrollTop': scrollTo
+          }, scrollSpeed, 'swing', function () {
+            openFn.apply(_this);
+          });
+        } else {
+          openFn.apply(_this);
+        }
       }
 
       /**

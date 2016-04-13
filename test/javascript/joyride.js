@@ -60,7 +60,10 @@ describe('Joyride', function() {
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
       plugin.start();
 
-      $(plugin.$items[0]).should.be.visible;
+      $html.find('h2').eq(0).on('show.zf.joyride', function() {
+        $(plugin.$items[0]).should.be.visible;
+      });
+      
     });
 
     it('starts joyride by clicking', function() {
@@ -74,7 +77,10 @@ describe('Joyride', function() {
       
       $button.trigger('click');
 
-      $(plugin.$items[0]).should.have.attr('aria-hidden', 'false');
+      $html.find('h2').eq(0).on('show.zf.joyride', function() {
+        $(plugin.$items[0]).should.have.attr('aria-hidden', 'false');
+      });
+      
     });
   });
 
@@ -88,7 +94,9 @@ describe('Joyride', function() {
 
       plugin.showItem(index);
 
-      $(plugin.$items[index]).should.be.visible;
+      $html.find('h2').eq(index).on('show.zf.joyride', function() {
+        $(plugin.$items[index]).should.be.visible;
+      });
     });
 
     it('adds class to active targets', function() {
@@ -98,7 +106,10 @@ describe('Joyride', function() {
 
       plugin.showItem(index);
 
-      $(plugin.structure[index].$target).should.have.class('joyride-is-active-target');
+      $html.find('h2').eq(index).on('show.zf.joyride', function() {
+        $(plugin.structure[index].$target).should.have.class('joyride-is-active-target');
+      });
+
     });
 
     it('adds class to body', function() {
@@ -108,7 +119,9 @@ describe('Joyride', function() {
 
       plugin.showItem(index);
 
-      $('body').should.have.class('joyride-is-open');
+      $html.find('h2').eq(index).on('show.zf.joyride', function() {
+        $(plugin.structure[index].$target).should.have.class('joyride-is-active-target');
+      });    
     });
   });
 
@@ -132,17 +145,22 @@ describe('Joyride', function() {
 
       plugin.hideItem(index);
 
-      $(plugin.structure[index].$target).should.not.have.class('joyride-is-active-target');
+      $html.find('h2').eq(index).on('show.zf.joyride', function() {
+        $(plugin.structure[index].$target).should.not.have.class('joyride-is-active-target');
+      });
+
     });
 
-    it('removes class to body', function() {
+    it('removes class from body', function() {
       $html = $(templateHtml).appendTo('body');
       plugin = new Foundation.Joyride($html.find('[data-joyride]'), {});
       plugin.start();
 
       plugin.hideItem(index);
 
-      $('body').should.not.have.class('joyride-is-open');
+      $html.find('h2').eq(index).on('show.zf.joyride', function() {
+        $('body').should.not.have.class('joyride-is-open');
+      });
     });
   });
 
@@ -153,7 +171,11 @@ describe('Joyride', function() {
       plugin.start();
 
       plugin.showNext();
-      $(plugin.$items[0]).should.have.attr('aria-hidden', 'true');
+
+      $html.find('h2').eq(0).on('show.zf.joyride', function() {
+        $(plugin.$items[0]).should.have.attr('aria-hidden', 'true');
+      });
+      
     });
 
     it('shows the next element', function() {
@@ -162,7 +184,10 @@ describe('Joyride', function() {
       plugin.start();
 
       plugin.showNext();
-      $(plugin.$items[1]).should.have.attr('aria-hidden', 'false');    
+      $html.find('h2').eq(1).on('show.zf.joyride', function() {
+        $(plugin.$items[1]).should.have.attr('aria-hidden', 'false');
+        $(plugin.$items[0]).should.have.attr('aria-hidden', 'true');
+      });
     });
   });
 
@@ -174,7 +199,10 @@ describe('Joyride', function() {
 
       plugin.showNext();
       plugin.showPrev();
-      $(plugin.$items[1]).should.have.attr('aria-hidden', 'true');
+
+      $html.find('h2').eq(0).on('show.zf.joyride', function() {
+        $(plugin.$items[1]).should.have.attr('aria-hidden', 'false');
+      }); 
     });
 
     it('shows the previous element', function() {
@@ -184,7 +212,10 @@ describe('Joyride', function() {
 
       plugin.showNext();
       plugin.showPrev();
-      $(plugin.$items[0]).should.have.attr('aria-hidden', 'false');    
+
+      $html.find('h2').eq(0).on('show.zf.joyride', function() {
+        $(plugin.$items[0]).should.have.attr('aria-hidden', 'true'); 
+      });  
     });
   });
 });
