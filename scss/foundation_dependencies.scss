@@ -1,0 +1,33 @@
+/**
+ * Import dependency SASS files that are needed.
+ *
+ * Based on:
+ * Foundation for Sites by ZURB
+ * foundation.zurb.com
+ * Licensed under MIT Open Source
+ */
+
+
+// Sass utilities
+@import '../node_modules/foundation-sites/scss/util/util';
+
+// Global variables and styles
+@import '../node_modules/foundation-sites/scss/global';
+
+// Components
+@import '../node_modules/foundation-sites/scss/typography/typography';
+@import '../node_modules/foundation-sites/scss/components/visibility';
+
+
+{{#components}}
+  @import '../node_modules/foundation-sites/scss/components/{{.}}';
+{{/components}}
+
+
+// Imports
+@include foundation-typography;
+@include foundation-visibility-classes;
+
+{{#components}}
+  @include foundation-{{.}};
+{{/components}}

@@ -1,0 +1,52 @@
+
+// foundation.zurb.com
+// Licensed under MIT Open Source
+
+
+////
+/// @group joyride
+////
+
+/// Default padding of the joyride background.
+/// @type Number
+$joyride-padding: 0.5em;
+
+/// Default font size for joyride tiems.
+/// @type Number
+$joyride-font-size: 100%;
+
+/// Default min-width of joyride items.
+/// @type Number
+$joyride-min-width: 20rem;
+
+/// Margin between the buttons to navigate.
+/// @type Number
+$joyride-button-space: 0.5em;
+
+[data-joyride] {
+  display: none;
+}
+
+.tooltip.joyride,
+.reveal.joyride {
+  font-size: $joyride-font-size;
+  min-width: $joyride-min-width;
+  padding: $joyride-padding;
+
+
+  .close {
+    float: right;
+  }
+
+  .joyride-buttons {
+    text-align: center;
+
+    button {
+      margin: 0 $joyride-button-space;
+    }
+  }
+}
+
+[data-whatinput='mouse'] .joyride {
+  outline: 0;
+}

@@ -1,0 +1,26 @@
+{
+  "name": "foundation-joyride",
+  "version": "3.0.0",
+  "main": [
+    "dist/foundation.joyride.css",
+    "dist/foundation.joyride.js"
+  ],
+  "ignore": [
+    "gulp",
+    "test",
+    "CONTRIBUTING.md",
+    "gulpfile.js",
+    "package.js",
+    "package.json",
+    ".npm",
+    ".gitignore",
+    ".npmignore",
+    ".versions",
+    "_build",
+    ".sass-cache"
+  ],
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "what-input": "~2.0.0"
+  }
+}
