@@ -1,6 +1,3 @@
-/* CSC :
-- Custom modification: replace if for data-areaid (line 437 )
-- Remplace of settings.$target.selector for settings.$target.is("body") (remove from jquery3)
 /*
  * jQuery Foundation Joyride Plugin 2.1
  * http://foundation.zurb.com
@@ -449,7 +446,6 @@
                       return elt;
                   }
                   else {
-                      console.log(elt.lenght);
                       return $(settings.document.getElementById(id));
                   }
               } else if (cl) {
