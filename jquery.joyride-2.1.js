@@ -439,10 +439,10 @@
             $sel = function () {
               if (id) {
                   var elt = $("[data-areaid='"+id+"']");
-                  if (elt.lenght>1){
+                  if (elt.length>1){
                       return elt[0];
                   }
-                  else if (elt.lenght==1){
+                  else if (elt.length==1){
                       return elt;
                   }
                   else {
