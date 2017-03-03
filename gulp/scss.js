@@ -15,7 +15,7 @@ gulp.task('scss:foundation', function () {
     .pipe(gulp.dest(config.buildPath));
 });
 
-gulp.task('scss:standalone', ['writeScss:foundation'], function () {
+gulp.task('scss:standalone', ['writeScss:foundation', 'scss:foundation'], function () {
   return sass(config.buildPath + 'foundation.scss', {sourcemap: false, defaultEncoding: 'UTF-8'})
     .pipe(gulp.dest(config.buildPath));
 });
