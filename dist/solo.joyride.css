@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /**
  * Import dependency SASS files that are needed.
  *
@@ -29,9 +30,9 @@ td {
   padding: 0; }
 
 p {
+  margin-bottom: 1rem;
   font-size: inherit;
   line-height: 1.6;
-  margin-bottom: 1rem;
   text-rendering: optimizeLegibility; }
 
 em,
@@ -55,41 +56,56 @@ h4,
 h5,
 h6 {
   font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-  font-weight: normal;
   font-style: normal;
+  font-weight: normal;
   color: inherit;
-  text-rendering: optimizeLegibility;
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  line-height: 1.4; }
+  text-rendering: optimizeLegibility; }
   h1 small,
   h2 small,
   h3 small,
   h4 small,
   h5 small,
   h6 small {
-    color: #cacaca;
-    line-height: 0; }
+    line-height: 0;
+    color: #cacaca; }
 
 h1 {
-  font-size: 1.5rem; }
+  font-size: 1.5rem;
+  line-height: 1.4;
+  margin-top: 0;
+  margin-bottom: 0.5rem; }
 
 h2 {
-  font-size: 1.25rem; }
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin-top: 0;
+  margin-bottom: 0.5rem; }
 
 h3 {
-  font-size: 1.1875rem; }
+  font-size: 1.1875rem;
+  line-height: 1.4;
+  margin-top: 0;
+  margin-bottom: 0.5rem; }
 
 h4 {
-  font-size: 1.125rem; }
+  font-size: 1.125rem;
+  line-height: 1.4;
+  margin-top: 0;
+  margin-bottom: 0.5rem; }
 
 h5 {
-  font-size: 1.0625rem; }
+  font-size: 1.0625rem;
+  line-height: 1.4;
+  margin-top: 0;
+  margin-bottom: 0.5rem; }
 
 h6 {
-  font-size: 1rem; }
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-top: 0;
+  margin-bottom: 0.5rem; }
 
-@media screen and (min-width: 40em) {
+@media print, screen and (min-width: 40em) {
   h1 {
     font-size: 3rem; }
 
@@ -108,38 +124,38 @@ h6 {
   h6 {
     font-size: 1rem; } }
 a {
-  color: #2199e8;
-  text-decoration: none;
   line-height: inherit;
+  color: #1779ba;
+  text-decoration: none;
   cursor: pointer; }
   a:hover, a:focus {
-    color: #1585cf; }
+    color: #1468a0; }
   a img {
     border: 0; }
 
 hr {
+  clear: both;
   max-width: 75rem;
   height: 0;
-  border-right: 0;
-  border-top: 0;
-  border-bottom: 1px solid #cacaca;
-  border-left: 0;
   margin: 1.25rem auto;
-  clear: both; }
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 1px solid #cacaca;
+  border-left: 0; }
 
 ul,
 ol,
 dl {
-  line-height: 1.6;
   margin-bottom: 1rem;
-  list-style-position: outside; }
+  list-style-position: outside;
+  line-height: 1.6; }
 
 li {
   font-size: inherit; }
 
 ul {
-  list-style-type: disc;
-  margin-left: 1.25rem; }
+  margin-left: 1.25rem;
+  list-style-type: disc; }
 
 ol {
   margin-left: 1.25rem; }
@@ -167,27 +183,30 @@ cite {
   font-size: 0.8125rem;
   color: #8a8a8a; }
   cite:before {
-    content: '\2014 \0020'; }
+    content: "— "; }
 
 abbr {
+  border-bottom: 1px dotted #0a0a0a;
   color: #0a0a0a;
-  cursor: help;
-  border-bottom: 1px dotted #0a0a0a; }
+  cursor: help; }
+
+figure {
+  margin: 0; }
 
 code {
+  padding: 0.125rem 0.3125rem 0.0625rem;
+  border: 1px solid #cacaca;
+  background-color: #e6e6e6;
   font-family: Consolas, "Liberation Mono", Courier, monospace;
   font-weight: normal;
-  color: #0a0a0a;
-  background-color: #e6e6e6;
-  border: 1px solid #cacaca;
-  padding: 0.125rem 0.3125rem 0.0625rem; }
+  color: #0a0a0a; }
 
 kbd {
-  padding: 0.125rem 0.25rem 0;
   margin: 0;
+  padding: 0.125rem 0.25rem 0;
   background-color: #e6e6e6;
-  color: #0a0a0a;
-  font-family: Consolas, "Liberation Mono", Courier, monospace; }
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+  color: #0a0a0a; }
 
 .subheader {
   margin-top: 0.2rem;
@@ -222,7 +241,7 @@ kbd {
 .text-justify {
   text-align: justify; }
 
-@media screen and (min-width: 40em) {
+@media print, screen and (min-width: 40em) {
   .medium-text-left {
     text-align: left; }
 
@@ -234,7 +253,7 @@ kbd {
 
   .medium-text-justify {
     text-align: justify; } }
-@media screen and (min-width: 64em) {
+@media print, screen and (min-width: 64em) {
   .large-text-left {
     text-align: left; }
 
@@ -252,8 +271,8 @@ kbd {
 @media print {
   * {
     background: transparent !important;
-    color: black !important;
     box-shadow: none !important;
+    color: black !important;
     text-shadow: none !important; }
 
   .show-for-print {
@@ -335,7 +354,7 @@ kbd {
   .show-for-small-only {
     display: none !important; } }
 
-@media screen and (min-width: 40em) {
+@media print, screen and (min-width: 40em) {
   .hide-for-medium {
     display: none !important; } }
 
@@ -351,7 +370,7 @@ kbd {
   .show-for-medium-only {
     display: none !important; } }
 
-@media screen and (min-width: 64em) {
+@media print, screen and (min-width: 64em) {
   .hide-for-large {
     display: none !important; } }
 
@@ -377,8 +396,8 @@ kbd {
 
 .show-on-focus:active, .show-on-focus:focus {
   position: static !important;
-  height: auto;
   width: auto;
+  height: auto;
   overflow: visible;
   clip: auto; }
 
@@ -407,106 +426,117 @@ kbd {
       display: block !important; } }
 
 .has-tip {
-  border-bottom: dotted 1px #8a8a8a;
-  font-weight: bold;
   position: relative;
   display: inline-block;
+  border-bottom: dotted 1px #8a8a8a;
+  font-weight: bold;
   cursor: help; }
 
 .tooltip {
-  background-color: #0a0a0a;
-  color: #fefefe;
-  font-size: 80%;
-  padding: 0.75rem;
   position: absolute;
-  z-index: 10;
   top: calc(100% + 0.6495rem);
-  max-width: 10rem !important;
-  border-radius: 0; }
+  z-index: 1200;
+  max-width: 10rem;
+  padding: 0.75rem;
+  border-radius: 0;
+  background-color: #0a0a0a;
+  font-size: 80%;
+  color: #fefefe; }
   .tooltip::before {
-    content: '';
     display: block;
     width: 0;
     height: 0;
     border: inset 0.75rem;
-    border-color: transparent transparent #0a0a0a;
-    border-bottom-style: solid;
+    content: '';
     border-top-width: 0;
-    bottom: 100%;
+    border-bottom-style: solid;
+    border-color: transparent transparent #0a0a0a;
     position: absolute;
+    bottom: 100%;
     left: 50%;
     -webkit-transform: translateX(-50%);
             transform: translateX(-50%); }
   .tooltip.top::before {
-    content: '';
     display: block;
     width: 0;
     height: 0;
     border: inset 0.75rem;
-    border-color: #0a0a0a transparent transparent;
-    border-top-style: solid;
+    content: '';
     border-bottom-width: 0;
+    border-top-style: solid;
+    border-color: #0a0a0a transparent transparent;
     top: 100%;
     bottom: auto; }
   .tooltip.left::before {
-    content: '';
     display: block;
     width: 0;
     height: 0;
     border: inset 0.75rem;
-    border-color: transparent transparent transparent #0a0a0a;
-    border-left-style: solid;
+    content: '';
     border-right-width: 0;
+    border-left-style: solid;
+    border-color: transparent transparent transparent #0a0a0a;
+    top: 50%;
     bottom: auto;
     left: 100%;
-    top: 50%;
     -webkit-transform: translateY(-50%);
             transform: translateY(-50%); }
   .tooltip.right::before {
-    content: '';
     display: block;
     width: 0;
     height: 0;
     border: inset 0.75rem;
-    border-color: transparent #0a0a0a transparent transparent;
-    border-right-style: solid;
+    content: '';
     border-left-width: 0;
+    border-right-style: solid;
+    border-color: transparent #0a0a0a transparent transparent;
+    top: 50%;
+    right: 100%;
     bottom: auto;
     left: auto;
-    right: 100%;
-    top: 50%;
     -webkit-transform: translateY(-50%);
             transform: translateY(-50%); }
 
 body.is-reveal-open {
   overflow: hidden; }
 
+html.is-reveal-open,
+html.is-reveal-open body {
+  min-height: 100%;
+  overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none; }
+
 .reveal-overlay {
-  display: none;
   position: fixed;
   top: 0;
+  right: 0;
   bottom: 0;
   left: 0;
-  right: 0;
   z-index: 1005;
+  display: none;
   background-color: rgba(10, 10, 10, 0.45);
   overflow-y: scroll; }
 
 .reveal {
-  display: none;
   z-index: 1006;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  display: none;
   padding: 1rem;
   border: 1px solid #cacaca;
-  background-color: #fefefe;
   border-radius: 0;
+  background-color: #fefefe;
   position: relative;
   top: 100px;
-  margin-left: auto;
   margin-right: auto;
+  margin-left: auto;
   overflow-y: auto; }
   [data-whatinput='mouse'] .reveal {
     outline: 0; }
-  @media screen and (min-width: 40em) {
+  @media print, screen and (min-width: 40em) {
     .reveal {
       min-height: 0; } }
   .reveal .column,
@@ -514,26 +544,26 @@ body.is-reveal-open {
     min-width: 0; }
   .reveal > :last-child {
     margin-bottom: 0; }
-  @media screen and (min-width: 40em) {
+  @media print, screen and (min-width: 40em) {
     .reveal {
       width: 600px;
       max-width: 75rem; } }
-  @media screen and (min-width: 40em) {
+  @media print, screen and (min-width: 40em) {
     .reveal .reveal {
-      left: auto;
       right: auto;
+      left: auto;
       margin: 0 auto; } }
   .reveal.collapse {
     padding: 0; }
-  @media screen and (min-width: 40em) {
+  @media print, screen and (min-width: 40em) {
     .reveal.tiny {
       width: 30%;
       max-width: 75rem; } }
-  @media screen and (min-width: 40em) {
+  @media print, screen and (min-width: 40em) {
     .reveal.small {
       width: 50%;
       max-width: 75rem; } }
-  @media screen and (min-width: 40em) {
+  @media print, screen and (min-width: 40em) {
     .reveal.large {
       width: 90%;
       max-width: 75rem; } }
@@ -541,23 +571,25 @@ body.is-reveal-open {
     top: 0;
     left: 0;
     width: 100%;
+    max-width: none;
     height: 100%;
     height: 100vh;
     min-height: 100vh;
-    max-width: none;
     margin-left: 0;
-    border: 0; }
+    border: 0;
+    border-radius: 0; }
   @media screen and (max-width: 39.9375em) {
     .reveal {
       top: 0;
       left: 0;
       width: 100%;
+      max-width: none;
       height: 100%;
       height: 100vh;
       min-height: 100vh;
-      max-width: none;
       margin-left: 0;
-      border: 0; } }
+      border: 0;
+      border-radius: 0; } }
   .reveal.without-overlay {
     position: fixed; }
 

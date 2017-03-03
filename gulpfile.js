@@ -4,7 +4,7 @@ var gulp = require('gulp'),
   requireDir = require('require-dir'),
   browser = require('browser-sync'),
   config = require('./gulp/config'),
-  port = process.env.SERVER_PORT || 3001;
+  port = process.env.SERVER_PORT || 3000;
 
 requireDir('./gulp');
 
@@ -20,8 +20,8 @@ gulp.task('default', ['serve', 'watch']);
  * Gulp task build:all.
  * Calls build:foundation and build:standalone.
  */
-gulp.task('build:all', function() {
-    runSequence('build:foundation', 'build:standalone');
+gulp.task('build:all', function(cb) {
+    runSequence('build:foundation', 'build:standalone', cb);
 });
 
 /**

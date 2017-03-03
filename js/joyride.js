@@ -10,7 +10,7 @@
 !(function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD
-    define(['jquery'], factory);
+    define(['jquery', 'foundation'], factory);
   } else if (typeof exports === 'object') {
     // Node, CommonJS-like
     module.exports = factory(require('jquery'));

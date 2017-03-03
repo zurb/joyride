@@ -14,7 +14,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 !function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD
-    define(['jquery'], factory);
+    define(['jquery', 'foundation'], factory);
   } else if (typeof exports === 'object') {
     // Node, CommonJS-like
     module.exports = factory(require('jquery'));
@@ -30,7 +30,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
    * @requires foundation.Tooltip
    * @requires foundation.Reveal
    */
-
   var Joyride = function () {
     /**
      * Creates a new instance of Joyride.
