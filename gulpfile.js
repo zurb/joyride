@@ -3,8 +3,7 @@ var gulp = require('gulp'),
   rimraf = require('rimraf').sync,
   requireDir = require('require-dir'),
   browser = require('browser-sync'),
-  config = require('./gulp/config'),
-  port = process.env.SERVER_PORT || 3000;
+  config = require('./gulp/config');
 
 requireDir('./gulp');
 
@@ -53,7 +52,7 @@ gulp.task('dist', ['js:min', 'css:min'], function() {
 gulp.task('watch', function() {
   gulp.watch('js/**/*', [[['js:foundation'], 'js:standalone'], browser.reload]);
   gulp.watch('scss/**/*', [[['css:foundation'], 'css:standalone'], browser.reload]);
-  gulp.watch('test/visual/*.html', [browser.reload]);
+  gulp.watch('./test/visual/*.html', [browser.reload]);
 });
 
 /**
@@ -61,7 +60,17 @@ gulp.task('watch', function() {
  * Starts a BrowerSync instance.
  */
 gulp.task('serve', ['build:all'], function() {
-  browser.init({server: './test/visual', port: port});
+  browser.init({
+    server: { 
+      baseDir: './test/visual',
+      routes: {
+        "/assets": "_build/assets",
+        "/jquery": "node_modules/jquery",
+        "/foundation-sites": "node_modules/foundation-sites",
+        "/what-input": "node_modules/what-input"
+      }
+    }
+  });
 });
 
 /**
