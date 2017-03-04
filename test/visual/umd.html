@@ -10,8 +10,8 @@
      <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link rel="stylesheet" href="/foundation-sites/dist/css/foundation.css">
-    <link rel="stylesheet" href="7assets/foundation.joyride.css">
+    <link rel="stylesheet" href="foundation-sites/dist/css/foundation.css">
+    <link rel="stylesheet" href="assets/foundation.joyride.css">
   </head>
   <body>
     <div class="wrapper">
@@ -135,23 +135,19 @@
       requirejs.config({
         packages: [{
           name: 'jquery',
-          location: '/jquery/dist',
+          location: 'jquery/dist',
           main: 'jquery'
         }, {
           name: 'what-input',
-          location: '/what-input',
+          location: 'what-input',
           main: 'what-input'
         }, {
-          name: 'joyride',
-          location: 'dist',
-          main: 'foundation.joyride'
-        }, {
           name: 'foundation',
-          location: '/foundation-sites/dist/js',
+          location: 'foundation-sites/dist/js',
           main: 'foundation'
         },{
           name: 'joyride',
-          location: '/assets',
+          location: 'assets',
           main: 'foundation.joyride'
         }]
       });
