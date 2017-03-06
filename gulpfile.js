@@ -50,8 +50,8 @@ gulp.task('dist', ['js:min', 'css:min'], function() {
  * Watch files for changes and reloads the browser.
  */
 gulp.task('watch', function() {
-  gulp.watch('js/**/*', [[['js:foundation'], 'js:standalone'], browser.reload]);
-  gulp.watch('scss/**/*', [[['css:foundation'], 'css:standalone'], browser.reload]);
+  gulp.watch('./js/**/*', [[['js:foundation'], 'js:standalone'], browser.reload]);
+  gulp.watch('./scss/**/*', [[['css:foundation'], 'css:standalone'], browser.reload]);
   gulp.watch('./test/visual/*.html', [browser.reload]);
 });
 
