@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Joyride</title>
+    <meta name="viewport" content="width=device-width">
+    <meta class="foundation-mq">
+
+     <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="assets/solo.joyride.css">
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <div class="row">
+          <div class="columns small-12">
+            <h1>Joyride</h1>
+            <p>
+              Joyride plugin for Foundation 6.
+            </p>
+          </div>
+        </div>
+      </header>
+      <nav>
+        <div class="row">
+          <div class="small-12">
+            <ul class="menu">
+              <li><a href="index.html">Foundation version</a></li>
+              <li><a href="standalone.html">Standalone version</a></li>
+              <li><a href="umd.html">UMD based version</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <main id="main" class="sections">
+        <div class="row">
+          <div class="columns small-12">
+            <h2 id="basic-joyride">Basic Joyride</h2>
+
+            <p>
+              Joyride makes use of the Tooltip component, so it is required to also have it included in your project.
+            You can define your Joyride stops by creating a HTML list and adding the `data-joyride` attribute. Make sure that the <code>data-target</code> attribute within the <code>li</code>-tags matches the id of the element you want to address.
+            </p>
+<pre lang="html"><code>&lt;ol data-joyride data-autostart="true" id="docs-joyride"&gt;
+  &lt;li data-target="#basic-joyride"&gt;
+    &lt;h3&gt;First&lt;/h3&gt;
+    &lt;p&gt;This is the default one without settings&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li data-target="#sass-reference" data-next-text="Weiter" data-prev-text="Zurück"&gt;
+    &lt;h3&gt;Second&lt;/h3&gt;
+    &lt;p&gt;This is the default one with custom texts&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li data-target="#js-class" data-position="bottom" data-closable="false"&gt;
+    &lt;h3&gt;Third&lt;/h3&gt;
+    &lt;p&gt;This one isn't closable&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;h3&gt;Fourth&lt;/h3&gt;
+    &lt;p&gt;If no target is specified, you create a modal.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li data-target="#trigger-start"&gt;
+    &lt;h3&gt;Fifth&lt;/h3&gt;
+    &lt;p&gt;Your ride ends here!&lt;/p&gt;
+    &lt;button class="button success" data-joyride-close&gt;OK, thanks!&lt;/button&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;</code></pre>
+            <h2 id="trigger-start">Trigger start</h2>
+            <p>
+              You can either have the Joyride start on page load, or by defining a button, etc. To enable auto start, set the <code>data-autostart</code> attribute of the list to true. A custom trigger can be defined by adding the <code>data-joyride-start</code> attribute pointing at the Joyride instance you want to start.
+            </p>
+
+            <p class="text-center">
+              <button class="button" data-joyride-start="#docs-joyride">Start Joyride!</button>
+            </p>
+
+            <h2 id="open-issues">Open issues</h2>
+            <p>
+              The following things are still open:
+
+              <ul>
+                <li>Some sort of cookie usage to remember if the user already had a ride</li>
+                <li>Proper testing</li>
+                <li>Example as Markdown</li>
+                <li>Align Gulp tasks and implement watching</li>
+              </ul>
+            </p>
+          </div>
+        </div>
+      </main>
+      <footer id="footer">
+        <div class="row">
+          <div class="columns small-12">
+            <p>Check out <a href="http://foundation.zurb.com/sites" target="_blank">Foundation Sites</a>.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Joyride list -->
+    <ol data-joyride data-autostart="true" id="docs-joyride">
+      <li data-target="#basic-joyride">
+        <h3>First</h3>
+        <p>This is the default one without settings</p>
+      </li>
+      <li data-target="#main" data-next-text="Weiter" data-prev-text="Zurück">
+        <h3>Second</h3>
+        <p>This is the default one with custom texts</p>
+      </li>
+      <li data-target="#footer" data-position="bottom" data-closable="false">
+        <h3>Third</h3>
+        <p>This one isn't closable</p>
+      </li>
+      <li>
+        <h3>Fourth</h3>
+        <p>If no target is specified, you create a modal.</p>
+      </li>
+      <li data-target="#open-issues">
+        <h3>Fifth</h3>
+        <p>Your ride ends here!</p>
+        <p class="text-center">
+          <button class="button success" data-joyride-close>OK, thanks!</button>
+        </p>
+      </li>
+    </ol>
+
+
+    <script src="jquery/dist/jquery.js" type="text/javascript"></script>
+    <script src="assets/solo.joyride.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      // initialize Foundation
+      $(document).foundation();
+    </script>
+  </body>
+</html>
