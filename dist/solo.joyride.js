@@ -2,7 +2,7 @@
 
   "use strict";
 
-  var FOUNDATION_VERSION = '6.3.1';
+  var FOUNDATION_VERSION = '6.2.1';
 
   // Global Foundation object
   // This is attached to the window, or used as a module for AMD/Browserify
@@ -44,7 +44,7 @@
      * @function
      * Populates the _uuids array with pointers to each individual plugin instance.
      * Adds the `zfPlugin` data-attribute to programmatically created plugins to allow use of $(selector).foundation(method) calls.
-     * Also fires the initialization event for each plugin, consolidating repetitive code.
+     * Also fires the initialization event for each plugin, consolidating repeditive code.
      * @param {Object} plugin - an instance of a plugin, usually `this` in context.
      * @param {String} name - the name of the plugin, passed as a camelCased string.
      * @fires Plugin#init
@@ -73,7 +73,7 @@
      * @function
      * Removes the plugins uuid from the _uuids array.
      * Removes the zfPlugin data attribute, as well as the data-plugin-name attribute.
-     * Also fires the destroyed event for the plugin, consolidating repetitive code.
+     * Also fires the destroyed event for the plugin, consolidating repeditive code.
      * @param {Object} plugin - an instance of a plugin, usually `this` in context.
      * @fires Plugin#destroyed
      */
@@ -375,7 +375,7 @@
     }
   }
   function parseValue(str) {
-    if ('true' === str) return true;else if ('false' === str) return false;else if (!isNaN(str * 1)) return parseFloat(str);
+    if (/true/.test(str)) return true;else if (/false/.test(str)) return false;else if (!isNaN(str * 1)) return parseFloat(str);
     return str;
   }
   // Convert PascalCase to kebab-case
@@ -417,7 +417,7 @@
       bottom = eleDims.offset.top + eleDims.height <= parDims.height + parDims.offset.top;
       top = eleDims.offset.top >= parDims.offset.top;
       left = eleDims.offset.left >= parDims.offset.left;
-      right = eleDims.offset.left + eleDims.width <= parDims.width + parDims.offset.left;
+      right = eleDims.offset.left + eleDims.width <= parDims.width;
     } else {
       bottom = eleDims.offset.top + eleDims.height <= eleDims.windowDims.height + eleDims.windowDims.offset.top;
       top = eleDims.offset.top >= eleDims.windowDims.offset.top;
@@ -562,19 +562,19 @@
         break;
       case 'left bottom':
         return {
-          left: $anchorDims.offset.left,
-          top: $anchorDims.offset.top + $anchorDims.height + vOffset
+          left: $anchorDims.offset.left - ($eleDims.width + hOffset),
+          top: $anchorDims.offset.top + $anchorDims.height
         };
         break;
       case 'right bottom':
         return {
           left: $anchorDims.offset.left + $anchorDims.width + hOffset - $eleDims.width,
-          top: $anchorDims.offset.top + $anchorDims.height + vOffset
+          top: $anchorDims.offset.top + $anchorDims.height
         };
         break;
       default:
         return {
-          left: Foundation.rtl() ? $anchorDims.offset.left - $eleDims.width + $anchorDims.width : $anchorDims.offset.left + hOffset,
+          left: Foundation.rtl() ? $anchorDims.offset.left - $eleDims.width + $anchorDims.width : $anchorDims.offset.left,
           top: $anchorDims.offset.top + $anchorDims.height + vOffset
         };
     }
@@ -616,17 +616,9 @@
      */
     parseKey: function (event) {
       var key = keyCodes[event.which || event.keyCode] || String.fromCharCode(event.which).toUpperCase();
-
-      // Remove un-printable characters, e.g. for `fromCharCode` calls for CTRL only events
-      key = key.replace(/\W+/, '');
-
       if (event.shiftKey) key = 'SHIFT_' + key;
       if (event.ctrlKey) key = 'CTRL_' + key;
       if (event.altKey) key = 'ALT_' + key;
-
-      // Remove trailing underscore, in case only modifiers were used (e.g. only `CTRL_ALT`)
-      key = key.replace(/_$/, '');
-
       return key;
     },
 
@@ -658,15 +650,15 @@
       fn = functions[command];
       if (fn && typeof fn === 'function') {
         // execute function  if exists
-        var returnValue = fn.apply();
+        fn.apply();
         if (functions.handled || typeof functions.handled === 'function') {
           // execute function when event was handled
-          functions.handled(returnValue);
+          functions.handled.apply();
         }
       } else {
         if (functions.unhandled || typeof functions.unhandled === 'function') {
           // execute function when event was not handled
-          functions.unhandled();
+          functions.unhandled.apply();
         }
       }
     },
@@ -678,9 +670,6 @@
      * @return {jQuery} $focusable - all focusable elements within `$element`
      */
     findFocusable: function ($element) {
-      if (!$element) {
-        return false;
-      }
       return $element.find('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, *[tabindex], *[contenteditable]').filter(function () {
         if (!$(this).is(':visible') || $(this).attr('tabindex') < 0) {
           return false;
@@ -698,35 +687,6 @@
 
     register: function (componentName, cmds) {
       commands[componentName] = cmds;
-    },
-
-
-    /**
-     * Traps the focus in the given element.
-     * @param  {jQuery} $element  jQuery object to trap the foucs into.
-     */
-    trapFocus: function ($element) {
-      var $focusable = Foundation.Keyboard.findFocusable($element),
-          $firstFocusable = $focusable.eq(0),
-          $lastFocusable = $focusable.eq(-1);
-
-      $element.on('keydown.zf.trapfocus', function (event) {
-        if (event.target === $lastFocusable[0] && Foundation.Keyboard.parseKey(event) === 'TAB') {
-          event.preventDefault();
-          $firstFocusable.focus();
-        } else if (event.target === $firstFocusable[0] && Foundation.Keyboard.parseKey(event) === 'SHIFT_TAB') {
-          event.preventDefault();
-          $lastFocusable.focus();
-        }
-      });
-    },
-
-    /**
-     * Releases the trapped focus from the given element.
-     * @param  {jQuery} $element  jQuery object to release the focus for.
-     */
-    releaseFocus: function ($element) {
-      $element.off('keydown.zf.trapfocus');
     }
   };
 
@@ -773,12 +733,10 @@
       namedQueries = parseStyleToObject(extractedStyles);
 
       for (var key in namedQueries) {
-        if (namedQueries.hasOwnProperty(key)) {
-          self.queries.push({
-            name: key,
-            value: 'only screen and (min-width: ' + namedQueries[key] + ')'
-          });
-        }
+        self.queries.push({
+          name: key,
+          value: 'only screen and (min-width: ' + namedQueries[key] + ')'
+        });
       }
 
       this.current = this._getCurrentSize();
@@ -805,23 +763,6 @@
 
 
     /**
-     * Checks if the screen matches to a breakpoint.
-     * @function
-     * @param {String} size - Name of the breakpoint to check, either 'small only' or 'small'. Omitting 'only' falls back to using atLeast() method.
-     * @returns {Boolean} `true` if the breakpoint matches, `false` if it does not.
-     */
-    is: function (size) {
-      size = size.trim().split(' ');
-      if (size.length > 1 && size[1] === 'only') {
-        if (size[0] === this._getCurrentSize()) return true;
-      } else {
-        return this.atLeast(size[0]);
-      }
-      return false;
-    },
-
-
-    /**
      * Gets the media query of a breakpoint.
      * @function
      * @param {String} size - Name of the breakpoint to get.
@@ -829,10 +770,8 @@
      */
     get: function (size) {
       for (var i in this.queries) {
-        if (this.queries.hasOwnProperty(i)) {
-          var query = this.queries[i];
-          if (size === query.name) return query.value;
-        }
+        var query = this.queries[i];
+        if (size === query.name) return query.value;
       }
 
       return null;
@@ -873,15 +812,14 @@
       var _this = this;
 
       $(window).on('resize.zf.mediaquery', function () {
-        var newSize = _this._getCurrentSize(),
-            currentSize = _this.current;
+        var newSize = _this._getCurrentSize();
 
-        if (newSize !== currentSize) {
+        if (newSize !== _this.current) {
+          // Broadcast the media query change on the window
+          $(window).trigger('changed.zf.mediaquery', [newSize, _this.current]);
+
           // Change the current media query
           _this.current = newSize;
-
-          // Broadcast the media query change on the window
-          $(window).trigger('changed.zf.mediaquery', [newSize, currentSize]);
         }
       });
     }
@@ -907,7 +845,7 @@
       style.type = 'text/css';
       style.id = 'matchmediajs-test';
 
-      script && script.parentNode && script.parentNode.insertBefore(style, script);
+      script.parentNode.insertBefore(style, script);
 
       // 'style.currentStyle' is used by IE <= 8 and 'window.getComputedStyle' for all other browsers
       info = 'getComputedStyle' in window && window.getComputedStyle(style, null) || style.currentStyle;
@@ -1004,14 +942,8 @@
         start = null;
     // console.log('called');
 
-    if (duration === 0) {
-      fn.apply(elem);
-      elem.trigger('finished.zf.animate', [elem]).triggerHandler('finished.zf.animate', [elem]);
-      return;
-    }
-
     function move(ts) {
-      if (!start) start = ts;
+      if (!start) start = window.performance.now();
       // console.log(start, ts);
       prog = ts - start;
       fn.apply(elem);
@@ -1094,6 +1026,8 @@
           subItemClass = subMenuClass + '-item',
           hasSubClass = 'is-' + type + '-submenu-parent';
 
+      menu.find('a:first').attr('tabindex', 0);
+
       items.each(function () {
         var $item = $(this),
             $sub = $item.children('ul');
@@ -1101,22 +1035,15 @@
         if ($sub.length) {
           $item.addClass(hasSubClass).attr({
             'aria-haspopup': true,
+            'aria-expanded': false,
             'aria-label': $item.children('a:first').text()
           });
-          // Note:  Drilldowns behave differently in how they hide, and so need
-          // additional attributes.  We should look if this possibly over-generalized
-          // utility (Nest) is appropriate when we rework menus in 6.4
-          if (type === 'drilldown') {
-            $item.attr({ 'aria-expanded': false });
-          }
 
           $sub.addClass('submenu ' + subMenuClass).attr({
             'data-submenu': '',
+            'aria-hidden': true,
             'role': 'menu'
           });
-          if (type === 'drilldown') {
-            $sub.attr({ 'aria-hidden': true });
-          }
         }
 
         if ($item.parent('[data-submenu]').length) {
@@ -1127,12 +1054,12 @@
       return;
     },
     Burn: function (menu, type) {
-      var //items = menu.find('li'),
-      subMenuClass = 'is-' + type + '-submenu',
+      var items = menu.find('li').removeAttr('tabindex'),
+          subMenuClass = 'is-' + type + '-submenu',
           subItemClass = subMenuClass + '-item',
           hasSubClass = 'is-' + type + '-submenu-parent';
 
-      menu.find('>li, .menu, .menu > li').removeClass(subMenuClass + ' ' + subItemClass + ' ' + hasSubClass + ' is-submenu-item submenu is-active').removeAttr('data-submenu').css('display', '');
+      menu.find('*').removeClass(subMenuClass + ' ' + subItemClass + ' ' + hasSubClass + ' is-submenu-item submenu is-active').removeAttr('data-submenu').css('display', '');
 
       // console.log(      menu.find('.' + subMenuClass + ', .' + subItemClass + ', .has-submenu, .is-submenu-item, .submenu, [data-submenu]')
       //           .removeClass(subMenuClass + ' ' + subItemClass + ' has-submenu is-submenu-item submenu')
@@ -1185,9 +1112,7 @@
         if (options.infinite) {
           _this.restart(); //rerun the timer.
         }
-        if (cb && typeof cb === 'function') {
-          cb();
-        }
+        cb();
       }, remain);
       elem.trigger('timerstart.zf.' + nameSpace);
     };
@@ -1217,19 +1142,15 @@
     }
 
     images.each(function () {
-      // Check if image is loaded
-      if (this.complete || this.readyState === 4 || this.readyState === 'complete') {
+      if (this.complete) {
         singleImageLoaded();
+      } else if (typeof this.naturalWidth !== 'undefined' && this.naturalWidth > 0) {
+        singleImageLoaded();
+      } else {
+        $(this).one('load', function () {
+          singleImageLoaded();
+        });
       }
-      // Force load the image
-      else {
-          // fix for IE. See https://css-tricks.com/snippets/jquery/fixing-load-in-ie-for-cached-images/
-          var src = $(this).attr('src');
-          $(this).attr('src', src + (src.indexOf('?') >= 0 ? '&' : '?') + new Date().getTime());
-          $(this).one('load', function () {
-            singleImageLoaded();
-          });
-        }
     });
 
     function singleImageLoaded() {
@@ -1347,7 +1268,7 @@
 			    simulatedEvent;
 
 			if ('MouseEvent' in window && typeof window.MouseEvent === 'function') {
-				simulatedEvent = new window.MouseEvent(type, {
+				simulatedEvent = window.MouseEvent(type, {
 					'bubbles': true,
 					'cancelable': true,
 					'screenX': first.screenX,
@@ -1632,12 +1553,7 @@
 
   // Elements with [data-toggle] will toggle a plugin that supports it when clicked.
   $(document).on('click.zf.trigger', '[data-toggle]', function () {
-    var id = $(this).data('toggle');
-    if (id) {
-      triggers($(this), 'toggle');
-    } else {
-      $(this).trigger('toggle.zf.trigger');
-    }
+    triggers($(this), 'toggle');
   });
 
   // Elements with [data-closable] will respond to close.zf.trigger events.
@@ -1664,7 +1580,7 @@
   * @function
   * @private
   */
-  $(window).on('load', function () {
+  $(window).load(function () {
     checkListeners();
   });
 
@@ -1672,7 +1588,6 @@
     eventsListener();
     resizeListener();
     scrollListener();
-    mutateListener();
     closemeListener();
   }
 
@@ -1756,17 +1671,6 @@
     }
   }
 
-  function mutateListener(debounce) {
-    var $nodes = $('[data-mutate]');
-    if ($nodes.length && MutationObserver) {
-      //trigger all listening elements and signal a mutate event
-      //no IE 9 or 10
-      $nodes.each(function () {
-        $(this).triggerHandler('mutateme.zf.trigger');
-      });
-    }
-  }
-
   function eventsListener() {
     if (!MutationObserver) {
       return false;
@@ -1776,27 +1680,26 @@
     //element callback
     var listeningElementsMutation = function (mutationRecordsList) {
       var $target = $(mutationRecordsList[0].target);
-
       //trigger the event handler for the element depending on type
-      switch (mutationRecordsList[0].type) {
+      switch ($target.attr("data-events")) {
 
-        case "attributes":
-          if ($target.attr("data-events") === "scroll" && mutationRecordsList[0].attributeName === "data-events") {
-            $target.triggerHandler('scrollme.zf.trigger', [$target, window.pageYOffset]);
-          }
-          if ($target.attr("data-events") === "resize" && mutationRecordsList[0].attributeName === "data-events") {
-            $target.triggerHandler('resizeme.zf.trigger', [$target]);
-          }
-          if (mutationRecordsList[0].attributeName === "style") {
-            $target.closest("[data-mutate]").attr("data-events", "mutate");
-            $target.closest("[data-mutate]").triggerHandler('mutateme.zf.trigger', [$target.closest("[data-mutate]")]);
-          }
+        case "resize":
+          $target.triggerHandler('resizeme.zf.trigger', [$target]);
           break;
 
-        case "childList":
-          $target.closest("[data-mutate]").attr("data-events", "mutate");
-          $target.closest("[data-mutate]").triggerHandler('mutateme.zf.trigger', [$target.closest("[data-mutate]")]);
+        case "scroll":
+          $target.triggerHandler('scrollme.zf.trigger', [$target, window.pageYOffset]);
           break;
+
+        // case "mutate" :
+        // console.log('mutate', $target);
+        // $target.triggerHandler('mutate.zf.trigger');
+        //
+        // //make sure we don't get stuck in an infinite loop from sloppy codeing
+        // if ($target.index('[data-mutate]') == $("[data-mutate]").length-1) {
+        //   domMutationObserver();
+        // }
+        // break;
 
         default:
           return false;
@@ -1805,10 +1708,10 @@
     };
 
     if (nodes.length) {
-      //for each element that needs to listen for resizing, scrolling, or mutation add a single observer
+      //for each element that needs to listen for resizing, scrolling, (or coming soon mutation) add a single observer
       for (var i = 0; i <= nodes.length - 1; i++) {
         var elementObserver = new MutationObserver(listeningElementsMutation);
-        elementObserver.observe(nodes[i], { attributes: true, childList: true, characterData: false, subtree: true, attributeFilter: ["data-events", "style"] });
+        elementObserver.observe(nodes[i], { attributes: true, childList: false, characterData: false, subtree: false, attributeFilter: ["data-events"] });
       }
     }
   }
@@ -1868,7 +1771,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
    * Tooltip module.
    * @module foundation.tooltip
    * @requires foundation.util.box
-   * @requires foundation.util.mediaQuery
    * @requires foundation.util.triggers
    */
 
@@ -1904,15 +1806,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       value: function _init() {
         var elemId = this.$element.attr('aria-describedby') || Foundation.GetYoDigits(6, 'tooltip');
 
-        this.options.positionClass = this.options.positionClass || this._getPositionClass(this.$element);
+        this.options.positionClass = this._getPositionClass(this.$element);
         this.options.tipText = this.options.tipText || this.$element.attr('title');
         this.template = this.options.template ? $(this.options.template) : this._buildTemplate(elemId);
 
-        if (this.options.allowHtml) {
-          this.template.appendTo(document.body).html(this.options.tipText).hide();
-        } else {
-          this.template.appendTo(document.body).text(this.options.tipText).hide();
-        }
+        this.template.appendTo(document.body).text(this.options.tipText).hide();
 
         this.$element.attr({
           'title': '',
@@ -1920,7 +1818,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           'data-yeti-box': elemId,
           'data-toggle': elemId,
           'data-resize': elemId
-        }).addClass(this.options.triggerClass);
+        }).addClass(this.triggerClass);
 
         //helper variables to track movement on collisions
         this.usedPositions = [];
@@ -2049,7 +1947,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: 'show',
       value: function show() {
-        if (this.options.showOn !== 'all' && !Foundation.MediaQuery.is(this.options.showOn)) {
+        if (this.options.showOn !== 'all' && !Foundation.MediaQuery.atLeast(this.options.showOn)) {
           // console.error('The screen is too small to display this tooltip');
           return false;
         }
@@ -2135,7 +2033,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
           }).on('mouseleave.zf.tooltip', function (e) {
             clearTimeout(_this.timeout);
-            if (!isFocus || _this.isClick && !_this.options.clickOpen) {
+            if (!isFocus || !_this.isClick && _this.options.clickOpen) {
               _this.hide();
             }
           });
@@ -2145,7 +2043,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           this.$element.on('mousedown.zf.tooltip', function (e) {
             e.stopImmediatePropagation();
             if (_this.isClick) {
-              //_this.hide();
+              _this.hide();
               // _this.isClick = false;
             } else {
               _this.isClick = true;
@@ -2153,11 +2051,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 _this.show();
               }
             }
-          });
-        } else {
-          this.$element.on('mousedown.zf.tooltip', function (e) {
-            e.stopImmediatePropagation();
-            _this.isClick = true;
           });
         }
 
@@ -2175,14 +2068,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         this.$element.on('focus.zf.tooltip', function (e) {
           isFocus = true;
+          // console.log(_this.isClick);
           if (_this.isClick) {
-            // If we're not showing open on clicks, we need to pretend a click-launched focus isn't
-            // a real focus, otherwise on hover and come back we get bad behavior
-            if (!_this.options.clickOpen) {
-              isFocus = false;
-            }
             return false;
           } else {
+            // $(window)
             _this.show();
           }
         }).on('focusout.zf.tooltip', function (e) {
@@ -2219,7 +2109,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: 'destroy',
       value: function destroy() {
-        this.$element.attr('title', this.template.text()).off('.zf.trigger .zf.tooltip').removeClass('has-tip top right left').removeAttr('aria-describedby aria-haspopup data-disable-hover data-resize data-toggle data-tooltip data-yeti-box');
+        this.$element.attr('title', this.template.text()).off('.zf.trigger .zf.tootip')
+        //  .removeClass('has-tip')
+        .removeAttr('aria-describedby').removeAttr('data-yeti-box').removeAttr('data-toggle').removeAttr('data-resize');
 
         this.template.remove();
 
@@ -2235,110 +2127,88 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /**
      * Time, in ms, before a tooltip should open on hover.
      * @option
-     * @type {number}
-     * @default 200
+     * @example 200
      */
     hoverDelay: 200,
     /**
      * Time, in ms, a tooltip should take to fade into view.
      * @option
-     * @type {number}
-     * @default 150
+     * @example 150
      */
     fadeInDuration: 150,
     /**
      * Time, in ms, a tooltip should take to fade out of view.
      * @option
-     * @type {number}
-     * @default 150
+     * @example 150
      */
     fadeOutDuration: 150,
     /**
      * Disables hover events from opening the tooltip if set to true
      * @option
-     * @type {boolean}
-     * @default false
+     * @example false
      */
     disableHover: false,
     /**
      * Optional addtional classes to apply to the tooltip template on init.
      * @option
-     * @type {string}
-     * @default ''
+     * @example 'my-cool-tip-class'
      */
     templateClasses: '',
     /**
      * Non-optional class added to tooltip templates. Foundation default is 'tooltip'.
      * @option
-     * @type {string}
-     * @default 'tooltip'
+     * @example 'tooltip'
      */
     tooltipClass: 'tooltip',
     /**
      * Class applied to the tooltip anchor element.
      * @option
-     * @type {string}
-     * @default 'has-tip'
+     * @example 'has-tip'
      */
     triggerClass: 'has-tip',
     /**
      * Minimum breakpoint size at which to open the tooltip.
      * @option
-     * @type {string}
-     * @default 'small'
+     * @example 'small'
      */
     showOn: 'small',
     /**
      * Custom template to be used to generate markup for tooltip.
      * @option
-     * @type {string}
-     * @default ''
+     * @example '&lt;div class="tooltip"&gt;&lt;/div&gt;'
      */
     template: '',
     /**
      * Text displayed in the tooltip template on open.
      * @option
-     * @type {string}
-     * @default ''
+     * @example 'Some cool space fact here.'
      */
     tipText: '',
     touchCloseText: 'Tap to close.',
     /**
      * Allows the tooltip to remain open if triggered with a click or touch event.
      * @option
-     * @type {boolean}
-     * @default true
+     * @example true
      */
     clickOpen: true,
     /**
      * Additional positioning classes, set by the JS
      * @option
-     * @type {string}
-     * @default ''
+     * @example 'top'
      */
     positionClass: '',
     /**
      * Distance, in pixels, the template should push away from the anchor on the Y axis.
      * @option
-     * @type {number}
-     * @default 10
+     * @example 10
      */
     vOffset: 10,
     /**
      * Distance, in pixels, the template should push away from the anchor on the X axis, if aligned to a side.
      * @option
-     * @type {number}
-     * @default 12
+     * @example 12
      */
-    hOffset: 12,
-    /**
-    * Allow HTML in tooltip. Warning: If you are loading user-generated content into tooltips,
-    * allowing HTML may open yourself up to XSS attacks.
-    * @option
-    * @type {boolean}
-    * @default false
-    */
-    allowHtml: false
+    hOffset: 12
   };
 
   /**
@@ -2384,7 +2254,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       Foundation.Keyboard.register('Reveal', {
         'ENTER': 'open',
         'SPACE': 'open',
-        'ESCAPE': 'close'
+        'ESCAPE': 'close',
+        'TAB': 'tab_forward',
+        'SHIFT_TAB': 'tab_backward'
       });
     }
 
@@ -2400,14 +2272,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this.id = this.$element.attr('id');
         this.isActive = false;
         this.cached = { mq: Foundation.MediaQuery.current };
-        this.isMobile = mobileSniff();
+        this.isiOS = iPhoneSniff();
+
+        if (this.isiOS) {
+          this.$element.addClass('is-ios');
+        }
 
         this.$anchor = $('[data-open="' + this.id + '"]').length ? $('[data-open="' + this.id + '"]') : $('[data-toggle="' + this.id + '"]');
-        this.$anchor.attr({
-          'aria-controls': this.id,
-          'aria-haspopup': true,
-          'tabindex': 0
-        });
+
+        if (this.$anchor.length) {
+          var anchorId = this.$anchor[0].id || Foundation.GetYoDigits(6, 'reveal');
+
+          this.$anchor.attr({
+            'aria-controls': this.id,
+            'id': anchorId,
+            'aria-haspopup': true,
+            'tabindex': 0
+          });
+          this.$element.attr({ 'aria-labelledby': anchorId });
+        }
 
         if (this.options.fullScreen || this.$element.hasClass('full')) {
           this.options.fullScreen = true;
@@ -2427,7 +2310,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (this.$overlay) {
           this.$element.detach().appendTo(this.$overlay);
         } else {
-          this.$element.detach().appendTo($(this.options.appendTo));
+          this.$element.detach().appendTo($('body'));
           this.$element.addClass('without-overlay');
         }
         this._events();
@@ -2443,8 +2326,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     }, {
       key: '_makeOverlay',
-      value: function _makeOverlay() {
-        return $('<div></div>').addClass('reveal-overlay').appendTo(this.options.appendTo);
+      value: function _makeOverlay(id) {
+        var $overlay = $('<div></div>').addClass('reveal-overlay').attr({ 'tabindex': -1, 'aria-hidden': true }).appendTo('body');
+        return $overlay;
       }
 
       /**
@@ -2492,18 +2376,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: '_events',
       value: function _events() {
-        var _this2 = this;
-
         var _this = this;
 
         this.$element.on({
           'open.zf.trigger': this.open.bind(this),
-          'close.zf.trigger': function (event, $element) {
-            if (event.target === _this.$element[0] || $(event.target).parents('[data-closable]')[0] === $element) {
-              // only close reveal when it's explicitly called
-              return _this2.close.apply(_this2);
-            }
-          },
+          'close.zf.trigger': this.close.bind(this),
           'toggle.zf.trigger': this.toggle.bind(this),
           'resizeme.zf.trigger': function () {
             _this._updatePosition();
@@ -2522,7 +2399,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         if (this.options.closeOnClick && this.options.overlay) {
           this.$overlay.off('.zf.reveal').on('click.zf.reveal', function (e) {
-            if (e.target === _this.$element[0] || $.contains(_this.$element[0], e.target) || !$.contains(document, e.target)) {
+            if (e.target === _this.$element[0] || $.contains(_this.$element[0], e.target)) {
               return;
             }
             _this.close();
@@ -2558,7 +2435,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: 'open',
       value: function open() {
-        var _this3 = this;
+        var _this2 = this;
 
         if (this.options.deepLink) {
           var hash = '#' + this.id;
@@ -2584,11 +2461,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         if (this.$overlay) {
           this.$overlay.css({ 'visibility': '' }).hide();
-          if (this.$element.hasClass('fast')) {
-            this.$overlay.addClass('fast');
-          } else if (this.$element.hasClass('slow')) {
-            this.$overlay.addClass('slow');
-          }
         }
 
         if (!this.options.multipleOpened) {
@@ -2600,38 +2472,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           this.$element.trigger('closeme.zf.reveal', this.id);
         }
 
-        var _this = this;
-
-        function addRevealOpenClasses() {
-          if (_this.isMobile) {
-            if (!_this.originalScrollPos) {
-              _this.originalScrollPos = window.pageYOffset;
-            }
-            $('html, body').addClass('is-reveal-open');
-          } else {
-            $('body').addClass('is-reveal-open');
-          }
-        }
         // Motion UI method of reveal
         if (this.options.animationIn) {
-          var afterAnimation = function () {
-            _this.$element.attr({
-              'aria-hidden': false,
-              'tabindex': -1
-            }).focus();
-            addRevealOpenClasses();
-            Foundation.Keyboard.trapFocus(_this.$element);
-          };
-
           if (this.options.overlay) {
             Foundation.Motion.animateIn(this.$overlay, 'fade-in');
           }
           Foundation.Motion.animateIn(this.$element, this.options.animationIn, function () {
-            if (_this3.$element) {
-              // protect against object having been removed
-              _this3.focusableElements = Foundation.Keyboard.findFocusable(_this3.$element);
-              afterAnimation();
-            }
+            _this2.focusableElements = Foundation.Keyboard.findFocusable(_this2.$element);
           });
         }
         // jQuery method of reveal
@@ -2647,7 +2494,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           'aria-hidden': false,
           'tabindex': -1
         }).focus();
-        Foundation.Keyboard.trapFocus(this.$element);
 
         /**
          * Fires when the modal has successfully opened.
@@ -2655,10 +2501,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
          */
         this.$element.trigger('open.zf.reveal');
 
-        addRevealOpenClasses();
+        if (this.isiOS) {
+          var scrollPos = window.pageYOffset;
+          $('html, body').addClass('is-reveal-open').scrollTop(scrollPos);
+        } else {
+          $('body').addClass('is-reveal-open');
+        }
+
+        $('body').addClass('is-reveal-open').attr('aria-hidden', this.options.overlay || this.options.fullScreen ? true : false);
 
         setTimeout(function () {
-          _this3._extraHandlers();
+          _this2._extraHandlers();
         }, 0);
       }
 
@@ -2671,14 +2524,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       key: '_extraHandlers',
       value: function _extraHandlers() {
         var _this = this;
-        if (!this.$element) {
-          return;
-        } // If we're in the middle of cleanup, don't freak out
         this.focusableElements = Foundation.Keyboard.findFocusable(this.$element);
 
         if (!this.options.overlay && this.options.closeOnClick && !this.options.fullScreen) {
           $('body').on('click.zf.reveal', function (e) {
-            if (e.target === _this.$element[0] || $.contains(_this.$element[0], e.target) || !$.contains(document, e.target)) {
+            if (e.target === _this.$element[0] || $.contains(_this.$element[0], e.target)) {
               return;
             }
             _this.close();
@@ -2703,6 +2553,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           var $target = $(this);
           // handle keyboard event with keyboard util
           Foundation.Keyboard.handleKey(e, 'Reveal', {
+            tab_forward: function () {
+              if (_this.$element.find(':focus').is(_this.focusableElements.eq(-1))) {
+                // left modal downwards, setting focus to first element
+                _this.focusableElements.eq(0).focus();
+                e.preventDefault();
+              }
+              if (_this.focusableElements.length === 0) {
+                // no focusable elements inside the modal at all, prevent tabbing in general
+                e.preventDefault();
+              }
+            },
+            tab_backward: function () {
+              if (_this.$element.find(':focus').is(_this.focusableElements.eq(0)) || _this.$element.is(':focus')) {
+                // left modal upwards, setting focus to last element
+                _this.focusableElements.eq(-1).focus();
+                e.preventDefault();
+              }
+              if (_this.focusableElements.length === 0) {
+                // no focusable elements inside the modal at all, prevent tabbing in general
+                e.preventDefault();
+              }
+            },
             open: function () {
               if (_this.$element.find(':focus').is(_this.$element.find('[data-close]'))) {
                 setTimeout(function () {
@@ -2718,11 +2590,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               if (_this.options.closeOnEsc) {
                 _this.close();
                 _this.$anchor.focus();
-              }
-            },
-            handled: function (preventDefault) {
-              if (preventDefault) {
-                e.preventDefault();
               }
             }
           });
@@ -2776,17 +2643,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this.$element.off('keydown.zf.reveal');
 
         function finishUp() {
-          if (_this.isMobile) {
+          if (_this.isiOS) {
             $('html, body').removeClass('is-reveal-open');
-            if (_this.originalScrollPos) {
-              $('body').scrollTop(_this.originalScrollPos);
-              _this.originalScrollPos = null;
-            }
           } else {
             $('body').removeClass('is-reveal-open');
           }
 
-          Foundation.Keyboard.releaseFocus(_this.$element);
+          $('body').attr({
+            'aria-hidden': false,
+            'tabindex': ''
+          });
 
           _this.$element.attr('aria-hidden', true);
 
@@ -2808,7 +2674,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this.isActive = false;
         if (_this.options.deepLink) {
           if (window.history.replaceState) {
-            window.history.replaceState('', document.title, window.location.href.replace('#' + this.id, ''));
+            window.history.replaceState("", document.title, window.location.pathname);
           } else {
             window.location.hash = '';
           }
@@ -2839,7 +2705,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
        */
       value: function destroy() {
         if (this.options.overlay) {
-          this.$element.appendTo($(this.options.appendTo)); // move $element outside of $overlay to prevent error unregisterPlugin()
+          this.$element.appendTo($('body')); // move $element outside of $overlay to prevent error unregisterPlugin()
           this.$overlay.hide().off().remove();
         }
         this.$element.hide().off();
@@ -2857,109 +2723,87 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /**
      * Motion-UI class to use for animated elements. If none used, defaults to simple show/hide.
      * @option
-     * @type {string}
-     * @default ''
+     * @example 'slide-in-left'
      */
     animationIn: '',
     /**
      * Motion-UI class to use for animated elements. If none used, defaults to simple show/hide.
      * @option
-     * @type {string}
-     * @default ''
+     * @example 'slide-out-right'
      */
     animationOut: '',
     /**
      * Time, in ms, to delay the opening of a modal after a click if no animation used.
      * @option
-     * @type {number}
-     * @default 0
+     * @example 10
      */
     showDelay: 0,
     /**
      * Time, in ms, to delay the closing of a modal after a click if no animation used.
      * @option
-     * @type {number}
-     * @default 0
+     * @example 10
      */
     hideDelay: 0,
     /**
      * Allows a click on the body/overlay to close the modal.
      * @option
-     * @type {boolean}
-     * @default true
+     * @example true
      */
     closeOnClick: true,
     /**
      * Allows the modal to close if the user presses the `ESCAPE` key.
      * @option
-     * @type {boolean}
-     * @default true
+     * @example true
      */
     closeOnEsc: true,
     /**
      * If true, allows multiple modals to be displayed at once.
      * @option
-     * @type {boolean}
-     * @default false
+     * @example false
      */
     multipleOpened: false,
     /**
      * Distance, in pixels, the modal should push down from the top of the screen.
      * @option
-     * @type {number|string}
-     * @default auto
+     * @example auto
      */
     vOffset: 'auto',
     /**
      * Distance, in pixels, the modal should push in from the side of the screen.
      * @option
-     * @type {number|string}
-     * @default auto
+     * @example auto
      */
     hOffset: 'auto',
     /**
      * Allows the modal to be fullscreen, completely blocking out the rest of the view. JS checks for this as well.
      * @option
-     * @type {boolean}
-     * @default false
+     * @example false
      */
     fullScreen: false,
     /**
      * Percentage of screen height the modal should push up from the bottom of the view.
      * @option
-     * @type {number}
-     * @default 10
+     * @example 10
      */
     btmOffsetPct: 10,
     /**
      * Allows the modal to generate an overlay div, which will cover the view when modal opens.
      * @option
-     * @type {boolean}
-     * @default true
+     * @example true
      */
     overlay: true,
     /**
      * Allows the modal to remove and reinject markup on close. Should be true if using video elements w/o using provider's api, otherwise, videos will continue to play in the background.
      * @option
-     * @type {boolean}
-     * @default false
+     * @example false
      */
     resetOnClose: false,
     /**
      * Allows the modal to alter the url on open/close, and allows the use of the `back` button to close modals. ALSO, allows a modal to auto-maniacally open on page load IF the hash === the modal's user-set id.
      * @option
-     * @type {boolean}
-     * @default false
+     * @example false
      */
-    deepLink: false,
-    /**
-    * Allows the modal to append to custom div.
-    * @option
-    * @type {string}
-    * @default "body"
-    */
-    appendTo: "body"
-
+    deepLink: false
   };
 
   // Window exports
@@ -2968,15 +2812,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
   function iPhoneSniff() {
     return (/iP(ad|hone|od).*OS/.test(window.navigator.userAgent)
     );
-  }
-
-  function androidSniff() {
-    return (/Android/.test(window.navigator.userAgent)
-    );
-  }
-
-  function mobileSniff() {
-    return iPhoneSniff() || androidSniff();
   }
 }(jQuery);
 'use strict';
