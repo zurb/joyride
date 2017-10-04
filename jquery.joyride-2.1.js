@@ -518,6 +518,12 @@
 
             }
 
+            // If tip is pushed beyond the right edge of the window, bring it back in
+            var left = settings.$next_tip.position().left;
+            if (left + settings.$next_tip.outerWidth() > settings.$window.width()) {
+              settings.$next_tip.css('left', settings.$window.width() - settings.$next_tip.outerWidth());
+            }
+
             if (!methods.visible(methods.corners(settings.$next_tip)) && settings.attempts < settings.tipSettings.tipLocationPattern.length) {
 
               $nub.removeClass('bottom')
