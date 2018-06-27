@@ -397,16 +397,13 @@
       },
 
       set_target : function () {
-        var cl = settings.$li.attr('data-class'),
-            id = settings.$li.attr('data-id'),
+        var selector = settings.$li.attr('data-target'),
             $sel = function () {
-              if (id) {
-                return $(settings.document.getElementById(id));
-              } else if (cl) {
-                return $('.' + cl).filter(":visible").first();
-              } else {
-                return $('body');
-              }
+                if (selector) {
+                    return $(selector).filter(":visible").first();
+                } else {
+                    return $('body');
+                }
             };
 
         settings.$target = $sel();
