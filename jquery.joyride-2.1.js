@@ -632,10 +632,11 @@
         expose = $(settings.template.expose);
         settings.$body.append(expose);
         expose.css({
-          top: el.offset().top,
-          left: el.offset().left,
-          width: el.outerWidth(true),
-          height: el.outerHeight(true)
+            top: (settings.tipSettings.roundExpose ? el.offset().top - (el.outerHeight(true) / 2) : el.offset().top),
+            left: (settings.tipSettings.roundExpose ? el.offset().left - (el.outerWidth(true) / 2) : el.offset().left),
+            width: (settings.tipSettings.roundExpose ? el.outerWidth(true) * 2 : el.outerWidth(true)),
+            height: (settings.tipSettings.roundExpose ? el.outerHeight(true) * 2 : el.outerHeight(true)),
+            borderRadius: (settings.tipSettings.roundExpose ? (el.outerWidth(true) + el.outerHeight(true))*2 : 0 ),
         });
         exposeCover = $(settings.template.exposeCover);
         origCSS = {
