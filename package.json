@@ -26,7 +26,7 @@
     "dist": "gulp dist"
   },
   "dependencies": {
-    "jquery": "^2.2.0",
+    "jquery": "^3.4.1",
     "what-input": "^2.0.0"
   },
   "devDependencies": {
