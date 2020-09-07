@@ -114,7 +114,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       value: function _render(structure) {
         for (var s in structure) {
           var options = $.extend({}, this.options, structure[s]),
-              // if specifc item has config, this should overwrite global settings
+              // if specific item has config, this should overwrite global settings
           $item;
 
           if (options.$target.length) {
