@@ -1,0 +1,19 @@
+{
+  "name": "jasonbrady/joyride",
+  "description": "Joyride plugin for Foundation 6.",
+  "keywords": [
+    "javascript",
+    "joyride",
+    "foundation"
+    ],
+  "homepage": "https://github.com/zurb/joyride",
+  "authors": [
+    {
+      "name": "Marius Olbertz"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/zurb/joyride/issues"
+  },
+  "license": "MIT"
+}
