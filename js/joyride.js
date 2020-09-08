@@ -100,7 +100,7 @@
      */
     _render(structure) {
       for (var s in structure) {
-        var options = $.extend({}, this.options, structure[s]),// if specifc item has config, this should overwrite global settings
+        var options = $.extend({}, this.options, structure[s]),// if specific item has config, this should overwrite global settings
           $item;
 
         if (options.$target.length) { // target element exists, create tooltip
